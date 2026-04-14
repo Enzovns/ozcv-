@@ -102,75 +102,86 @@
     <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
   </div>
 </nav>
+
+<!-- All translatable text lives here, NOT in the HTML -->
 <div class="hero">
-  <div class="hero-tag">AI-Powered • Made for Australia</div>
-  <h1>Your Resume.<br><span>Built in Seconds.</span></h1>
-  <p>Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
+  <div class="hero-tag" data-i18n="hero_tag">AI-Powered • Made for Australia</div>
+  <h1 data-i18n="hero_h1">Your Resume.<br><span data-i18n="hero_h1_span">Built in Seconds.</span></h1>
+  <p data-i18n="hero_p">Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
   <div class="steps">
-    <div class="step"><div class="step-num">1</div> <span>Choose job type</span></div>
+    <div class="step"><div class="step-num">1</div> <span data-i18n="step1">Choose job type</span></div>
     <div class="step-divider">→</div>
-    <div class="step"><div class="step-num">2</div> <span>Fill your info</span></div>
+    <div class="step"><div class="step-num">2</div> <span data-i18n="step2">Fill your info</span></div>
     <div class="step-divider">→</div>
-    <div class="step"><div class="step-num">3</div> <span>Download PDF</span></div>
+    <div class="step"><div class="step-num">3</div> <span data-i18n="step3">Download PDF</span></div>
   </div>
 </div>
+
 <div class="container">
   <div class="section">
-    <div class="section-title">SELECT JOB TYPE</div>
+    <div class="section-title" data-i18n="sec_job">SELECT JOB TYPE</div>
     <div class="job-grid">
-      <div class="job-card active" onclick="selectJob(this,'mining')"><div class="emoji">⛏️</div><div class="label">Mining</div><div class="sub">FIFO, Site work</div></div>
-      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label">Farm Work</div><div class="sub">Harvest, Picking</div></div>
-      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label">Hospitality</div><div class="sub">Pub, Hotel, Café</div></div>
-      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label">Roadhouse</div><div class="sub">Remote service</div></div>
-      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label">Station Hand</div><div class="sub">Cattle, Sheep</div></div>
-      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label">Construction</div><div class="sub">Labour, Trade</div></div>
-      <div class="job-card" onclick="selectJob(this,'retail')"><div class="emoji">🛒</div><div class="label">Retail</div><div class="sub">Shop, Supermarket</div></div>
-      <div class="job-card" onclick="selectJob(this,'transport')"><div class="emoji">🚛</div><div class="label">Transport</div><div class="sub">Driver, Logistics</div></div>
+      <div class="job-card active" onclick="selectJob(this,'mining')"><div class="emoji">⛏️</div><div class="label" data-i18n="job_mining">Mining</div><div class="sub" data-i18n="job_mining_sub">FIFO, Site work</div></div>
+      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" data-i18n="job_farm">Farm Work</div><div class="sub" data-i18n="job_farm_sub">Harvest, Picking</div></div>
+      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" data-i18n="job_hosp">Hospitality</div><div class="sub" data-i18n="job_hosp_sub">Pub, Hotel, Café</div></div>
+      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" data-i18n="job_road">Roadhouse</div><div class="sub" data-i18n="job_road_sub">Remote service</div></div>
+      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" data-i18n="job_station">Station Hand</div><div class="sub" data-i18n="job_station_sub">Cattle, Sheep</div></div>
+      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" data-i18n="job_const">Construction</div><div class="sub" data-i18n="job_const_sub">Labour, Trade</div></div>
+      <div class="job-card" onclick="selectJob(this,'retail')"><div class="emoji">🛒</div><div class="label" data-i18n="job_retail">Retail</div><div class="sub" data-i18n="job_retail_sub">Shop, Supermarket</div></div>
+      <div class="job-card" onclick="selectJob(this,'transport')"><div class="emoji">🚛</div><div class="label" data-i18n="job_transport">Transport</div><div class="sub" data-i18n="job_transport_sub">Driver, Logistics</div></div>
     </div>
   </div>
+
   <div class="section">
-    <div class="section-title">PERSONAL INFORMATION</div>
+    <div class="section-title" data-i18n="sec_personal">PERSONAL INFORMATION</div>
     <div class="form-grid">
-      <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="John" /></div>
-      <div class="field"><label>Last Name</label><input type="text" id="lastName" placeholder="Smith" /></div>
-      <div class="field"><label>Phone</label><input type="text" id="phone" placeholder="+61 400 000 000" /></div>
-      <div class="field"><label>Email</label><input type="text" id="email" placeholder="john@email.com" /></div>
-      <div class="field"><label>Location</label><input type="text" id="location" placeholder="Perth, WA" /></div>
-      <div class="field"><label>Visa / Work Rights</label>
+      <div class="field"><label data-i18n="label_firstname">First Name</label><input type="text" id="firstName" data-i18n-placeholder="ph_firstname" placeholder="John" /></div>
+      <div class="field"><label data-i18n="label_lastname">Last Name</label><input type="text" id="lastName" data-i18n-placeholder="ph_lastname" placeholder="Smith" /></div>
+      <div class="field"><label data-i18n="label_phone">Phone</label><input type="text" id="phone" placeholder="+61 400 000 000" /></div>
+      <div class="field"><label data-i18n="label_email">Email</label><input type="text" id="email" placeholder="john@email.com" /></div>
+      <div class="field"><label data-i18n="label_location">Location</label><input type="text" id="location" data-i18n-placeholder="ph_location" placeholder="Perth, WA" /></div>
+      <div class="field"><label data-i18n="label_visa">Visa / Work Rights</label>
         <select id="visa">
-          <option value="Australian Citizen">Australian Citizen</option>
-          <option value="Permanent Resident">Permanent Resident</option>
-          <option value="Working Holiday Visa (417)">Working Holiday (417)</option>
-          <option value="Working Holiday Visa (462)">Working Holiday (462)</option>
-          <option value="Student Visa">Student Visa</option>
-          <option value="Skilled Visa">Skilled Visa</option>
+          <option value="Australian Citizen" data-i18n="visa_citizen">Australian Citizen</option>
+          <option value="Permanent Resident" data-i18n="visa_pr">Permanent Resident</option>
+          <option value="Working Holiday Visa (417)" data-i18n="visa_whv417">Working Holiday (417)</option>
+          <option value="Working Holiday Visa (462)" data-i18n="visa_whv462">Working Holiday (462)</option>
+          <option value="Student Visa" data-i18n="visa_student">Student Visa</option>
+          <option value="Skilled Visa" data-i18n="visa_skilled">Skilled Visa</option>
         </select>
       </div>
     </div>
   </div>
+
   <div class="section">
-    <div class="section-title">EXPERIENCE & SKILLS</div>
+    <div class="section-title" data-i18n="sec_exp">EXPERIENCE & SKILLS</div>
     <div class="form-grid full">
-      <div class="field"><label>Past Experience (leave empty if none)</label><textarea id="experience" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
-      <div class="field"><label>Licences & Certificates</label><input type="text" id="licences" placeholder="e.g. Driver licence, RSA, White Card, Forklift..." /></div>
-      <div class="field"><label>Languages spoken</label><input type="text" id="languages" placeholder="e.g. English, French, Spanish..." /></div>
+      <div class="field"><label data-i18n="label_exp">Past Experience (leave empty if none)</label><textarea id="experience" data-i18n-placeholder="ph_exp" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
+      <div class="field"><label data-i18n="label_licences">Licences & Certificates</label><input type="text" id="licences" data-i18n-placeholder="ph_licences" placeholder="e.g. Driver licence, RSA, White Card, Forklift..." /></div>
+      <div class="field"><label data-i18n="label_languages">Languages spoken</label><input type="text" id="languages" data-i18n-placeholder="ph_languages" placeholder="e.g. English, French, Spanish..." /></div>
     </div>
   </div>
+
   <div class="section">
-    <div class="section-title">AI ASSISTANCE LEVEL</div>
+    <div class="section-title" data-i18n="sec_ai">AI ASSISTANCE LEVEL</div>
     <div class="ai-slider-wrap">
       <div class="ai-slider-header">
-        <div><div style="font-size:13px;color:var(--muted);margin-bottom:4px">How much should AI fill in?</div><div class="ai-level" id="ai-level-label">BALANCED</div></div>
+        <div><div style="font-size:13px;color:var(--muted);margin-bottom:4px" data-i18n="ai_subtitle">How much should AI fill in?</div><div class="ai-level" id="ai-level-label">BALANCED</div></div>
         <div style="font-size:32px" id="ai-emoji">⚖️</div>
       </div>
       <input type="range" min="1" max="3" value="2" id="ai-slider" oninput="updateSlider(this.value)" />
-      <div class="slider-labels"><span>My experience only</span><span>Balanced</span><span>AI fills everything</span></div>
+      <div class="slider-labels">
+        <span data-i18n="slider_min">My experience only</span>
+        <span data-i18n="slider_mid">Balanced</span>
+        <span data-i18n="slider_max">AI fills everything</span>
+      </div>
     </div>
   </div>
+
   <div class="section">
-    <div class="section-title">CV LANGUAGE</div>
+    <div class="section-title" data-i18n="sec_cvlang">CV LANGUAGE</div>
     <div class="form-grid">
-      <div class="field"><label>Generate CV in</label>
+      <div class="field"><label data-i18n="label_cvlang">Generate CV in</label>
         <select id="cv-lang">
           <option value="English">🇦🇺 English</option>
           <option value="French">🇫🇷 Français</option>
@@ -185,88 +196,296 @@
       </div>
     </div>
   </div>
-  <button class="gen-btn" id="gen-btn" onclick="generateCV()">✦ GENERATE MY RESUME — $5 AUD</button>
+
+  <button class="gen-btn" id="gen-btn" onclick="generateCV()">
+    <span data-i18n="gen_btn">✦ GENERATE MY RESUME — $5 AUD</span>
+  </button>
   <div class="error-box" id="error-box"></div>
-  <div class="loading" id="loading"><div class="spinner"></div><p>AI is crafting your resume...</p></div>
+  <div class="loading" id="loading"><div class="spinner"></div><p data-i18n="loading_txt">AI is crafting your resume...</p></div>
+
   <div class="cv-result" id="cv-result" style="margin-top:32px">
-    <div class="price-badge">✅ Resume ready! Download your PDF below.</div>
+    <div class="price-badge"><span data-i18n="result_ready">✅ Resume ready! Download your PDF below.</span></div>
     <div class="cv-actions">
-      <button class="btn-download" onclick="downloadPDF()">⬇ DOWNLOAD PDF</button>
-      <button class="btn-new" onclick="resetForm()">← New Resume</button>
+      <button class="btn-download" onclick="downloadPDF()"><span data-i18n="btn_download">⬇ DOWNLOAD PDF</span></button>
+      <button class="btn-new" onclick="resetForm()"><span data-i18n="btn_new">← New Resume</span></button>
     </div>
     <div id="cv-paper"></div>
   </div>
 </div>
+
 <script>
-  let currentLang='en', selectedJob='mining', cvData=null;
-  function setLang(lang){currentLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');}
-  function selectJob(el,type){document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');selectedJob=type;}
-  const emojis=['📝','⚖️','🤖'];
-  const lvls=['MY EXPERIENCE ONLY','BALANCED','AI FILLS EVERYTHING'];
-  function updateSlider(val){const i=val-1;document.getElementById('ai-level-label').textContent=lvls[i];document.getElementById('ai-emoji').textContent=emojis[i];const p=((val-1)/2)*100;document.getElementById('ai-slider').style.background=`linear-gradient(to right,var(--gold) 0%,var(--gold) ${p}%,#1E1E1E ${p}%)`;}
-  const jobLabels={mining:'Mining / FIFO Worker',farm:'Farm Worker',hospitality:'Hospitality Worker',roadhouse:'Roadhouse Worker',station:'Station Hand',construction:'Construction Labourer',retail:'Retail Worker',transport:'Transport / Truck Driver'};
-  async function generateCV(){
-    const firstName=document.getElementById('firstName').value.trim();
-    const lastName=document.getElementById('lastName').value.trim();
-    if(!firstName||!lastName){showError('Please enter your first and last name.');return;}
-    const aiLevel=parseInt(document.getElementById('ai-slider').value);
-    const aiText=aiLevel===1?'minimal AI, only use what user provided':aiLevel===2?'balanced, enhance user info':'maximum AI, create detailed experience even if user has none';
-    const cvLang=document.getElementById('cv-lang').value;
-    const prompt=`You are an expert Australian resume writer. Create a professional resume in ${cvLang} for ${firstName} ${lastName} applying for ${jobLabels[selectedJob]} in Australia.
-Phone: ${document.getElementById('phone').value||'Not provided'}
-Email: ${document.getElementById('email').value||'Not provided'}
-Location: ${document.getElementById('location').value||'Australia'}
+  // ─── TRANSLATIONS ────────────────────────────────────────────────────────────
+  const i18n = {
+    en: {
+      hero_tag: 'AI-Powered • Made for Australia',
+      hero_h1: 'Your Resume.<br><span>Built in Seconds.</span>',
+      hero_p: 'Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
+      step1: 'Choose job type', step2: 'Fill your info', step3: 'Download PDF',
+      sec_job: 'SELECT JOB TYPE',
+      job_mining: 'Mining', job_mining_sub: 'FIFO, Site work',
+      job_farm: 'Farm Work', job_farm_sub: 'Harvest, Picking',
+      job_hosp: 'Hospitality', job_hosp_sub: 'Pub, Hotel, Café',
+      job_road: 'Roadhouse', job_road_sub: 'Remote service',
+      job_station: 'Station Hand', job_station_sub: 'Cattle, Sheep',
+      job_const: 'Construction', job_const_sub: 'Labour, Trade',
+      job_retail: 'Retail', job_retail_sub: 'Shop, Supermarket',
+      job_transport: 'Transport', job_transport_sub: 'Driver, Logistics',
+      sec_personal: 'PERSONAL INFORMATION',
+      label_firstname: 'First Name', ph_firstname: 'John',
+      label_lastname: 'Last Name', ph_lastname: 'Smith',
+      label_phone: 'Phone',
+      label_email: 'Email',
+      label_location: 'Location', ph_location: 'Perth, WA',
+      label_visa: 'Visa / Work Rights',
+      visa_citizen: 'Australian Citizen', visa_pr: 'Permanent Resident',
+      visa_whv417: 'Working Holiday (417)', visa_whv462: 'Working Holiday (462)',
+      visa_student: 'Student Visa', visa_skilled: 'Skilled Visa',
+      sec_exp: 'EXPERIENCE & SKILLS',
+      label_exp: 'Past Experience (leave empty if none)',
+      ph_exp: 'e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel...',
+      label_licences: 'Licences & Certificates',
+      ph_licences: 'e.g. Driver licence, RSA, White Card, Forklift...',
+      label_languages: 'Languages spoken',
+      ph_languages: 'e.g. English, French, Spanish...',
+      sec_ai: 'AI ASSISTANCE LEVEL',
+      ai_subtitle: 'How much should AI fill in?',
+      slider_min: 'My experience only', slider_mid: 'Balanced', slider_max: 'AI fills everything',
+      ai_lvl1: 'MY EXPERIENCE ONLY', ai_lvl2: 'BALANCED', ai_lvl3: 'AI FILLS EVERYTHING',
+      sec_cvlang: 'CV LANGUAGE',
+      label_cvlang: 'Generate CV in',
+      gen_btn: '✦ GENERATE MY RESUME — $5 AUD',
+      loading_txt: 'AI is crafting your resume...',
+      result_ready: '✅ Resume ready! Download your PDF below.',
+      btn_download: '⬇ DOWNLOAD PDF',
+      btn_new: '← New Resume',
+      err_name: 'Please enter your first and last name.',
+      err_connection: 'Connection error. Please try again.',
+    },
+    fr: {
+      hero_tag: 'Propulsé par l\'IA • Fait pour l\'Australie',
+      hero_h1: 'Ton CV.<br><span>Prêt en quelques secondes.</span>',
+      hero_p: 'CV australiens professionnels pour le mining, l\'agriculture, l\'hôtellerie et plus encore. Optimisé par IA, prêt à envoyer.',
+      step1: 'Choisis ton secteur', step2: 'Remplis tes infos', step3: 'Télécharge le PDF',
+      sec_job: 'CHOISIS TON SECTEUR',
+      job_mining: 'Mining', job_mining_sub: 'FIFO, Chantier',
+      job_farm: 'Farm Work', job_farm_sub: 'Récolte, Cueillette',
+      job_hosp: 'Hôtellerie', job_hosp_sub: 'Pub, Hôtel, Café',
+      job_road: 'Roadhouse', job_road_sub: 'Service isolé',
+      job_station: 'Station Hand', job_station_sub: 'Bétail, Moutons',
+      job_const: 'Construction', job_const_sub: 'Manœuvre, Trade',
+      job_retail: 'Commerce', job_retail_sub: 'Magasin, Super',
+      job_transport: 'Transport', job_transport_sub: 'Chauffeur, Logistique',
+      sec_personal: 'INFORMATIONS PERSONNELLES',
+      label_firstname: 'Prénom', ph_firstname: 'Jean',
+      label_lastname: 'Nom', ph_lastname: 'Dupont',
+      label_phone: 'Téléphone',
+      label_email: 'Email',
+      label_location: 'Ville', ph_location: 'Perth, WA',
+      label_visa: 'Visa / Droit de travail',
+      visa_citizen: 'Citoyen australien', visa_pr: 'Résident permanent',
+      visa_whv417: 'Visa Vacances-Travail (417)', visa_whv462: 'Visa Vacances-Travail (462)',
+      visa_student: 'Visa étudiant', visa_skilled: 'Visa qualifié',
+      sec_exp: 'EXPÉRIENCE & COMPÉTENCES',
+      label_exp: 'Expériences passées (laisser vide si aucune)',
+      ph_exp: 'Ex : 6 mois dans une station au QLD, bar dans une auberge de jeunesse...',
+      label_licences: 'Licences & Certifications',
+      ph_licences: 'Ex : Permis de conduire, RSA, White Card, Chariot élévateur...',
+      label_languages: 'Langues parlées',
+      ph_languages: 'Ex : Anglais, Français, Espagnol...',
+      sec_ai: 'NIVEAU D\'ASSISTANCE IA',
+      ai_subtitle: 'Combien l\'IA doit-elle compléter ?',
+      slider_min: 'Mon expérience uniquement', slider_mid: 'Équilibré', slider_max: 'L\'IA complète tout',
+      ai_lvl1: 'MON EXPÉRIENCE UNIQUEMENT', ai_lvl2: 'ÉQUILIBRÉ', ai_lvl3: 'L\'IA COMPLÈTE TOUT',
+      sec_cvlang: 'LANGUE DU CV',
+      label_cvlang: 'Générer le CV en',
+      gen_btn: '✦ GÉNÉRER MON CV — 5 $ AUD',
+      loading_txt: 'L\'IA rédige ton CV...',
+      result_ready: '✅ CV prêt ! Télécharge ton PDF ci-dessous.',
+      btn_download: '⬇ TÉLÉCHARGER LE PDF',
+      btn_new: '← Nouveau CV',
+      err_name: 'Veuillez entrer votre prénom et votre nom.',
+      err_connection: 'Erreur de connexion. Veuillez réessayer.',
+    }
+  };
+
+  // ─── LANG SWITCH ─────────────────────────────────────────────────────────────
+  let currentLang = 'en';
+  let selectedJob = 'mining';
+  let cvData = null;
+
+  function setLang(lang) {
+    currentLang = lang;
+
+    // Update active button
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+    const t = i18n[lang];
+
+    // Update all data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (t[key] !== undefined) {
+        el.innerHTML = t[key];
+      }
+    });
+
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if (t[key] !== undefined) el.placeholder = t[key];
+    });
+
+    // Update select options
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      if (el.tagName === 'OPTION') {
+        const key = el.dataset.i18n;
+        if (t[key]) el.textContent = t[key];
+      }
+    });
+
+    // Update AI slider label
+    updateSlider(document.getElementById('ai-slider').value);
+  }
+
+  // ─── SLIDER ──────────────────────────────────────────────────────────────────
+  const emojis = ['📝', '⚖️', '🤖'];
+  function updateSlider(val) {
+    const i = val - 1;
+    const t = i18n[currentLang];
+    const lvls = [t.ai_lvl1, t.ai_lvl2, t.ai_lvl3];
+    document.getElementById('ai-level-label').textContent = lvls[i];
+    document.getElementById('ai-emoji').textContent = emojis[i];
+    const p = ((val - 1) / 2) * 100;
+    document.getElementById('ai-slider').style.background =
+      `linear-gradient(to right,var(--gold) 0%,var(--gold) ${p}%,#1E1E1E ${p}%)`;
+  }
+
+  function selectJob(el, type) {
+    document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedJob = type;
+  }
+
+  // ─── GENERATE ────────────────────────────────────────────────────────────────
+  const jobLabels = {
+    en: { mining:'Mining / FIFO Worker', farm:'Farm Worker', hospitality:'Hospitality Worker', roadhouse:'Roadhouse Worker', station:'Station Hand', construction:'Construction Labourer', retail:'Retail Worker', transport:'Transport / Truck Driver' },
+    fr: { mining:'Mineur / Travailleur FIFO', farm:'Travailleur agricole', hospitality:'Employé hôtellerie', roadhouse:'Employé roadhouse', station:'Station Hand', construction:'Manœuvre BTP', retail:'Employé commerce', transport:'Chauffeur / Logisticien' }
+  };
+
+  async function generateCV() {
+    const t = i18n[currentLang];
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    if (!firstName || !lastName) { showError(t.err_name); return; }
+
+    const aiLevel = parseInt(document.getElementById('ai-slider').value);
+    const aiText = aiLevel === 1 ? 'minimal AI, only use what user provided' : aiLevel === 2 ? 'balanced, enhance user info' : 'maximum AI, create detailed experience even if user has none';
+    const cvLang = document.getElementById('cv-lang').value;
+    const jobLabel = (jobLabels[currentLang] || jobLabels.en)[selectedJob];
+
+    const prompt = `You are an expert Australian resume writer. Create a professional resume in ${cvLang} for ${firstName} ${lastName} applying for ${jobLabel} in Australia.
+Phone: ${document.getElementById('phone').value || 'Not provided'}
+Email: ${document.getElementById('email').value || 'Not provided'}
+Location: ${document.getElementById('location').value || 'Australia'}
 Visa: ${document.getElementById('visa').value}
-Experience: ${document.getElementById('experience').value||'None'}
-Licences: ${document.getElementById('licences').value||'None'}
-Languages: ${document.getElementById('languages').value||'English'}
+Experience: ${document.getElementById('experience').value || 'None'}
+Licences: ${document.getElementById('licences').value || 'None'}
+Languages: ${document.getElementById('languages').value || 'English'}
 AI level: ${aiText}
 Write everything in ${cvLang}. Australian resume style. Return ONLY valid JSON, no markdown:
 {"name":"Full Name","jobTitle":"job title","phone":"phone","email":"email","location":"location","visa":"visa","summary":"2-3 sentence summary","experience":[{"role":"title","company":"company","period":"dates","duties":["duty1","duty2","duty3"]}],"skills":["s1","s2","s3","s4","s5","s6"],"licences":["l1"],"languages":["lang1"],"education":"education"}`;
-    document.getElementById('error-box').style.display='none';
-    document.getElementById('loading').style.display='block';
-    document.getElementById('gen-btn').disabled=true;
-    document.getElementById('cv-result').style.display='none';
-    try{
-      const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-      const data=await res.json();
-      if(data.error){showError(data.error);return;}
-      let clean=data.result.replace(/```json|```/g,'').trim();
-      cvData=JSON.parse(clean);
+
+    document.getElementById('error-box').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('gen-btn').disabled = true;
+    document.getElementById('cv-result').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
+      const data = await res.json();
+      if (data.error) { showError(data.error); return; }
+      let clean = data.result.replace(/```json|```/g, '').trim();
+      cvData = JSON.parse(clean);
       renderCV(cvData);
-      document.getElementById('cv-result').style.display='block';
-      document.getElementById('cv-result').scrollIntoView({behavior:'smooth'});
-    }catch(e){showError('Connection error. Please try again.');}
-    finally{document.getElementById('loading').style.display='none';document.getElementById('gen-btn').disabled=false;}
+      document.getElementById('cv-result').style.display = 'block';
+      document.getElementById('cv-result').scrollIntoView({ behavior: 'smooth' });
+    } catch (e) {
+      showError(t.err_connection);
+    } finally {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('gen-btn').disabled = false;
+    }
   }
-  function renderCV(d){
-    document.getElementById('cv-paper').innerHTML=`<h2>${d.name}</h2><div class="cv-title">${d.jobTitle}</div><div class="cv-contact">${d.phone} | ${d.email} | ${d.location} | ${d.visa}</div><hr/><div class="cv-section"><h3>Professional Summary</h3><p>${d.summary}</p></div><div class="cv-section"><h3>Work Experience</h3>${d.experience.map(e=>`<div class="exp-item"><div class="exp-header"><span class="exp-role">${e.role}</span><span class="exp-date">${e.period}</span></div><div class="exp-company">${e.company}</div><ul>${e.duties.map(d=>`<li>${d}</li>`).join('')}</ul></div>`).join('')}</div><div class="cv-section"><h3>Key Skills</h3><ul style="columns:2">${d.skills.map(s=>`<li>${s}</li>`).join('')}</ul></div>${d.licences&&d.licences.length?`<div class="cv-section"><h3>Licences & Certificates</h3><ul>${d.licences.map(l=>`<li>${l}</li>`).join('')}</ul></div>`:''}<div class="cv-section"><h3>Education</h3><p>${d.education}</p></div>${d.languages&&d.languages.length?`<div class="cv-section"><h3>Languages</h3><p>${d.languages.join(', ')}</p></div>`:''}<div class="cv-section"><h3>References</h3><p>Available upon request</p></div>`;
+
+  function renderCV(d) {
+    document.getElementById('cv-paper').innerHTML = `
+      <h2>${d.name}</h2>
+      <div class="cv-title">${d.jobTitle}</div>
+      <div class="cv-contact">${d.phone} | ${d.email} | ${d.location} | ${d.visa}</div>
+      <hr/>
+      <div class="cv-section"><h3>Professional Summary</h3><p>${d.summary}</p></div>
+      <div class="cv-section"><h3>Work Experience</h3>${d.experience.map(e => `
+        <div class="exp-item">
+          <div class="exp-header"><span class="exp-role">${e.role}</span><span class="exp-date">${e.period}</span></div>
+          <div class="exp-company">${e.company}</div>
+          <ul>${e.duties.map(d => `<li>${d}</li>`).join('')}</ul>
+        </div>`).join('')}
+      </div>
+      <div class="cv-section"><h3>Key Skills</h3><ul style="columns:2">${d.skills.map(s => `<li>${s}</li>`).join('')}</ul></div>
+      ${d.licences && d.licences.length ? `<div class="cv-section"><h3>Licences & Certificates</h3><ul>${d.licences.map(l => `<li>${l}</li>`).join('')}</ul></div>` : ''}
+      <div class="cv-section"><h3>Education</h3><p>${d.education}</p></div>
+      ${d.languages && d.languages.length ? `<div class="cv-section"><h3>Languages</h3><p>${d.languages.join(', ')}</p></div>` : ''}
+      <div class="cv-section"><h3>References</h3><p>Available upon request</p></div>`;
   }
-  function downloadPDF(){
-    if(!cvData)return;
-    const{jsPDF}=window.jspdf;
-    const doc=new jsPDF({unit:'mm',format:'a4'});
-    let y=20;const lm=20,rm=190,lw=rm-lm;
-    doc.setFontSize(22);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);doc.text(cvData.name,lm,y);y+=8;
-    doc.setFontSize(12);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);doc.text(cvData.jobTitle,lm,y);y+=6;
-    doc.setFontSize(10);doc.setTextColor(100,100,100);doc.text(`${cvData.phone}  |  ${cvData.email}  |  ${cvData.location}`,lm,y);y+=8;
-    doc.setDrawColor(201,168,76);doc.setLineWidth(0.8);doc.line(lm,y,rm,y);y+=8;
-    const section=(t)=>{doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);doc.text(t.toUpperCase(),lm,y);y+=5;doc.setDrawColor(201,168,76);doc.setLineWidth(0.3);doc.line(lm,y,rm,y);y+=5;doc.setTextColor(50,50,50);doc.setFont('helvetica','normal');};
-    const addText=(text,bold=false)=>{doc.setFontSize(10);doc.setFont('helvetica',bold?'bold':'normal');doc.splitTextToSize(text,lw).forEach(l=>{if(y>270){doc.addPage();y=20;}doc.text(l,lm,y);y+=5;});};
-    section('Professional Summary');addText(cvData.summary);y+=4;
+
+  function downloadPDF() {
+    if (!cvData) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    let y = 20; const lm = 20, rm = 190, lw = rm - lm;
+    doc.setFontSize(22); doc.setFont('helvetica', 'bold'); doc.setTextColor(17, 17, 17); doc.text(cvData.name, lm, y); y += 8;
+    doc.setFontSize(12); doc.setFont('helvetica', 'normal'); doc.setTextColor(80, 80, 80); doc.text(cvData.jobTitle, lm, y); y += 6;
+    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.text(`${cvData.phone}  |  ${cvData.email}  |  ${cvData.location}`, lm, y); y += 8;
+    doc.setDrawColor(201, 168, 76); doc.setLineWidth(0.8); doc.line(lm, y, rm, y); y += 8;
+    const section = (t) => { doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(201, 168, 76); doc.text(t.toUpperCase(), lm, y); y += 5; doc.setDrawColor(201, 168, 76); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5; doc.setTextColor(50, 50, 50); doc.setFont('helvetica', 'normal'); };
+    const addText = (text) => { doc.setFontSize(10); doc.splitTextToSize(text, lw).forEach(l => { if (y > 270) { doc.addPage(); y = 20; } doc.text(l, lm, y); y += 5; }); };
+    section('Professional Summary'); addText(cvData.summary); y += 4;
     section('Work Experience');
-    cvData.experience.forEach(e=>{doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);doc.text(e.role,lm,y);doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);doc.text(e.period,rm,y,{align:'right'});y+=5;doc.setTextColor(80,80,80);doc.text(e.company,lm,y);y+=5;doc.setTextColor(50,50,50);e.duties.forEach(d=>{doc.splitTextToSize(`• ${d}`,lw-4).forEach(l=>{doc.text(l,lm+2,y);y+=4.5;});});y+=3;});
+    cvData.experience.forEach(e => {
+      doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(17, 17, 17); doc.text(e.role, lm, y);
+      doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(120, 120, 120); doc.text(e.period, rm, y, { align: 'right' }); y += 5;
+      doc.setTextColor(80, 80, 80); doc.text(e.company, lm, y); y += 5;
+      doc.setTextColor(50, 50, 50);
+      e.duties.forEach(d => { doc.splitTextToSize(`• ${d}`, lw - 4).forEach(l => { doc.text(l, lm + 2, y); y += 4.5; }); });
+      y += 3;
+    });
     section('Key Skills');
-    const sc=[cvData.skills.slice(0,3),cvData.skills.slice(3)];
-    for(let i=0;i<Math.max(sc[0].length,sc[1].length);i++){doc.setFontSize(10);doc.setTextColor(50,50,50);if(sc[0][i])doc.text(`• ${sc[0][i]}`,lm,y);if(sc[1][i])doc.text(`• ${sc[1][i]}`,lm+lw/2,y);y+=5;}y+=4;
-    if(cvData.licences&&cvData.licences.length){section('Licences & Certificates');cvData.licences.forEach(l=>addText(`• ${l}`));y+=4;}
-    section('Education');addText(cvData.education);y+=4;
-    if(cvData.languages&&cvData.languages.length){section('Languages');addText(cvData.languages.join(', '));y+=4;}
-    section('References');addText('Available upon request');
-    doc.save(`${cvData.name.replace(' ','_')}_Resume.pdf`);
+    const sc = [cvData.skills.slice(0, 3), cvData.skills.slice(3)];
+    for (let i = 0; i < Math.max(sc[0].length, sc[1].length); i++) {
+      if (sc[0][i]) doc.text(`• ${sc[0][i]}`, lm, y);
+      if (sc[1][i]) doc.text(`• ${sc[1][i]}`, lm + lw / 2, y);
+      y += 5;
+    } y += 4;
+    if (cvData.licences && cvData.licences.length) { section('Licences & Certificates'); cvData.licences.forEach(l => addText(`• ${l}`)); y += 4; }
+    section('Education'); addText(cvData.education); y += 4;
+    if (cvData.languages && cvData.languages.length) { section('Languages'); addText(cvData.languages.join(', ')); y += 4; }
+    section('References'); addText('Available upon request');
+    doc.save(`${cvData.name.replace(' ', '_')}_Resume.pdf`);
   }
-  function showError(msg){const b=document.getElementById('error-box');b.textContent='⚠ '+msg;b.style.display='block';document.getElementById('loading').style.display='none';document.getElementById('gen-btn').disabled=false;}
-  function resetForm(){document.getElementById('cv-result').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+
+  function showError(msg) {
+    const b = document.getElementById('error-box');
+    b.textContent = '⚠ ' + msg;
+    b.style.display = 'block';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('gen-btn').disabled = false;
+  }
+
+  function resetForm() {
+    document.getElementById('cv-result').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 </script>
 </body>
 </html>
