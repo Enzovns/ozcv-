@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OzCV — AI Resume Builder Australia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --dark: #0D0D0D;
+      --dark2: #161616;
+      --dark3: #1E1E1E;
+      --border: rgba(201,168,76,0.2);
+      --text: #F5F0E8;
+      --muted: rgba(245,240,232,0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    ::selection { background: var(--gold); color: var(--dark); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(13,13,13,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .lang-toggle { display: flex; gap: 4px; background: var(--dark3); border: 1px solid var(--border); border-radius: 6px; padding: 4px; }
+    .lang-btn { background: none; border: none; color: var(--muted); padding: 6px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+    .lang-btn.active { background: var(--gold); color: var(--dark); font-weight: 600; }
+    .hero { text-align: center; padding: 64px 24px 48px; animation: fadeUp 0.6s ease forwards; }
+    .hero-tag { display: inline-block; background: rgba(201,168,76,0.1); border: 1px solid var(--border); color: var(--gold); font-size: 11px; letter-spacing: 3px; padding: 6px 16px; border-radius: 20px; margin-bottom: 24px; text-transform: uppercase; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 10vw, 80px); letter-spacing: 2px; line-height: 1; margin-bottom: 16px; }
+    .hero h1 span { background: linear-gradient(135deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: var(--muted); font-size: 16px; max-width: 480px; margin: 0 auto 40px; line-height: 1.6; }
+    .steps { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 48px; }
+    .step { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--dark3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--gold); font-weight: 600; }
+    .step-divider { color: var(--border); font-size: 18px; }
+    .container { max-width: 820px; margin: 0 auto; padding: 0 20px 80px; }
+    .section { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; animation: fadeUp 0.5s ease forwards; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .job-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .job-card { background: var(--dark3); border: 1px solid var(--border); border-radius: 8px; padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .job-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .job-card.active { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+    .job-card .emoji { font-size: 28px; margin-bottom: 8px; }
+    .job-card .label { font-size: 12px; font-weight: 500; color: var(--text); }
+    .job-card .sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid.full { grid-template-columns: 1fr; }
+    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 11px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; font-weight: 500; }
+    .field input, .field textarea, .field select { background: var(--dark3); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; width: 100%; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+    .field input::placeholder, .field textarea::placeholder { color: rgba(245,240,232,0.2); }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field select option { background: var(--dark2); }
+    .ai-slider-wrap { background: var(--dark3); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+    .ai-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .ai-level { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--gold); letter-spacing: 1px; }
+    input[type="range"] { width: 100%; -webkit-appearance: none; height: 4px; background: linear-gradient(to right, var(--gold) 0%, var(--gold) 50%, var(--dark) 50%); border-radius: 2px; outline: none; margin-bottom: 10px; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); cursor: pointer; box-shadow: 0 0 12px rgba(201,168,76,0.5); }
+    .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+    .gen-btn { width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; color: var(--dark); padding: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; cursor: pointer; border-radius: 8px; transition: all 0.2s; margin-top: 8px; }
+    .gen-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 8px 30px rgba(201,168,76,0.3); }
+    .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .loading { text-align: center; padding: 48px; display: none; }
+    .spinner { width: 44px; height: 44px; border: 3px solid rgba(201,168,76,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 16px; }
+    .loading p { color: var(--muted); font-size: 14px; }
+    .error-box { background: rgba(220,50,50,0.1); border: 1px solid rgba(220,50,50,0.3); border-radius: 8px; padding: 14px 18px; color: #ff7070; font-size: 13px; margin-top: 16px; display: none; }
+    .cv-result { display: none; animation: fadeUp 0.5s ease forwards; }
+    .cv-actions { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .btn-download { background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; color: var(--dark); padding: 14px 28px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; cursor: pointer; border-radius: 6px; transition: all 0.2s; flex: 1; }
+    .btn-download:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-new { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
+    .btn-new:hover { border-color: var(--gold); color: var(--gold); }
+    #cv-paper { background: white; color: #111; border-radius: 8px; padding: 40px; font-family: 'DM Sans', sans-serif; line-height: 1.6; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    #cv-paper h2 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 2px; }
+    #cv-paper .cv-title { font-size: 14px; color: #555; margin-bottom: 4px; }
+    #cv-paper .cv-contact { font-size: 12px; color: #666; margin-bottom: 20px; }
+    #cv-paper hr { border: none; border-top: 2px solid #C9A84C; margin: 16px 0; }
+    #cv-paper h3 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #C9A84C; font-weight: 700; margin-bottom: 10px; margin-top: 16px; }
+    #cv-paper p { font-size: 13px; color: #333; margin-bottom: 6px; }
+    #cv-paper ul { padding-left: 18px; }
+    #cv-paper ul li { font-size: 13px; color: #333; margin-bottom: 4px; }
+    #cv-paper .cv-section { margin-bottom: 16px; }
+    #cv-paper .exp-item { margin-bottom: 12px; }
+    #cv-paper .exp-header { display: flex; justify-content: space-between; align-items: baseline; }
+    #cv-paper .exp-role { font-weight: 600; font-size: 14px; color: #111; }
+    #cv-paper .exp-date { font-size: 12px; color: #888; }
+    #cv-paper .exp-company { font-size: 13px; color: #555; margin-bottom: 4px; }
+    .price-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.1); border: 1px solid var(--border); border-radius: 6px; padding: 8px 16px; font-size: 13px; color: var(--gold); margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="logo">OzCV</div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">🇦🇺 EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-tag">AI-Powered • Made for Australia</div>
+  <h1>Your Resume.<br><span>Built in Seconds.</span></h1>
+  <p>Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div> <span>Choose job type</span></div>
+    <div class="step-divider">→</div>
+    <div class="step"><div class="step-num">2</div> <span>Fill your info</span></div>
+    <div class="step-divider">→</div>
+    <div class="step"><div class="step-num">3</div> <span>Download PDF</span></div>
+  </div>
+</div>
+<div class="container">
+  <div class="section">
+    <div class="section-title">SELECT JOB TYPE</div>
+    <div class="job-grid">
+      <div class="job-card active" onclick="selectJob(this,'mining')"><div class="emoji">⛏️</div><div class="label">Mining</div><div class="sub">FIFO, Site work</div></div>
+      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label">Farm Work</div><div class="sub">Harvest, Picking</div></div>
+      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label">Hospitality</div><div class="sub">Pub, Hotel, Café</div></div>
+      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label">Roadhouse</div><div class="sub">Remote service</div></div>
+      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label">Station Hand</div><div class="sub">Cattle, Sheep</div></div>
+      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label">Construction</div><div class="sub">Labour, Trade</div></div>
+      <div class="job-card" onclick="selectJob(this,'retail')"><div class="emoji">🛒</div><div class="label">Retail</div><div class="sub">Shop, Supermarket</div></div>
+      <div class="job-card" onclick="selectJob(this,'transport')"><div class="emoji">🚛</div><div class="label">Transport</div><div class="sub">Driver, Logistics</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">PERSONAL INFORMATION</div>
+    <div class="form-grid">
+      <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="John" /></div>
+      <div class="field"><label>Last Name</label><input type="text" id="lastName" placeholder="Smith" /></div>
+      <div class="field"><label>Phone</label><input type="text" id="phone" placeholder="+61 400 000 000" /></div>
+      <div class="field"><label>Email</label><input type="text" id="email" placeholder="john@email.com" /></div>
+      <div class="field"><label>Location</label><input type="text" id="location" placeholder="Perth, WA" /></div>
+      <div class="field"><label>Visa / Work Rights</label>
+        <select id="visa">
+          <option value="Australian Citizen">Australian Citizen</option>
+          <option value="Permanent Resident">Permanent Resident</option>
+          <option value="Working Holiday Visa (417)">Working Holiday (417)</option>
+          <option value="Working Holiday Visa (462)">Working Holiday (462)</option>
+          <option value="Student Visa">Student Visa</option>
+          <option value="Skilled Visa">Skilled Visa</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">EXPERIENCE & SKILLS</div>
+    <div class="form-grid full">
+      <div class="field"><label>Past Experience (leave empty if none)</label><textarea id="experience" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
+      <div class="field"><label>Licences & Certificates</label><input type="text" id="licences" placeholder="e.g. Driver licence, RSA, White Card, Forklift..." /></div>
+      <div class="field"><label>Languages spoken</label><input type="text" id="languages" placeholder="e.g. English, French, Spanish..." /></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">AI ASSISTANCE LEVEL</div>
+    <div class="ai-slider-wrap">
+      <div class="ai-slider-header">
+        <div><div style="font-size:13px;color:var(--muted);margin-bottom:4px">How much should AI fill in?</div><div class="ai-level" id="ai-level-label">BALANCED</div></div>
+        <div style="font-size:32px" id="ai-emoji">⚖️</div>
+      </div>
+      <input type="range" min="1" max="3" value="2" id="ai-slider" oninput="updateSlider(this.value)" />
+      <div class="slider-labels"><span>My experience only</span><span>Balanced</span><span>AI fills everything</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">CV LANGUAGE</div>
+    <div class="form-grid">
+      <div class="field"><label>Generate CV in</label>
+        <select id="cv-lang">
+          <option value="English">🇦🇺 English</option>
+          <option value="French">🇫🇷 Français</option>
+          <option value="Spanish">🇪🇸 Español</option>
+          <option value="Portuguese">🇧🇷 Português</option>
+          <option value="German">🇩🇪 Deutsch</option>
+          <option value="Italian">🇮🇹 Italiano</option>
+          <option value="Japanese">🇯🇵 日本語</option>
+          <option value="Korean">🇰🇷 한국어</option>
+          <option value="Mandarin">🇨🇳 中文</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button class="gen-btn" id="gen-btn" onclick="generateCV()">✦ GENERATE MY RESUME — $5 AUD</button>
+  <div class="error-box" id="error-box"></div>
+  <div class="loading" id="loading"><div class="spinner"></div><p>AI is crafting your resume...</p></div>
+  <div class="cv-result" id="cv-result" style="margin-top:32px">
+    <div class="price-badge">✅ Resume ready! Download your PDF below.</div>
+    <div class="cv-actions">
+      <button class="btn-download" onclick="downloadPDF()">⬇ DOWNLOAD PDF</button>
+      <button class="btn-new" onclick="resetForm()">← New Resume</button>
+    </div>
+    <div id="cv-paper"></div>
+  </div>
+</div>
+<script>
+  let currentLang='en', selectedJob='mining', cvData=null;
+  function setLang(lang){currentLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');}
+  function selectJob(el,type){document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');selectedJob=type;}
+  const emojis=['📝','⚖️','🤖'];
+  const lvls=['MY EXPERIENCE ONLY','BALANCED','AI FILLS EVERYTHING'];
+  function updateSlider(val){const i=val-1;document.getElementById('ai-level-label').textContent=lvls[i];document.getElementById('ai-emoji').textContent=emojis[i];const p=((val-1)/2)*100;document.getElementById('ai-slider').style.background=`linear-gradient(to right,var(--gold) 0%,var(--gold) ${p}%,#1E1E1E ${p}%)`;}
+  const jobLabels={mining:'Mining / FIFO Worker',farm:'Farm Worker',hospitality:'Hospitality Worker',roadhouse:'Roadhouse Worker',station:'Station Hand',construction:'Construction Labourer',retail:'Retail Worker',transport:'Transport / Truck Driver'};
+  async function generateCV(){
+    const firstName=document.getElementById('firstName').value.trim();
+    const lastName=document.getElementById('lastName').value.trim();
+    if(!firstName||!lastName){showError('Please enter your first and last name.');return;}
+    const aiLevel=parseInt(document.getElementById('ai-slider').value);
+    const aiText=aiLevel===1?'minimal AI, only use what user provided':aiLevel===2?'balanced, enhance user info':'maximum AI, create detailed experience even if user has none';
+    const cvLang=document.getElementById('cv-lang').value;
+    const prompt=`You are an expert Australian resume writer. Create a professional resume in ${cvLang} for ${firstName} ${lastName} applying for ${jobLabels[selectedJob]} in Australia.
+Phone: ${document.getElementById('phone').value||'Not provided'}
+Email: ${document.getElementById('email').value||'Not provided'}
+Location: ${document.getElementById('location').value||'Australia'}
+Visa: ${document.getElementById('visa').value}
+Experience: ${document.getElementById('experience').value||'None'}
+Licences: ${document.getElementById('licences').value||'None'}
+Languages: ${document.getElementById('languages').value||'English'}
+AI level: ${aiText}
+Write everything in ${cvLang}. Australian resume style. Return ONLY valid JSON, no markdown:
+{"name":"Full Name","jobTitle":"job title","phone":"phone","email":"email","location":"location","visa":"visa","summary":"2-3 sentence summary","experience":[{"role":"title","company":"company","period":"dates","duties":["duty1","duty2","duty3"]}],"skills":["s1","s2","s3","s4","s5","s6"],"licences":["l1"],"languages":["lang1"],"education":"education"}`;
+    document.getElementById('error-box').style.display='none';
+    document.getElementById('loading').style.display='block';
+    document.getElementById('gen-btn').disabled=true;
+    document.getElementById('cv-result').style.display='none';
+    try{
+      const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+      const data=await res.json();
+      if(data.error){showError(data.error);return;}
+      let clean=data.result.replace(/```json|```/g,'').trim();
+      cvData=JSON.parse(clean);
+      renderCV(cvData);
+      document.getElementById('cv-result').style.display='block';
+      document.getElementById('cv-result').scrollIntoView({behavior:'smooth'});
+    }catch(e){showError('Connection error. Please try again.');}
+    finally{document.getElementById('loading').style.display='none';document.getElementById('gen-btn').disabled=false;}
+  }
+  function renderCV(d){
+    document.getElementById('cv-paper').innerHTML=`<h2>${d.name}</h2><div class="cv-title">${d.jobTitle}</div><div class="cv-contact">${d.phone} | ${d.email} | ${d.location} | ${d.visa}</div><hr/><div class="cv-section"><h3>Professional Summary</h3><p>${d.summary}</p></div><div class="cv-section"><h3>Work Experience</h3>${d.experience.map(e=>`<div class="exp-item"><div class="exp-header"><span class="exp-role">${e.role}</span><span class="exp-date">${e.period}</span></div><div class="exp-company">${e.company}</div><ul>${e.duties.map(d=>`<li>${d}</li>`).join('')}</ul></div>`).join('')}</div><div class="cv-section"><h3>Key Skills</h3><ul style="columns:2">${d.skills.map(s=>`<li>${s}</li>`).join('')}</ul></div>${d.licences&&d.licences.length?`<div class="cv-section"><h3>Licences & Certificates</h3><ul>${d.licences.map(l=>`<li>${l}</li>`).join('')}</ul></div>`:''}<div class="cv-section"><h3>Education</h3><p>${d.education}</p></div>${d.languages&&d.languages.length?`<div class="cv-section"><h3>Languages</h3><p>${d.languages.join(', ')}</p></div>`:''}<div class="cv-section"><h3>References</h3><p>Available upon request</p></div>`;
+  }
+  function downloadPDF(){
+    if(!cvData)return;
+    const{jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:'mm',format:'a4'});
+    let y=20;const lm=20,rm=190,lw=rm-lm;
+    doc.setFontSize(22);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);doc.text(cvData.name,lm,y);y+=8;
+    doc.setFontSize(12);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);doc.text(cvData.jobTitle,lm,y);y+=6;
+    doc.setFontSize(10);doc.setTextColor(100,100,100);doc.text(`${cvData.phone}  |  ${cvData.email}  |  ${cvData.location}`,lm,y);y+=8;
+    doc.setDrawColor(201,168,76);doc.setLineWidth(0.8);doc.line(lm,y,rm,y);y+=8;
+    const section=(t)=>{doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);doc.text(t.toUpperCase(),lm,y);y+=5;doc.setDrawColor(201,168,76);doc.setLineWidth(0.3);doc.line(lm,y,rm,y);y+=5;doc.setTextColor(50,50,50);doc.setFont('helvetica','normal');};
+    const addText=(text,bold=false)=>{doc.setFontSize(10);doc.setFont('helvetica',bold?'bold':'normal');doc.splitTextToSize(text,lw).forEach(l=>{if(y>270){doc.addPage();y=20;}doc.text(l,lm,y);y+=5;});};
+    section('Professional Summary');addText(cvData.summary);y+=4;
+    section('Work Experience');
+    cvData.experience.forEach(e=>{doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);doc.text(e.role,lm,y);doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);doc.text(e.period,rm,y,{align:'right'});y+=5;doc.setTextColor(80,80,80);doc.text(e.company,lm,y);y+=5;doc.setTextColor(50,50,50);e.duties.forEach(d=>{doc.splitTextToSize(`• ${d}`,lw-4).forEach(l=>{doc.text(l,lm+2,y);y+=4.5;});});y+=3;});
+    section('Key Skills');
+    const sc=[cvData.skills.slice(0,3),cvData.skills.slice(3)];
+    for(let i=0;i<Math.max(sc[0].length,sc[1].length);i++){doc.setFontSize(10);doc.setTextColor(50,50,50);if(sc[0][i])doc.text(`• ${sc[0][i]}`,lm,y);if(sc[1][i])doc.text(`• ${sc[1][i]}`,lm+lw/2,y);y+=5;}y+=4;
+    if(cvData.licences&&cvData.licences.length){section('Licences & Certificates');cvData.licences.forEach(l=>addText(`• ${l}`));y+=4;}
+    section('Education');addText(cvData.education);y+=4;
+    if(cvData.languages&&cvData.languages.length){section('Languages');addText(cvData.languages.join(', '));y+=4;}
+    section('References');addText('Available upon request');
+    doc.save(`${cvData.name.replace(' ','_')}_Resume.pdf`);
+  }
+  function showError(msg){const b=document.getElementById('error-box');b.textContent='⚠ '+msg;b.style.display='block';document.getElementById('loading').style.display='none';document.getElementById('gen-btn').disabled=false;}
+  function resetForm(){document.getElementById('cv-result').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
