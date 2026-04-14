@@ -62,7 +62,10 @@
     .ai-level { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--gold); letter-spacing: 1px; }
     input[type="range"] { width: 100%; -webkit-appearance: none; height: 4px; background: linear-gradient(to right, var(--gold) 0%, var(--gold) 50%, var(--dark) 50%); border-radius: 2px; outline: none; margin-bottom: 10px; }
     input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); cursor: pointer; box-shadow: 0 0 12px rgba(201,168,76,0.5); }
-    .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+    .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); gap: 4px; }
+    .slider-labels span { flex: 1; text-align: center; }
+    .slider-labels span:first-child { text-align: left; }
+    .slider-labels span:last-child { text-align: right; }
     .gen-btn { width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; color: var(--dark); padding: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; cursor: pointer; border-radius: 8px; transition: all 0.2s; margin-top: 8px; }
     .gen-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 8px 30px rgba(201,168,76,0.3); }
     .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -103,10 +106,9 @@
   </div>
 </nav>
 
-<!-- All translatable text lives here, NOT in the HTML -->
 <div class="hero">
   <div class="hero-tag" data-i18n="hero_tag">AI-Powered • Made for Australia</div>
-  <h1 data-i18n="hero_h1">Your Resume.<br><span data-i18n="hero_h1_span">Built in Seconds.</span></h1>
+  <h1 data-i18n="hero_h1">Your Resume.<br><span>Built in Seconds.</span></h1>
   <p data-i18n="hero_p">Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
   <div class="steps">
     <div class="step"><div class="step-num">1</div> <span data-i18n="step1">Choose job type</span></div>
@@ -121,14 +123,13 @@
   <div class="section">
     <div class="section-title" data-i18n="sec_job">SELECT JOB TYPE</div>
     <div class="job-grid">
-      <div class="job-card active" onclick="selectJob(this,'mining')"><div class="emoji">⛏️</div><div class="label" data-i18n="job_mining">Mining</div><div class="sub" data-i18n="job_mining_sub">FIFO, Site work</div></div>
+      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label" data-i18n="job_mine_utility">Mine Utility</div><div class="sub" data-i18n="job_mine_utility_sub">Camp, Cleaning</div></div>
+      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label" data-i18n="job_mine_entry">Mine Entry Level</div><div class="sub" data-i18n="job_mine_entry_sub">Labourer, Sentry</div></div>
       <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" data-i18n="job_farm">Farm Work</div><div class="sub" data-i18n="job_farm_sub">Harvest, Picking</div></div>
       <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" data-i18n="job_hosp">Hospitality</div><div class="sub" data-i18n="job_hosp_sub">Pub, Hotel, Café</div></div>
       <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" data-i18n="job_road">Roadhouse</div><div class="sub" data-i18n="job_road_sub">Remote service</div></div>
       <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" data-i18n="job_station">Station Hand</div><div class="sub" data-i18n="job_station_sub">Cattle, Sheep</div></div>
       <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" data-i18n="job_const">Construction</div><div class="sub" data-i18n="job_const_sub">Labour, Trade</div></div>
-      <div class="job-card" onclick="selectJob(this,'retail')"><div class="emoji">🛒</div><div class="label" data-i18n="job_retail">Retail</div><div class="sub" data-i18n="job_retail_sub">Shop, Supermarket</div></div>
-      <div class="job-card" onclick="selectJob(this,'transport')"><div class="emoji">🚛</div><div class="label" data-i18n="job_transport">Transport</div><div class="sub" data-i18n="job_transport_sub">Driver, Logistics</div></div>
     </div>
   </div>
 
@@ -214,7 +215,6 @@
 </div>
 
 <script>
-  // ─── TRANSLATIONS ────────────────────────────────────────────────────────────
   const i18n = {
     en: {
       hero_tag: 'AI-Powered • Made for Australia',
@@ -222,19 +222,17 @@
       hero_p: 'Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
       step1: 'Choose job type', step2: 'Fill your info', step3: 'Download PDF',
       sec_job: 'SELECT JOB TYPE',
-      job_mining: 'Mining', job_mining_sub: 'FIFO, Site work',
+      job_mine_utility: 'Mine Utility', job_mine_utility_sub: 'Camp, Cleaning',
+      job_mine_entry: 'Mine Entry Level', job_mine_entry_sub: 'Labourer, Sentry',
       job_farm: 'Farm Work', job_farm_sub: 'Harvest, Picking',
       job_hosp: 'Hospitality', job_hosp_sub: 'Pub, Hotel, Café',
       job_road: 'Roadhouse', job_road_sub: 'Remote service',
       job_station: 'Station Hand', job_station_sub: 'Cattle, Sheep',
       job_const: 'Construction', job_const_sub: 'Labour, Trade',
-      job_retail: 'Retail', job_retail_sub: 'Shop, Supermarket',
-      job_transport: 'Transport', job_transport_sub: 'Driver, Logistics',
       sec_personal: 'PERSONAL INFORMATION',
       label_firstname: 'First Name', ph_firstname: 'John',
       label_lastname: 'Last Name', ph_lastname: 'Smith',
-      label_phone: 'Phone',
-      label_email: 'Email',
+      label_phone: 'Phone', label_email: 'Email',
       label_location: 'Location', ph_location: 'Perth, WA',
       label_visa: 'Visa / Work Rights',
       visa_citizen: 'Australian Citizen', visa_pr: 'Permanent Resident',
@@ -251,13 +249,11 @@
       ai_subtitle: 'How much should AI fill in?',
       slider_min: 'My experience only', slider_mid: 'Balanced', slider_max: 'AI fills everything',
       ai_lvl1: 'MY EXPERIENCE ONLY', ai_lvl2: 'BALANCED', ai_lvl3: 'AI FILLS EVERYTHING',
-      sec_cvlang: 'CV LANGUAGE',
-      label_cvlang: 'Generate CV in',
+      sec_cvlang: 'CV LANGUAGE', label_cvlang: 'Generate CV in',
       gen_btn: '✦ GENERATE MY RESUME — $5 AUD',
       loading_txt: 'AI is crafting your resume...',
       result_ready: '✅ Resume ready! Download your PDF below.',
-      btn_download: '⬇ DOWNLOAD PDF',
-      btn_new: '← New Resume',
+      btn_download: '⬇ DOWNLOAD PDF', btn_new: '← New Resume',
       err_name: 'Please enter your first and last name.',
       err_connection: 'Connection error. Please try again.',
     },
@@ -267,19 +263,17 @@
       hero_p: 'CV australiens professionnels pour le mining, l\'agriculture, l\'hôtellerie et plus encore. Optimisé par IA, prêt à envoyer.',
       step1: 'Choisis ton secteur', step2: 'Remplis tes infos', step3: 'Télécharge le PDF',
       sec_job: 'CHOISIS TON SECTEUR',
-      job_mining: 'Mining', job_mining_sub: 'FIFO, Chantier',
+      job_mine_utility: 'Mine Utility', job_mine_utility_sub: 'Camp, Nettoyage',
+      job_mine_entry: 'Mine Débutant', job_mine_entry_sub: 'Manœuvre, Sentry',
       job_farm: 'Farm Work', job_farm_sub: 'Récolte, Cueillette',
       job_hosp: 'Hôtellerie', job_hosp_sub: 'Pub, Hôtel, Café',
       job_road: 'Roadhouse', job_road_sub: 'Service isolé',
       job_station: 'Station Hand', job_station_sub: 'Bétail, Moutons',
       job_const: 'Construction', job_const_sub: 'Manœuvre, Trade',
-      job_retail: 'Commerce', job_retail_sub: 'Magasin, Super',
-      job_transport: 'Transport', job_transport_sub: 'Chauffeur, Logistique',
       sec_personal: 'INFORMATIONS PERSONNELLES',
       label_firstname: 'Prénom', ph_firstname: 'Jean',
       label_lastname: 'Nom', ph_lastname: 'Dupont',
-      label_phone: 'Téléphone',
-      label_email: 'Email',
+      label_phone: 'Téléphone', label_email: 'Email',
       label_location: 'Ville', ph_location: 'Perth, WA',
       label_visa: 'Visa / Droit de travail',
       visa_citizen: 'Citoyen australien', visa_pr: 'Résident permanent',
@@ -296,65 +290,41 @@
       ai_subtitle: 'Combien l\'IA doit-elle compléter ?',
       slider_min: 'Mon expérience uniquement', slider_mid: 'Équilibré', slider_max: 'L\'IA complète tout',
       ai_lvl1: 'MON EXPÉRIENCE UNIQUEMENT', ai_lvl2: 'ÉQUILIBRÉ', ai_lvl3: 'L\'IA COMPLÈTE TOUT',
-      sec_cvlang: 'LANGUE DU CV',
-      label_cvlang: 'Générer le CV en',
+      sec_cvlang: 'LANGUE DU CV', label_cvlang: 'Générer le CV en',
       gen_btn: '✦ GÉNÉRER MON CV — 5 $ AUD',
       loading_txt: 'L\'IA rédige ton CV...',
       result_ready: '✅ CV prêt ! Télécharge ton PDF ci-dessous.',
-      btn_download: '⬇ TÉLÉCHARGER LE PDF',
-      btn_new: '← Nouveau CV',
+      btn_download: '⬇ TÉLÉCHARGER LE PDF', btn_new: '← Nouveau CV',
       err_name: 'Veuillez entrer votre prénom et votre nom.',
       err_connection: 'Erreur de connexion. Veuillez réessayer.',
     }
   };
 
-  // ─── LANG SWITCH ─────────────────────────────────────────────────────────────
   let currentLang = 'en';
-  let selectedJob = 'mining';
+  let selectedJob = 'mine_utility';
   let cvData = null;
 
   function setLang(lang) {
     currentLang = lang;
-
-    // Update active button
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
-
     const t = i18n[lang];
-
-    // Update all data-i18n elements
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
-      if (t[key] !== undefined) {
-        el.innerHTML = t[key];
-      }
+      if (t[key] !== undefined) el.innerHTML = t[key];
     });
-
-    // Update placeholders
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.dataset.i18nPlaceholder;
       if (t[key] !== undefined) el.placeholder = t[key];
     });
-
-    // Update select options
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      if (el.tagName === 'OPTION') {
-        const key = el.dataset.i18n;
-        if (t[key]) el.textContent = t[key];
-      }
-    });
-
-    // Update AI slider label
     updateSlider(document.getElementById('ai-slider').value);
   }
 
-  // ─── SLIDER ──────────────────────────────────────────────────────────────────
   const emojis = ['📝', '⚖️', '🤖'];
   function updateSlider(val) {
     const i = val - 1;
     const t = i18n[currentLang];
-    const lvls = [t.ai_lvl1, t.ai_lvl2, t.ai_lvl3];
-    document.getElementById('ai-level-label').textContent = lvls[i];
+    document.getElementById('ai-level-label').textContent = [t.ai_lvl1, t.ai_lvl2, t.ai_lvl3][i];
     document.getElementById('ai-emoji').textContent = emojis[i];
     const p = ((val - 1) / 2) * 100;
     document.getElementById('ai-slider').style.background =
@@ -367,10 +337,21 @@
     selectedJob = type;
   }
 
-  // ─── GENERATE ────────────────────────────────────────────────────────────────
   const jobLabels = {
-    en: { mining:'Mining / FIFO Worker', farm:'Farm Worker', hospitality:'Hospitality Worker', roadhouse:'Roadhouse Worker', station:'Station Hand', construction:'Construction Labourer', retail:'Retail Worker', transport:'Transport / Truck Driver' },
-    fr: { mining:'Mineur / Travailleur FIFO', farm:'Travailleur agricole', hospitality:'Employé hôtellerie', roadhouse:'Employé roadhouse', station:'Station Hand', construction:'Manœuvre BTP', retail:'Employé commerce', transport:'Chauffeur / Logisticien' }
+    en: {
+      mine_utility: 'FIFO Utility Worker – Mine Site Support',
+      mine_entry: 'Mine Labourer / Trade Assistant / Sentry',
+      farm: 'Farm Worker', hospitality: 'Hospitality Worker',
+      roadhouse: 'Roadhouse All-Rounder', station: 'Station Hand',
+      construction: 'Construction Labourer'
+    },
+    fr: {
+      mine_utility: 'Agent de support minier FIFO – Utility Worker',
+      mine_entry: 'Manœuvre minier / Trade Assistant / Sentinelle',
+      farm: 'Travailleur agricole', hospitality: 'Employé hôtellerie',
+      roadhouse: 'Employé roadhouse', station: 'Station Hand',
+      construction: 'Manœuvre BTP'
+    }
   };
 
   async function generateCV() {
@@ -378,12 +359,11 @@
     const firstName = document.getElementById('firstName').value.trim();
     const lastName = document.getElementById('lastName').value.trim();
     if (!firstName || !lastName) { showError(t.err_name); return; }
-
     const aiLevel = parseInt(document.getElementById('ai-slider').value);
     const aiText = aiLevel === 1 ? 'minimal AI, only use what user provided' : aiLevel === 2 ? 'balanced, enhance user info' : 'maximum AI, create detailed experience even if user has none';
     const cvLang = document.getElementById('cv-lang').value;
     const jobLabel = (jobLabels[currentLang] || jobLabels.en)[selectedJob];
-
+    const isMining = selectedJob === 'mine_utility' || selectedJob === 'mine_entry';
     const prompt = `You are an expert Australian resume writer. Create a professional resume in ${cvLang} for ${firstName} ${lastName} applying for ${jobLabel} in Australia.
 Phone: ${document.getElementById('phone').value || 'Not provided'}
 Email: ${document.getElementById('email').value || 'Not provided'}
@@ -393,14 +373,15 @@ Experience: ${document.getElementById('experience').value || 'None'}
 Licences: ${document.getElementById('licences').value || 'None'}
 Languages: ${document.getElementById('languages').value || 'English'}
 AI level: ${aiText}
-Write everything in ${cvLang}. Australian resume style. Return ONLY valid JSON, no markdown:
+${isMining ? 'IMPORTANT: This is a mining CV. Always mention: Drug & Alcohol free, available for FIFO, and include relevant safety tickets.' : ''}
+Australian resume rules: No photo, no date of birth, always mention visa/work rights, end with "References available upon request".
+Write everything in ${cvLang}. Return ONLY valid JSON, no markdown:
 {"name":"Full Name","jobTitle":"job title","phone":"phone","email":"email","location":"location","visa":"visa","summary":"2-3 sentence summary","experience":[{"role":"title","company":"company","period":"dates","duties":["duty1","duty2","duty3"]}],"skills":["s1","s2","s3","s4","s5","s6"],"licences":["l1"],"languages":["lang1"],"education":"education"}`;
 
     document.getElementById('error-box').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
     document.getElementById('gen-btn').disabled = true;
     document.getElementById('cv-result').style.display = 'none';
-
     try {
       const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
       const data = await res.json();
@@ -457,7 +438,7 @@ Write everything in ${cvLang}. Australian resume style. Return ONLY valid JSON, 
       doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(120, 120, 120); doc.text(e.period, rm, y, { align: 'right' }); y += 5;
       doc.setTextColor(80, 80, 80); doc.text(e.company, lm, y); y += 5;
       doc.setTextColor(50, 50, 50);
-      e.duties.forEach(d => { doc.splitTextToSize(`• ${d}`, lw - 4).forEach(l => { doc.text(l, lm + 2, y); y += 4.5; }); });
+      e.duties.forEach(d => { doc.splitTextToSize(`• ${d}`, lw - 4).forEach(l => { if (y > 270) { doc.addPage(); y = 20; } doc.text(l, lm + 2, y); y += 4.5; }); });
       y += 3;
     });
     section('Key Skills');
