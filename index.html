@@ -40,6 +40,8 @@
     .section { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; animation: fadeUp 0.5s ease forwards; }
     .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .help-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    .help-btn:hover { border-color: var(--gold); color: var(--gold); }
     .job-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
     .job-card { background: var(--dark3); border: 1px solid var(--border); border-radius: 8px; padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .job-card:hover { border-color: var(--gold); transform: translateY(-2px); }
@@ -48,8 +50,8 @@
     .job-card .label { font-size: 12px; font-weight: 500; color: var(--text); }
     .job-card .sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
     .tickets-box { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: none; }
-    .tickets-label { font-size: 11px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; font-weight: 500; margin-bottom: 12px; }
-    .tickets-hint { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 10px; }
+    .tickets-label { font-size: 11px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+    .tickets-hint { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 12px; }
     .tickets-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
     .ticket-chip { display: flex; align-items: center; gap: 5px; background: var(--dark3); border: 1px solid var(--border); border-radius: 20px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: all 0.2s; user-select: none; color: var(--muted); }
     .ticket-chip.checked { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
@@ -89,24 +91,36 @@
     .btn-new { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
     .btn-new:hover { border-color: var(--gold); color: var(--gold); }
     #cv-paper { background: white; color: #111; border-radius: 8px; padding: 40px; font-family: 'DM Sans', sans-serif; line-height: 1.6; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-    #cv-paper h2 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 2px; }
-    #cv-paper .cv-title { font-size: 14px; color: #555; margin-bottom: 4px; }
-    #cv-paper .cv-contact { font-size: 12px; color: #666; margin-bottom: 20px; }
-    #cv-paper hr { border: none; border-top: 2px solid #111; margin: 12px 0; }
-    #cv-paper h3 { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #111; font-weight: 700; margin-bottom: 8px; margin-top: 14px; }
-    #cv-paper p { font-size: 13px; color: #333; margin-bottom: 6px; }
-    #cv-paper ul { padding-left: 18px; }
-    #cv-paper ul li { font-size: 13px; color: #333; margin-bottom: 4px; }
-    #cv-paper .cv-section { margin-bottom: 14px; }
-    #cv-paper .exp-item { margin-bottom: 12px; }
+    #cv-paper h2 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 2px; }
+    #cv-paper .cv-title { font-size: 13px; color: #555; margin-bottom: 4px; }
+    #cv-paper .cv-contact { font-size: 11px; color: #666; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1.5px solid #111; }
+    #cv-paper h3 { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #111; font-weight: 700; margin-bottom: 8px; margin-top: 14px; }
+    #cv-paper p { font-size: 12px; color: #333; margin-bottom: 6px; }
+    #cv-paper ul { padding-left: 16px; }
+    #cv-paper ul li { font-size: 12px; color: #333; margin-bottom: 3px; }
+    #cv-paper .cv-section { margin-bottom: 12px; }
+    #cv-paper .exp-item { margin-bottom: 10px; }
     #cv-paper .exp-header { display: flex; justify-content: space-between; align-items: baseline; }
-    #cv-paper .exp-role { font-weight: 600; font-size: 13px; color: #111; }
+    #cv-paper .exp-role { font-weight: 600; font-size: 12px; color: #111; }
     #cv-paper .exp-date { font-size: 11px; color: #888; }
-    #cv-paper .exp-company { font-size: 12px; color: #555; font-style: italic; margin-bottom: 4px; }
+    #cv-paper .exp-company { font-size: 11px; color: #555; font-style: italic; margin-bottom: 4px; }
     .price-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.1); border: 1px solid var(--border); border-radius: 6px; padding: 8px 16px; font-size: 13px; color: var(--gold); margin-bottom: 20px; }
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 400px; width: 100%; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--gold); margin-bottom: 20px; }
+    .modal-item { display: flex; gap: 14px; margin-bottom: 18px; }
+    .modal-item:last-of-type { margin-bottom: 0; }
+    .modal-emoji { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .modal-item-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .modal-item-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .modal-close { width: 100%; margin-top: 20px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 10px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.2s; }
+    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
   </style>
 </head>
 <body>
+
 <nav>
   <div class="logo">OzCV</div>
   <div class="lang-toggle">
@@ -130,6 +144,7 @@
 
 <div class="container">
 
+  <!-- JOB TYPE -->
   <div class="section">
     <div class="section-title" data-i18n="sec_job">SELECT JOB TYPE</div>
     <div class="job-grid">
@@ -141,7 +156,6 @@
       <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" data-i18n="job_station">Station Hand</div><div class="sub" data-i18n="job_station_sub">Cattle, Sheep</div></div>
       <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" data-i18n="job_const">Construction</div><div class="sub" data-i18n="job_const_sub">Labour, Trade</div></div>
     </div>
-
     <div class="tickets-box" id="tickets-box">
       <div class="tickets-label" data-i18n="label_tickets">Tickets & Certifications</div>
       <p class="tickets-hint" data-i18n="tickets_hint">These are the recommended minimum tickets for this job. Tick the ones you have.</p>
@@ -152,6 +166,7 @@
     </div>
   </div>
 
+  <!-- PERSONAL INFO -->
   <div class="section">
     <div class="section-title" data-i18n="sec_personal">PERSONAL INFORMATION</div>
     <div class="form-grid">
@@ -162,27 +177,34 @@
       <div class="field"><label data-i18n="label_location">Location</label><input type="text" id="location" data-i18n-placeholder="ph_location" placeholder="Perth, WA" /></div>
       <div class="field"><label data-i18n="label_visa">Visa / Work Rights</label>
         <select id="visa">
-          <option value="Australian Citizen" data-i18n="visa_citizen">Australian Citizen</option>
-          <option value="Permanent Resident" data-i18n="visa_pr">Permanent Resident</option>
-          <option value="Working Holiday Visa (417)" data-i18n="visa_whv417">Working Holiday (417)</option>
-          <option value="Working Holiday Visa (462)" data-i18n="visa_whv462">Working Holiday (462)</option>
-          <option value="Student Visa" data-i18n="visa_student">Student Visa</option>
-          <option value="Skilled Visa" data-i18n="visa_skilled">Skilled Visa</option>
+          <option value="Full Work Rights in Australia" data-i18n="visa_citizen">Australian Citizen</option>
+          <option value="Full Work Rights in Australia" data-i18n="visa_pr">Permanent Resident</option>
+          <option value="Working Holiday Visa (417) – Full Work Rights in Australia" data-i18n="visa_whv417">Working Holiday (417)</option>
+          <option value="Working Holiday Visa (462) – Full Work Rights in Australia" data-i18n="visa_whv462">Working Holiday (462)</option>
+          <option value="Student Visa – Limited Work Rights" data-i18n="visa_student">Student Visa</option>
+          <option value="Skilled Visa – Full Work Rights in Australia" data-i18n="visa_skilled">Skilled Visa</option>
         </select>
       </div>
     </div>
   </div>
 
+  <!-- EXPERIENCE -->
   <div class="section">
     <div class="section-title" data-i18n="sec_exp">EXPERIENCE & SKILLS</div>
     <div class="form-grid full">
       <div class="field"><label data-i18n="label_exp">Past Experience (leave empty if none)</label><textarea id="experience" data-i18n-placeholder="ph_exp" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
       <div class="field"><label data-i18n="label_languages">Languages spoken</label><input type="text" id="languages" data-i18n-placeholder="ph_languages" placeholder="e.g. English, French, Spanish..." /></div>
+      <div class="field"><label data-i18n="label_education">Education (optional)</label><input type="text" id="education" data-i18n-placeholder="ph_education" placeholder="e.g. High School Diploma – Belgium" /></div>
     </div>
   </div>
 
+  <!-- AI LEVEL -->
   <div class="section">
-    <div class="section-title" data-i18n="sec_ai">AI ASSISTANCE LEVEL</div>
+    <div class="section-title">
+      <span data-i18n="sec_ai">AI ASSISTANCE LEVEL</span>
+      <button class="help-btn" onclick="openModal()">?</button>
+      <span style="flex:1;height:1px;background:var(--border);display:block;margin-left:2px"></span>
+    </div>
     <div class="ai-slider-wrap">
       <div class="ai-slider-header">
         <div>
@@ -200,6 +222,7 @@
     </div>
   </div>
 
+  <!-- CV LANGUAGE -->
   <div class="section">
     <div class="section-title" data-i18n="sec_cvlang">CV LANGUAGE</div>
     <div class="form-grid">
@@ -235,6 +258,35 @@
   </div>
 </div>
 
+<!-- MODAL -->
+<div class="modal-overlay" id="ai-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-title" data-i18n="modal_title">AI ASSISTANCE LEVELS</div>
+    <div class="modal-item">
+      <div class="modal-emoji">📝</div>
+      <div>
+        <div class="modal-item-title" data-i18n="modal_l1_title">Level 1 — My experience only</div>
+        <div class="modal-item-desc" data-i18n="modal_l1_desc">We only use what you wrote in the experience field. Nothing is added or invented.</div>
+      </div>
+    </div>
+    <div class="modal-item">
+      <div class="modal-emoji">⚖️</div>
+      <div>
+        <div class="modal-item-title" data-i18n="modal_l2_title">Level 2 — Balanced</div>
+        <div class="modal-item-desc" data-i18n="modal_l2_desc">We improve your wording, add action verbs and relevant details. No new jobs are invented.</div>
+      </div>
+    </div>
+    <div class="modal-item">
+      <div class="modal-emoji">🤖</div>
+      <div>
+        <div class="modal-item-title" data-i18n="modal_l3_title">Level 3 — AI fills in your experience</div>
+        <div class="modal-item-desc" data-i18n="modal_l3_desc">If you have little or no experience, AI creates realistic past jobs tailored to your chosen sector.</div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal()" data-i18n="modal_close">Close</button>
+  </div>
+</div>
+
 <script>
   const i18n = {
     en: {
@@ -267,6 +319,8 @@
       ph_exp: 'e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel...',
       label_languages: 'Languages spoken',
       ph_languages: 'e.g. English, French, Spanish...',
+      label_education: 'Education (optional)',
+      ph_education: 'e.g. High School Diploma – Belgium',
       sec_ai: 'AI ASSISTANCE LEVEL',
       ai_subtitle: 'How much should AI fill in your work experience?',
       slider_min: 'My experience only', slider_mid: 'Balanced', slider_max: 'AI fills in your experience',
@@ -278,6 +332,14 @@
       btn_download: '⬇ DOWNLOAD PDF', btn_new: '← New Resume',
       err_name: 'Please enter your first and last name.',
       err_connection: 'Connection error. Please try again.',
+      modal_title: 'AI ASSISTANCE LEVELS',
+      modal_l1_title: 'Level 1 — My experience only',
+      modal_l1_desc: 'We only use what you wrote in the experience field. Nothing is added or invented.',
+      modal_l2_title: 'Level 2 — Balanced',
+      modal_l2_desc: 'We improve your wording, add action verbs and relevant details. No new jobs are invented.',
+      modal_l3_title: 'Level 3 — AI fills in your experience',
+      modal_l3_desc: 'If you have little or no experience, AI creates realistic past jobs tailored to your chosen sector.',
+      modal_close: 'Close',
     },
     fr: {
       hero_tag: "Propulsé par l'IA • Fait pour l'Australie",
@@ -294,7 +356,7 @@
       job_const: 'Construction', job_const_sub: 'Manœuvre, Trade',
       label_tickets: 'Tickets & Certifications',
       tickets_hint: 'Ce sont les tickets minimum recommandés pour ce poste. Coche ceux que tu possèdes.',
-      ph_tickets: '+ Ajouter d\'autres tickets (séparés par une virgule)...',
+      ph_tickets: "+ Ajouter d'autres tickets (séparés par une virgule)...",
       sec_personal: 'INFORMATIONS PERSONNELLES',
       label_firstname: 'Prénom', ph_firstname: 'Jean',
       label_lastname: 'Nom', ph_lastname: 'Dupont',
@@ -309,6 +371,8 @@
       ph_exp: 'Ex : 6 mois dans une station au QLD, bar dans une auberge de jeunesse...',
       label_languages: 'Langues parlées',
       ph_languages: 'Ex : Anglais, Français, Espagnol...',
+      label_education: 'Formation (optionnel)',
+      ph_education: 'Ex : Baccalauréat – Belgique',
       sec_ai: "NIVEAU D'ASSISTANCE IA",
       ai_subtitle: "Combien l'IA doit-elle compléter ton expérience professionnelle ?",
       slider_min: 'Mon expérience uniquement', slider_mid: 'Équilibré', slider_max: "L'IA complète ton expérience",
@@ -320,6 +384,14 @@
       btn_download: '⬇ TÉLÉCHARGER LE PDF', btn_new: '← Nouveau CV',
       err_name: 'Veuillez entrer votre prénom et votre nom.',
       err_connection: 'Erreur de connexion. Veuillez réessayer.',
+      modal_title: "NIVEAUX D'ASSISTANCE IA",
+      modal_l1_title: 'Niveau 1 — Mon expérience uniquement',
+      modal_l1_desc: "On utilise uniquement ce que tu as écrit dans le champ expérience. Rien n'est ajouté ou inventé.",
+      modal_l2_title: 'Niveau 2 — Équilibré',
+      modal_l2_desc: "On améliore ta rédaction, on ajoute des verbes d'action et des détails pertinents. Aucun emploi n'est inventé.",
+      modal_l3_title: "Niveau 3 — L'IA complète ton expérience",
+      modal_l3_desc: "Si tu as peu ou pas d'expérience, l'IA crée des emplois passés réalistes adaptés à ton secteur.",
+      modal_close: 'Fermer',
     }
   };
 
@@ -398,9 +470,7 @@
     const tickets = jobTickets[type] || [];
     box.style.display = tickets.length ? 'block' : 'none';
     chips.innerHTML = tickets.map(t =>
-      `<div class="ticket-chip checked" onclick="this.classList.toggle('checked')">
-        <span>✓</span> ${t}
-      </div>`
+      `<div class="ticket-chip checked" onclick="this.classList.toggle('checked')"><span>✓</span> ${t}</div>`
     ).join('');
   }
 
@@ -412,6 +482,9 @@
     return checked;
   }
 
+  function openModal() { document.getElementById('ai-modal').classList.add('open'); }
+  function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
+
   async function generateCV() {
     const t = i18n[currentLang];
     const firstName = document.getElementById('firstName').value.trim();
@@ -420,15 +493,17 @@
 
     const aiLevel = parseInt(document.getElementById('ai-slider').value);
     const aiText = aiLevel === 1
-      ? 'Use ONLY what the user provided. Do not invent any experience.'
+      ? 'Use ONLY the experience the user provided. Do not add, enhance or invent anything.'
       : aiLevel === 2
-      ? 'Enhance and expand on the user experience provided. Add relevant details and action verbs but stay realistic.'
-      : 'The user may have little or no experience. Create a full, realistic and detailed work experience section relevant to the job type. Invent plausible past jobs with strong ATS keywords.';
+      ? 'Improve the wording of the user experience using action verbs and ATS keywords. Do not invent new jobs, only enhance what was provided.'
+      : 'The user may have little or no experience. Invent realistic and detailed past work experience tailored to the job type with strong ATS keywords. Make it plausible and coherent.';
 
     const cvLang = document.getElementById('cv-lang').value;
     const jobLabel = (jobLabels[currentLang] || jobLabels.en)[selectedJob];
     const tickets = getSelectedTickets();
     const isMining = selectedJob === 'mine_utility' || selectedJob === 'mine_entry';
+    const education = document.getElementById('education').value.trim();
+    const languages = document.getElementById('languages').value.trim();
 
     const prompt = `You are an expert Australian resume writer specialized in ATS-optimized CVs for manual and entry-level jobs.
 
@@ -439,23 +514,26 @@ CANDIDATE INFO:
 - Email: ${document.getElementById('email').value || 'not provided'}
 - Location: ${document.getElementById('location').value || 'Australia'}
 - Visa / Work Rights: ${document.getElementById('visa').value}
-- Languages: ${document.getElementById('languages').value || 'English'}
+- Languages: ${languages || 'not provided'}
+- Education: ${education || 'not provided'}
 - Past experience: ${document.getElementById('experience').value || 'none provided'}
-- Tickets / Licences held: ${tickets.length ? tickets.join(', ') : 'none specified'}
+- Tickets / Licences held: ${tickets.length ? tickets.join(', ') : 'none'}
 
-AI INSTRUCTION FOR WORK EXPERIENCE: ${aiText}
+AI INSTRUCTION FOR WORK EXPERIENCE ONLY: ${aiText}
 
-STRICT AUSTRALIAN RESUME RULES:
+STRICT RULES — NEVER BREAK THESE:
+- Never invent or add tickets/licences. Use ONLY what is listed above under "Tickets / Licences held"
+- Never invent or change languages. Use ONLY what is listed above under "Languages"
+- Never invent or change education. Use ONLY what is listed above under "Education". If not provided, return empty string for education field
+- Never use "Present" or "current" for job end dates. All jobs must have a past end date. The candidate is available immediately for a new job
+- Do not include "References available upon request" as a field — it will be added separately
+- Visa must appear exactly as: ${document.getElementById('visa').value}
 - No photo, no date of birth
-- Always mention visa / work rights
-- End with "References available upon request"
-${isMining ? '- Add "Drug & Alcohol Free" and "Available for FIFO" in the summary\n- Mention safety compliance: WHS, PPE, HSE, SWMS' : ''}
-- Use action verbs and ATS keywords relevant to: ${jobLabel}
-- Candidate must sound ready to work immediately
-- Convert any past experience into transferable skills
+${isMining ? '- Add "Drug & Alcohol Free" and "Available for FIFO immediately" in the summary\n- Include WHS, PPE, HSE, SWMS keywords' : ''}
+- Candidate must sound immediately available and ready to work
 
 Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation:
-{"name":"Full Name","jobTitle":"job title","phone":"phone","email":"email","location":"location","visa":"visa status","summary":"3-4 line summary","experience":[{"role":"title","company":"company name, location","period":"dates","duties":["duty1","duty2","duty3","duty4","duty5"]}],"skills":["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10"],"licences":["l1","l2"],"languages":["lang1"],"education":"diploma or degree"}`;
+{"name":"Full Name","jobTitle":"job title","phone":"phone","email":"email","location":"location","visa":"visa","summary":"3-4 sentence summary","experience":[{"role":"title","company":"company, location","period":"Month YYYY – Month YYYY","duties":["duty1","duty2","duty3","duty4","duty5"]}],"skills":["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10"],"licences":["only real tickets from the list"],"languages":["only real languages from the list"],"education":"only if provided, else empty string"}`;
 
     document.getElementById('error-box').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
@@ -484,13 +562,19 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
   }
 
   function renderCV(d) {
+    const licencesHTML = d.licences && d.licences.length
+      ? `<div class="cv-section"><h3>Licences & Certificates</h3><ul style="columns:2">${d.licences.map(l=>`<li>${l}</li>`).join('')}</ul></div>` : '';
+    const educationHTML = d.education && d.education.trim()
+      ? `<div class="cv-section"><h3>Education</h3><p>${d.education}</p></div>` : '';
+    const languagesHTML = d.languages && d.languages.length
+      ? `<div class="cv-section"><h3>Languages</h3><p>${d.languages.join(', ')}</p></div>` : '';
+
     document.getElementById('cv-paper').innerHTML = `
       <h2>${d.name}</h2>
       <div class="cv-title">${d.jobTitle}</div>
       <div class="cv-contact">${d.phone} | ${d.email} | ${d.location} | ${d.visa}</div>
-      <hr/>
       <div class="cv-section"><h3>Professional Summary</h3><p>${d.summary}</p></div>
-      ${d.licences && d.licences.length ? `<div class="cv-section"><h3>Licences & Certificates</h3><ul style="columns:2">${d.licences.map(l=>`<li>${l}</li>`).join('')}</ul></div>` : ''}
+      ${licencesHTML}
       <div class="cv-section"><h3>Work Experience</h3>${d.experience.map(e=>`
         <div class="exp-item">
           <div class="exp-header"><span class="exp-role">${e.role}</span><span class="exp-date">${e.period}</span></div>
@@ -499,9 +583,9 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
         </div>`).join('')}
       </div>
       <div class="cv-section"><h3>Key Skills</h3><ul style="columns:2">${d.skills.map(s=>`<li>${s}</li>`).join('')}</ul></div>
-      <div class="cv-section"><h3>Education</h3><p>${d.education}</p></div>
-      ${d.languages && d.languages.length ? `<div class="cv-section"><h3>Languages</h3><p>${d.languages.join(', ')}</p></div>` : ''}
-      <div class="cv-section"><h3>References</h3><p>Available upon request</p></div>`;
+      ${educationHTML}
+      ${languagesHTML}
+      <p style="font-size:11px;color:#888;margin-top:16px;border-top:1px solid #eee;padding-top:10px">References available upon request</p>`;
   }
 
   function downloadPDF() {
@@ -510,21 +594,23 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
     const doc = new jsPDF({ unit: 'mm', format: 'a4' });
     let y = 20; const lm = 20, rm = 190, lw = rm - lm;
 
-    doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
-    doc.text(cvData.name, lm, y); y += 8;
-    doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
+    // Header
+    doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
+    doc.text(cvData.name, lm, y); y += 7;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
     doc.text(cvData.jobTitle, lm, y); y += 5;
     doc.setFontSize(9); doc.setTextColor(100,100,100);
-    doc.text(`${cvData.phone}  |  ${cvData.email}  |  ${cvData.location}  |  ${cvData.visa}`, lm, y); y += 6;
+    const contact = `${cvData.phone}  |  ${cvData.email}  |  ${cvData.location}  |  ${cvData.visa}`;
+    doc.splitTextToSize(contact, lw).forEach(l => { doc.text(l, lm, y); y += 4; });
+    y += 2;
     doc.setDrawColor(17,17,17); doc.setLineWidth(0.8); doc.line(lm, y, rm, y); y += 7;
 
     const checkPage = (needed = 10) => { if (y + needed > 275) { doc.addPage(); y = 20; } };
 
     const section = (title) => {
       checkPage(12);
-      doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
-      doc.text(title.toUpperCase(), lm, y); y += 3;
-      doc.setDrawColor(17,17,17); doc.setLineWidth(0.4); doc.line(lm, y, rm, y); y += 5;
+      doc.setFontSize(8.5); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
+      doc.text(title.toUpperCase(), lm, y); y += 6;
       doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
     };
 
@@ -540,8 +626,10 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
       });
     };
 
+    // Summary
     section('Professional Summary'); addText(cvData.summary); y += 3;
 
+    // Licences
     if (cvData.licences && cvData.licences.length) {
       section('Licences & Certificates');
       const half = Math.ceil(cvData.licences.length / 2);
@@ -551,12 +639,13 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
         checkPage();
         doc.setFontSize(9);
         if (c1[i]) doc.text(`✓  ${c1[i]}`, lm, y);
-        if (c2[i]) doc.text(`✓  ${c2[i]}`, lm + lw/2, y);
+        if (c2[i]) doc.text(`✓  ${c2[i]}`, lm + lw / 2, y);
         y += 5;
       }
       y += 2;
     }
 
+    // Experience
     section('Work Experience');
     cvData.experience.forEach(e => {
       checkPage(15);
@@ -570,6 +659,7 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
       y += 3;
     });
 
+    // Skills
     section('Key Skills');
     const half = Math.ceil(cvData.skills.length / 2);
     const sk1 = cvData.skills.slice(0, half);
@@ -577,18 +667,26 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
     for (let i = 0; i < Math.max(sk1.length, sk2.length); i++) {
       checkPage(); doc.setFontSize(9);
       if (sk1[i]) doc.text(`•  ${sk1[i]}`, lm, y);
-      if (sk2[i]) doc.text(`•  ${sk2[i]}`, lm + lw/2, y);
+      if (sk2[i]) doc.text(`•  ${sk2[i]}`, lm + lw / 2, y);
       y += 5;
     }
     y += 2;
 
-    section('Education'); addText(cvData.education); y += 3;
+    // Education
+    if (cvData.education && cvData.education.trim()) {
+      section('Education'); addText(cvData.education); y += 3;
+    }
 
+    // Languages
     if (cvData.languages && cvData.languages.length) {
       section('Languages'); addText(cvData.languages.join(', ')); y += 3;
     }
 
-    section('References'); addText('Available upon request');
+    // References
+    checkPage(10);
+    doc.setDrawColor(200,200,200); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5;
+    doc.setFontSize(8); doc.setTextColor(150,150,150);
+    doc.text('References available upon request', lm, y);
 
     doc.save(`${cvData.name.replace(/\s+/g,'_')}_Resume.pdf`);
   }
