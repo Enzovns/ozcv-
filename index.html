@@ -290,24 +290,6 @@
   </div>
 </div>
 
-<!-- PAYMENT MODAL -->
-
-<div class="payment-overlay" id="payment-overlay">
-  <div class="payment-box">
-    <div class="payment-title" data-i18n="pay_title">Almost there!</div>
-    <div class="payment-subtitle" data-i18n="pay_subtitle">Your info is saved. Complete your $5 AUD payment on Stripe, then you'll be redirected back here to get your CV.</div>
-    <div class="payment-amount">$5 <span>AUD</span></div>
-    <div class="payment-note" data-i18n="pay_note">One-time payment • Secure • Instant delivery</div>
-    <div class="payment-features">
-      <div class="payment-feature"><span>✓</span> AI-optimized</div>
-      <div class="payment-feature"><span>✓</span> PDF download</div>
-      <div class="payment-feature"><span>✓</span> Australia-ready</div>
-    </div>
-    <a id="stripe-pay-link" class="pay-stripe-btn" target="_self" data-i18n="pay_btn">✦ PAY WITH STRIPE</a>
-    <button class="payment-cancel" onclick="closePayment()" data-i18n="pay_cancel">← Cancel</button>
-  </div>
-</div>
-
 <!-- AI MODAL -->
 
 <div class="modal-overlay" id="ai-modal" onclick="if(event.target===this)closeModal()">
@@ -548,8 +530,12 @@ function startPayment() {
   const firstName = document.getElementById('firstName').value.trim();
   const lastName = document.getElementById('lastName').value.trim();
   if (!firstName || !lastName) { showError(t.err_name); return; }
-
   saveFormData();
+  window.location.href = STRIPE_PAYMENT_LINK;
+}
+
+function closePayment() {}
+
 
   // Build Stripe Payment Link with redirect URL
   const redirectUrl = encodeURIComponent(window.location.origin + window.location.pathname + '?paid=true');
