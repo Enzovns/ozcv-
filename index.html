@@ -1,3 +1,5 @@
+Pas de souci, voilà le code complet final :
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,10 +51,10 @@
     .job-card .sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
     .tickets-box { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: none; }
     .tickets-label { font-size: 11px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; font-weight: 500; margin-bottom: 12px; }
-    .tickets-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .tickets-hint { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 10px; }
+    .tickets-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
     .ticket-chip { display: flex; align-items: center; gap: 5px; background: var(--dark3); border: 1px solid var(--border); border-radius: 20px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: all 0.2s; user-select: none; color: var(--muted); }
     .ticket-chip.checked { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
-    .ticket-chip .chip-icon { font-size: 10px; }
     .tickets-custom input { background: var(--dark3); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; width: 100%; transition: all 0.2s; }
     .tickets-custom input:focus { border-color: var(--gold); background: rgba(201,168,76,0.05); }
     .tickets-custom input::placeholder { color: rgba(245,240,232,0.2); }
@@ -130,7 +132,6 @@
 
 <div class="container">
 
-  <!-- JOB TYPE -->
   <div class="section">
     <div class="section-title" data-i18n="sec_job">SELECT JOB TYPE</div>
     <div class="job-grid">
@@ -143,9 +144,9 @@
       <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" data-i18n="job_const">Construction</div><div class="sub" data-i18n="job_const_sub">Labour, Trade</div></div>
     </div>
 
-    <!-- TICKETS DROPDOWN -->
     <div class="tickets-box" id="tickets-box">
-      <div class="tickets-label" data-i18n="label_tickets">Tickets & Certifications you hold</div>
+      <div class="tickets-label" data-i18n="label_tickets">Tickets & Certifications</div>
+      <p class="tickets-hint" data-i18n="tickets_hint">These are the recommended minimum tickets for this job. Tick the ones you have.</p>
       <div class="tickets-chips" id="tickets-chips"></div>
       <div class="tickets-custom">
         <input type="text" id="tickets-custom" data-i18n-placeholder="ph_tickets" placeholder="+ Add other tickets (comma separated)..." />
@@ -153,7 +154,6 @@
     </div>
   </div>
 
-  <!-- PERSONAL INFO -->
   <div class="section">
     <div class="section-title" data-i18n="sec_personal">PERSONAL INFORMATION</div>
     <div class="form-grid">
@@ -175,7 +175,6 @@
     </div>
   </div>
 
-  <!-- EXPERIENCE -->
   <div class="section">
     <div class="section-title" data-i18n="sec_exp">EXPERIENCE & SKILLS</div>
     <div class="form-grid full">
@@ -184,7 +183,6 @@
     </div>
   </div>
 
-  <!-- AI LEVEL -->
   <div class="section">
     <div class="section-title" data-i18n="sec_ai">AI ASSISTANCE LEVEL</div>
     <div class="ai-slider-wrap">
@@ -204,7 +202,6 @@
     </div>
   </div>
 
-  <!-- CV LANGUAGE -->
   <div class="section">
     <div class="section-title" data-i18n="sec_cvlang">CV LANGUAGE</div>
     <div class="form-grid">
@@ -241,7 +238,6 @@
 </div>
 
 <script>
-  // ─── TRANSLATIONS ─────────────────────────────────────────────────────────
   const i18n = {
     en: {
       hero_tag: 'AI-Powered • Made for Australia',
@@ -256,7 +252,8 @@
       job_road: 'Roadhouse', job_road_sub: 'Remote service',
       job_station: 'Station Hand', job_station_sub: 'Cattle, Sheep',
       job_const: 'Construction', job_const_sub: 'Labour, Trade',
-      label_tickets: 'Tickets & Certifications you hold',
+      label_tickets: 'Tickets & Certifications',
+      tickets_hint: 'These are the recommended minimum tickets for this job. Tick the ones you have.',
       ph_tickets: '+ Add other tickets (comma separated)...',
       sec_personal: 'PERSONAL INFORMATION',
       label_firstname: 'First Name', ph_firstname: 'John',
@@ -297,7 +294,8 @@
       job_road: 'Roadhouse', job_road_sub: 'Service isolé',
       job_station: 'Station Hand', job_station_sub: 'Bétail, Moutons',
       job_const: 'Construction', job_const_sub: 'Manœuvre, Trade',
-      label_tickets: 'Tickets & Certifications que tu possèdes',
+      label_tickets: 'Tickets & Certifications',
+      tickets_hint: 'Ce sont les tickets minimum recommandés pour ce poste. Coche ceux que tu possèdes.',
       ph_tickets: '+ Ajouter d\'autres tickets (séparés par une virgule)...',
       sec_personal: 'INFORMATIONS PERSONNELLES',
       label_firstname: 'Prénom', ph_firstname: 'Jean',
@@ -327,18 +325,16 @@
     }
   };
 
-  // ─── TICKETS PAR SECTEUR ──────────────────────────────────────────────────
   const jobTickets = {
-    mine_utility: ['White Card','Working at Heights','Confined Space','Gas Testing','First Aid','Food Safety / HACCP','RSA','Police Check / VEVO','Drug & Alcohol Test'],
-    mine_entry:   ['White Card','Working at Heights','Confined Space','Gas Testing','First Aid','Police Check / VEVO','Drug & Alcohol Test'],
-    hospitality:  ['RSA','Food Handling Certificate','First Aid','Police Check / VEVO'],
-    farm:         ["Driver's Licence (Manual)",'First Aid','Police Check / VEVO'],
-    roadhouse:    ['RSA','Food Handling Certificate',"Driver's Licence",'First Aid','Police Check / VEVO','White Card'],
-    station:      ["Driver's Licence (Manual)",'Motorbike Licence','First Aid','Police Check / VEVO'],
-    construction: ['White Card','Working at Heights','Forklift (LF)','First Aid','Police Check / VEVO',"Driver's Licence"],
+    mine_utility: ['White Card', 'RSA', 'Food Safety', 'Police Check / VEVO', 'Drug & Alcohol Test'],
+    mine_entry:   ['White Card', 'Working at Heights', 'Confined Space', 'Gas Testing', 'First Aid', 'Police Check / VEVO', 'Drug & Alcohol Test', "Driver's Licence"],
+    farm:         [],
+    hospitality:  ['RSA', 'Food Safety'],
+    roadhouse:    ['RSA', 'Food Safety', "Driver's Licence", 'First Aid'],
+    station:      ["Driver's Licence (Manual)", 'Motorbike Licence'],
+    construction: ['White Card'],
   };
 
-  // ─── JOB LABELS POUR LE PROMPT ───────────────────────────────────────────
   const jobLabels = {
     en: {
       mine_utility: 'FIFO Utility Worker – Mine Site Support',
@@ -360,12 +356,10 @@
     }
   };
 
-  // ─── STATE ────────────────────────────────────────────────────────────────
   let currentLang = 'en';
   let selectedJob = 'mine_utility';
   let cvData = null;
 
-  // ─── LANG ─────────────────────────────────────────────────────────────────
   function setLang(lang) {
     currentLang = lang;
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -382,7 +376,6 @@
     updateSlider(document.getElementById('ai-slider').value);
   }
 
-  // ─── SLIDER ───────────────────────────────────────────────────────────────
   const emojis = ['📝', '⚖️', '🤖'];
   function updateSlider(val) {
     const i = val - 1;
@@ -394,7 +387,6 @@
       `linear-gradient(to right,var(--gold) 0%,var(--gold) ${p}%,#1E1E1E ${p}%)`;
   }
 
-  // ─── SELECT JOB + TICKETS ─────────────────────────────────────────────────
   function selectJob(el, type) {
     document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
@@ -409,7 +401,7 @@
     box.style.display = tickets.length ? 'block' : 'none';
     chips.innerHTML = tickets.map(t =>
       `<div class="ticket-chip checked" onclick="this.classList.toggle('checked')">
-        <span class="chip-icon">✓</span> ${t}
+        <span>✓</span> ${t}
       </div>`
     ).join('');
   }
@@ -422,7 +414,6 @@
     return checked;
   }
 
-  // ─── GENERATE ─────────────────────────────────────────────────────────────
   async function generateCV() {
     const t = i18n[currentLang];
     const firstName = document.getElementById('firstName').value.trim();
@@ -494,7 +485,6 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
     }
   }
 
-  // ─── RENDER CV ────────────────────────────────────────────────────────────
   function renderCV(d) {
     document.getElementById('cv-paper').innerHTML = `
       <h2>${d.name}</h2>
@@ -516,24 +506,21 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
       <div class="cv-section"><h3>References</h3><p>Available upon request</p></div>`;
   }
 
-  // ─── DOWNLOAD PDF ─────────────────────────────────────────────────────────
   function downloadPDF() {
     if (!cvData) return;
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: 'mm', format: 'a4' });
     let y = 20; const lm = 20, rm = 190, lw = rm - lm;
 
-    // Header
-    doc.setFontSize(22); doc.setFont('helvetica', 'bold'); doc.setTextColor(17,17,17);
+    doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
     doc.text(cvData.name, lm, y); y += 8;
-    doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(80,80,80);
+    doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
     doc.text(cvData.jobTitle, lm, y); y += 5;
     doc.setFontSize(9); doc.setTextColor(100,100,100);
     doc.text(`${cvData.phone}  |  ${cvData.email}  |  ${cvData.location}  |  ${cvData.visa}`, lm, y); y += 6;
     doc.setDrawColor(17,17,17); doc.setLineWidth(0.8); doc.line(lm, y, rm, y); y += 7;
 
-    const newPage = () => { doc.addPage(); y = 20; };
-    const checkPage = (needed = 10) => { if (y + needed > 275) newPage(); };
+    const checkPage = (needed = 10) => { if (y + needed > 275) { doc.addPage(); y = 20; } };
 
     const section = (title) => {
       checkPage(12);
@@ -543,87 +530,71 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
       doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
     };
 
-    const addText = (text, indent = 0) => {
+    const addText = (text) => {
       doc.setFontSize(9);
-      doc.splitTextToSize(text, lw - indent).forEach(l => {
-        checkPage();
-        doc.text(l, lm + indent, y); y += 4.5;
-      });
+      doc.splitTextToSize(text, lw).forEach(l => { checkPage(); doc.text(l, lm, y); y += 4.5; });
     };
 
     const addBullet = (text) => {
       doc.setFontSize(9);
-      const lines = doc.splitTextToSize(`– ${text}`, lw - 4);
-      lines.forEach((l, i) => {
-        checkPage();
-        doc.text(l, lm + (i === 0 ? 2 : 5), y); y += 4.5;
+      doc.splitTextToSize(`– ${text}`, lw - 4).forEach((l, i) => {
+        checkPage(); doc.text(l, lm + (i === 0 ? 2 : 5), y); y += 4.5;
       });
     };
 
-    // Summary
     section('Professional Summary'); addText(cvData.summary); y += 3;
 
-    // Licences
     if (cvData.licences && cvData.licences.length) {
       section('Licences & Certificates');
       const half = Math.ceil(cvData.licences.length / 2);
-      const col1 = cvData.licences.slice(0, half);
-      const col2 = cvData.licences.slice(half);
-      for (let i = 0; i < Math.max(col1.length, col2.length); i++) {
+      const c1 = cvData.licences.slice(0, half);
+      const c2 = cvData.licences.slice(half);
+      for (let i = 0; i < Math.max(c1.length, c2.length); i++) {
         checkPage();
         doc.setFontSize(9);
-        if (col1[i]) doc.text(`✓  ${col1[i]}`, lm, y);
-        if (col2[i]) doc.text(`✓  ${col2[i]}`, lm + lw/2, y);
+        if (c1[i]) doc.text(`✓  ${c1[i]}`, lm, y);
+        if (c2[i]) doc.text(`✓  ${c2[i]}`, lm + lw/2, y);
         y += 5;
       }
       y += 2;
     }
 
-    // Experience
     section('Work Experience');
     cvData.experience.forEach(e => {
       checkPage(15);
       doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
       doc.text(e.role, lm, y);
       doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(120,120,120);
-      const dw = doc.getTextWidth(e.period);
-      doc.text(e.period, rm - dw, y); y += 5;
-      doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
-      doc.text(e.company, lm, y); y += 5;
+      doc.text(e.period, rm - doc.getTextWidth(e.period), y); y += 5;
+      doc.setTextColor(80,80,80); doc.text(e.company, lm, y); y += 5;
       doc.setTextColor(50,50,50);
       e.duties.forEach(d => addBullet(d));
       y += 3;
     });
 
-    // Skills
     section('Key Skills');
     const half = Math.ceil(cvData.skills.length / 2);
     const sk1 = cvData.skills.slice(0, half);
     const sk2 = cvData.skills.slice(half);
     for (let i = 0; i < Math.max(sk1.length, sk2.length); i++) {
-      checkPage();
-      doc.setFontSize(9);
+      checkPage(); doc.setFontSize(9);
       if (sk1[i]) doc.text(`•  ${sk1[i]}`, lm, y);
       if (sk2[i]) doc.text(`•  ${sk2[i]}`, lm + lw/2, y);
       y += 5;
     }
     y += 2;
 
-    // Education
     section('Education'); addText(cvData.education); y += 3;
 
-    // Languages
     if (cvData.languages && cvData.languages.length) {
       section('Languages'); addText(cvData.languages.join(', ')); y += 3;
     }
 
-    // References
     section('References'); addText('Available upon request');
 
-    doc.save(`${cvData.name.replace(/\s+/g, '_')}_Resume.pdf`);
+    doc.save(`${cvData.name.replace(/\s+/g,'_')}_Resume.pdf`);
   }
 
-  // ─── UTILS ────────────────────────────────────────────────────────────────
   function showError(msg) {
     const b = document.getElementById('error-box');
     b.textContent = '⚠ ' + msg;
@@ -637,7 +608,7 @@ Write entirely in ${cvLang}. Return ONLY valid JSON, no markdown, no explanation
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ─── INIT ─────────────────────────────────────────────────────────────────
+  // Init
   renderTickets('mine_utility');
 </script>
 </body>
