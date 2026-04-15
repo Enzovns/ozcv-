@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OzCV — AI Resume Builder Australia</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
@@ -116,6 +118,20 @@
     .modal-item-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
     .modal-close { width: 100%; margin-top: 20px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 10px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.2s; }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+    .payment-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 300; align-items: center; justify-content: center; padding: 20px; }
+    .payment-overlay.open { display: flex; }
+    .payment-box { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; max-width: 440px; width: 100%; }
+    .payment-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px; }
+    .payment-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .payment-amount { font-size: 36px; font-weight: 700; color: var(--text); margin-bottom: 24px; }
+    .payment-amount span { font-size: 16px; color: var(--muted); font-weight: 400; }
+    #payment-element { margin-bottom: 20px; }
+    .pay-btn { width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; color: var(--dark); padding: 16px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+    .pay-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+    .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .payment-cancel { width: 100%; margin-top: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 10px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.2s; }
+    .payment-cancel:hover { border-color: var(--gold); color: var(--gold); }
+    .payment-error { color: #ff7070; font-size: 13px; margin-top: 12px; display: none; }
   </style>
 </head>
 <body>
@@ -235,7 +251,7 @@
     </div>
   </div>
 
-  <button class="gen-btn" id="gen-btn" onclick="generateCV()">
+  <button class="gen-btn" id="gen-btn" onclick="startPayment()">
     <span data-i18n="gen_btn">✦ GENERATE MY RESUME — $5 AUD</span>
   </button>
   <div class="error-box" id="error-box"></div>
@@ -250,6 +266,8 @@
     <div id="cv-paper"></div>
   </div>
 </div>
+
+<!-- AI MODAL -->
 
 <div class="modal-overlay" id="ai-modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
@@ -276,6 +294,22 @@
       </div>
     </div>
     <button class="modal-close" onclick="closeModal()" data-i18n="modal_close">Close</button>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+
+<div class="payment-overlay" id="payment-overlay">
+  <div class="payment-box">
+    <div class="payment-title" data-i18n="pay_title">Almost there!</div>
+    <div class="payment-subtitle" data-i18n="pay_subtitle">Your professional Australian resume — one-time payment</div>
+    <div class="payment-amount">$5 <span>AUD</span></div>
+    <div id="payment-element"></div>
+    <div class="payment-error" id="payment-error"></div>
+    <button class="pay-btn" id="pay-btn" onclick="confirmPayment()">
+      <span data-i18n="pay_btn">✦ PAY & GENERATE MY RESUME</span>
+    </button>
+    <button class="payment-cancel" onclick="closePayment()" data-i18n="pay_cancel">← Cancel</button>
   </div>
 </div>
 
@@ -327,6 +361,10 @@ const i18n = {
     modal_l3_title: 'Level 3 — AI fills in your experience',
     modal_l3_desc: 'If you have little or no experience, AI creates realistic past jobs tailored to your chosen sector.',
     modal_close: 'Close',
+    pay_title: 'Almost there!',
+    pay_subtitle: 'Your professional Australian resume — one-time payment',
+    pay_btn: '✦ PAY & GENERATE MY RESUME',
+    pay_cancel: '← Cancel',
   },
   fr: {
     hero_tag: "Propulsé par l'IA • Fait pour l'Australie",
@@ -374,6 +412,10 @@ const i18n = {
     modal_l3_title: "Niveau 3 — L'IA complète ton expérience",
     modal_l3_desc: "Si tu as peu ou pas d'expérience, l'IA crée des emplois passés réalistes adaptés à ton secteur.",
     modal_close: 'Fermer',
+    pay_title: 'Presque terminé !',
+    pay_subtitle: 'Ton CV australien professionnel — paiement unique',
+    pay_btn: '✦ PAYER & GÉNÉRER MON CV',
+    pay_cancel: '← Annuler',
   }
 };
 
@@ -387,9 +429,7 @@ const jobTickets = {
   construction: ['White Card'],
 };
 
-// ─── PROMPTS PAR SECTEUR ──────────────────────────────────────────────────────
 function buildPrompt(job, firstName, lastName, phone, email, location, visa, languages, education, experience, tickets, aiLevel, cvLang) {
-
   const strictRules = `
 STRICT RULES — NEVER BREAK:
 - Never invent or add tickets/licences. Use ONLY the tickets listed above.
@@ -409,8 +449,7 @@ VERIFIED CLOSED MINES (use only these for invented experience):
 - Ranger Uranium Mine, Jabiru NT, Australia (closed January 2021)
 - Victor Diamond Mine, Ontario, Canada (closed 2019)
 - Ekati Diamond Mine, NWT, Canada (active FIFO camp — use only for camp/utility support roles)
-NEVER use Giant Mine (closed 2004 — too old to be credible).
-Always verify that work period dates are BEFORE the mine closure date.`;
+NEVER use Giant Mine (closed 2004). Always verify work period dates are BEFORE the mine closure date.`;
 
   const jsonSchema = `{"name":"","jobTitle":"","phone":"","email":"","location":"","visa":"","summary":"","skills":[""],"licences":[""],"experience":[{"role":"","company":"","period":"Month YYYY – Month YYYY","duties":[""]}],"languages":[""],"education":""}`;
 
@@ -426,190 +465,122 @@ CANDIDATE INFO:
 - Tickets held: ${tickets.length ? tickets.join(', ') : 'none'}
 - Past experience provided: ${experience || 'none'}`;
 
-  // ── MINE UTILITY ──────────────────────────────────────────────────────────
   if (job === 'mine_utility') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs. Do not add or invent anything.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs. Do not add or invent anything.'
       : aiLevel === 2
-      ? 'Enhance the user experience with stronger wording and ATS keywords. Do not invent new jobs, only improve what was provided.'
-      : `Invent realistic detailed past experience ONLY from these categories:
-  - Industrial/camp cleaning (accommodation blocks, ablution facilities, wet & dry areas)
-  - Housekeeping (room preparation, linen management, deep cleaning)
-  - Kitchen hand / dishwashing / catering support in remote camps
-  - HACCP food safety compliance
-  - Waste management & chemical handling (MSDS/SDS)
-  Use the verified closed mines list. Never use irrelevant jobs (no farming, no bar work, no construction).
-  Generate 3-4 jobs minimum, 6-8 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for the mining industry.
-Generate a FULL 2-PAGE resume for a FIFO Utility Worker – Mine Site Support position.
+      ? 'Enhance user experience with stronger wording and ATS keywords. Do not invent new jobs.'
+      : `Invent realistic detailed experience ONLY from: industrial/camp cleaning, housekeeping, kitchen hand/dishwashing, HACCP food safety, waste management, chemical handling (MSDS/SDS). Use verified closed mines. Never use irrelevant jobs. Generate 3-4 jobs, 6-8 bullets each.`;
+    return `You are an expert Australian resume writer for ATS-optimized mining CVs. Generate a FULL 2-PAGE resume for FIFO Utility Worker – Mine Site Support.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 ${closedMines}
 STRUCTURE — 2 FULL PAGES, NO WHITE SPACE:
-Page 1: Header → Professional Summary (4-5 lines, include: physically fit, safety-focused, FIFO ready, Drug & Alcohol Free, available immediately) → Core Skills (12 skills, 2-column grid: industrial cleaning, housekeeping, kitchen hand, HACCP, waste management, chemical handling, PPE, HSE, manual handling, FIFO adaptability) → Certifications (2-column grid, only real tickets)
-Page 2: Work Experience (antéchronological, 3-4 jobs, 6-8 bullets each, all past dates) → Education (if provided) → Languages (if provided) → Footer: Full Work Rights in Australia – Available for FIFO – Drug & Alcohol Free – References available upon request
+Page 1: Header → Professional Summary (4-5 lines: physically fit, safety-focused, FIFO ready, Drug & Alcohol Free, available immediately) → Core Skills (12 skills, 2-column: industrial cleaning, housekeeping, kitchen hand, HACCP, waste management, chemical handling, PPE, HSE, manual handling, FIFO adaptability) → Certifications (2-column, only real tickets)
+Page 2: Work Experience (antéchronological, 3-4 jobs, 6-8 bullets, all past dates) → Education (if provided) → Languages (if provided) → Footer: Full Work Rights – Available for FIFO – Drug & Alcohol Free – References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 
-  // ── MINE ENTRY LEVEL ──────────────────────────────────────────────────────
   if (job === 'mine_entry') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs. Do not add or invent anything.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs.'
       : aiLevel === 2
-      ? 'Enhance the user experience with stronger wording and ATS keywords. Do not invent new jobs, only improve what was provided.'
-      : `Invent realistic detailed past experience ONLY from these categories:
-  - General labourer on mine sites (manual labour, site maintenance, clean-up)
-  - Trade assistant (assisting electricians, boilermakers, fitters, mechanics)
-  - Sentry / spotter duties (exclusion zone management, hazard communication)
-  - Light construction labouring (not scaffolding — no ticket required)
-  Use the verified closed mines list. Never use farm work, hospitality, road work or kitchen jobs.
-  Generate 3-4 jobs minimum, 6-8 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for the mining industry.
-Generate a FULL 2-PAGE resume for a Mine Labourer / Trade Assistant / Sentry position.
+      ? 'Enhance user experience with stronger wording and ATS keywords. Do not invent new jobs.'
+      : `Invent realistic experience ONLY from: general labourer on mine sites, trade assistant (electricians, boilermakers, fitters), sentry/spotter duties, light construction labouring (no scaffolding). Use verified closed mines. Never use farm, hospitality, road work or kitchen jobs. Generate 3-4 jobs, 6-8 bullets each.`;
+    return `You are an expert Australian resume writer for ATS-optimized mining CVs. Generate a FULL 2-PAGE resume for Mine Labourer / Trade Assistant / Sentry.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 ${closedMines}
 STRUCTURE — 2 FULL PAGES, NO WHITE SPACE:
-Page 1: Header → Professional Summary (4-5 lines, include: physically fit, safety-focused, FIFO ready, Drug & Alcohol Free, available immediately) → Core Skills (12 skills, 2-column grid: manual handling, trade assistant support, sentry/spotter duties, WHS/SWMS, hazard identification, PPE, tools handling, shutdown support, remote FIFO adaptability, 12-hour shift capability) → Certifications (2-column grid, only real tickets)
-Page 2: Work Experience (antéchronological, 3-4 jobs, 6-8 bullets each, all past dates) → Education (if provided) → Languages (if provided) → Footer: Full Work Rights in Australia – Available for FIFO – Drug & Alcohol Free – References available upon request
+Page 1: Header → Professional Summary (4-5 lines: physically fit, safety-focused, FIFO ready, Drug & Alcohol Free, available immediately) → Core Skills (12 skills, 2-column: manual handling, trade assistant support, sentry/spotter duties, WHS/SWMS, hazard identification, PPE, tools handling, shutdown support, remote FIFO adaptability, 12-hour shift capability) → Certifications (2-column, only real tickets)
+Page 2: Work Experience (antéchronological, 3-4 jobs, 6-8 bullets, all past dates) → Education (if provided) → Languages (if provided) → Footer: Full Work Rights – Available for FIFO – Drug & Alcohol Free – References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 
-  // ── FARM WORK ─────────────────────────────────────────────────────────────
   if (job === 'farm') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs.'
       : aiLevel === 2
-      ? 'Enhance the user experience with stronger wording and relevant farm keywords. Do not invent new jobs.'
-      : `Invent realistic farm work experience ONLY from these categories:
-  - Fruit & vegetable picking (mangoes, grapes, tomatoes, strawberries, citrus)
-  - Packing shed work (sorting, grading, packaging produce)
-  - General farm hand (irrigation, pruning, weeding, planting)
-  - Basic tractor or machinery operation
-  Realistic Australian regions: QLD (Bundaberg, Atherton), VIC (Mildura, Swan Hill), SA (Riverland), WA (Manjimup), NSW (Griffith).
-  Never use mining, hospitality, construction or roadhouse jobs.
-  Generate 2-3 jobs minimum, 5-6 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for farm and agricultural work.
-Generate a 1-PAGE professional resume for a Farm Worker / Fruit Picker position in Australia.
+      ? 'Enhance user experience with relevant farm keywords. Do not invent new jobs.'
+      : `Invent realistic farm experience ONLY from: fruit/vegetable picking (mangoes, grapes, tomatoes, strawberries, citrus), packing shed (sorting, grading, packaging), general farm hand (irrigation, pruning, weeding), basic tractor/machinery operation. Regions: QLD (Bundaberg, Atherton), VIC (Mildura), SA (Riverland), WA (Manjimup), NSW (Griffith). Never use mining, hospitality or construction. Generate 2-3 jobs, 5-6 bullets each.`;
+    return `You are an expert Australian resume writer. Generate a 1-PAGE resume for Farm Worker / Fruit Picker.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 STRUCTURE — 1 FULL PAGE, NO WHITE SPACE:
-Header → Professional Summary (3-4 lines, include: physically fit, outdoor work, available immediately, willing to relocate to regional areas) → Core Skills (10 skills, 2-column: picking speed & quality, packing & grading, farm maintenance, irrigation, physical endurance, outdoor adaptability, manual handling, team collaboration, driver licence if held) → Certifications (only if provided) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets each) → Education (if provided) → Languages (if provided) → Footer: References available upon request
+Header → Professional Summary (3-4 lines: physically fit, outdoor work, available immediately, willing to relocate) → Core Skills (10 skills, 2-column) → Certifications (only if provided) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets) → Education (if provided) → Languages (if provided) → Footer: References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 
-  // ── HOSPITALITY ───────────────────────────────────────────────────────────
   if (job === 'hospitality') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs.'
       : aiLevel === 2
-      ? 'Enhance the user experience with stronger hospitality keywords. Do not invent new jobs.'
-      : `Invent realistic hospitality experience ONLY from these categories:
-  - Waiter / table service in restaurant or pub
-  - Bar staff (RSA compliance, beverage service)
-  - Kitchen hand / all-rounder in café or hotel
-  - Barista (basic coffee preparation)
-  Realistic Australian locations: Sydney, Melbourne, Brisbane, Perth, Cairns, Gold Coast.
-  Never use mining, farm, construction or roadhouse jobs.
-  Generate 2-3 jobs minimum, 5-6 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for hospitality.
-Generate a 1-PAGE professional resume for a Hospitality All-Rounder position in Australia.
+      ? 'Enhance user experience with hospitality keywords. Do not invent new jobs.'
+      : `Invent realistic hospitality experience ONLY from: waiter/table service, bar staff (RSA compliance), kitchen hand/all-rounder, barista (basic). Locations: Sydney, Melbourne, Brisbane, Perth, Cairns, Gold Coast. Never use mining, farm or construction. Generate 2-3 jobs, 5-6 bullets each.`;
+    return `You are an expert Australian resume writer. Generate a 1-PAGE resume for Hospitality All-Rounder.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 STRUCTURE — 1 FULL PAGE, NO WHITE SPACE:
-Header → Professional Summary (3-4 lines, include: customer-focused, RSA certified if applicable, fast-paced experience, available immediately) → Core Skills (10 skills, 2-column: customer service, table service, RSA compliance, food & beverage prep, cash handling/EFTPOS, food safety/HACCP, bar service, cleaning & hygiene, teamwork, work under pressure) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets each) → Education (if provided) → Languages (if provided) → Footer: References available upon request
+Header → Professional Summary (3-4 lines: customer-focused, RSA certified if applicable, fast-paced experience, available immediately) → Core Skills (10 skills, 2-column: customer service, table service, RSA, food & beverage prep, cash handling/EFTPOS, food safety/HACCP, bar service, cleaning & hygiene, teamwork, work under pressure) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets) → Education (if provided) → Languages (if provided) → Footer: References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 
-  // ── ROADHOUSE ─────────────────────────────────────────────────────────────
   if (job === 'roadhouse') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs.'
       : aiLevel === 2
-      ? 'Enhance the user experience with relevant roadhouse keywords. Do not invent new jobs.'
-      : `Invent realistic roadhouse experience ONLY from these categories:
-  - Counter service & customer service in remote roadhouse
-  - Food preparation & basic cooking (grill, fryer, sandwiches)
-  - Fuel pump operation & driveway service
-  - Cash handling & stock management
-  - Cleaning & housekeeping (bathrooms, rooms, common areas)
-  Realistic locations: Great Northern Highway WA, Stuart Highway NT, Nullarbor Plain SA, Outback QLD.
-  Never use city hospitality, mining, farm or construction jobs.
-  Generate 2-3 jobs minimum, 5-6 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for remote roadhouse work.
-Generate a 1-PAGE professional resume for a Roadhouse All-Rounder position in Australia.
+      ? 'Enhance user experience with roadhouse keywords. Do not invent new jobs.'
+      : `Invent realistic roadhouse experience ONLY from: counter service & customer service, food preparation & basic cooking (grill, fryer), fuel pump operation, cash handling & stock management, cleaning & housekeeping. Locations: Great Northern Highway WA, Stuart Highway NT, Nullarbor SA, Outback QLD. Never use city hospitality, mining or farm. Generate 2-3 jobs, 5-6 bullets each.`;
+    return `You are an expert Australian resume writer. Generate a 1-PAGE resume for Roadhouse All-Rounder.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 STRUCTURE — 1 FULL PAGE, NO WHITE SPACE:
-Header → Professional Summary (3-4 lines, include: versatile, RSA if applicable, comfortable in remote/isolated locations, flexible hours, available immediately) → Core Skills (10 skills, 2-column: customer service, food preparation, fuel pump operation, cash handling/EFTPOS, RSA compliance, food safety, cleaning & hygiene, stock management, remote work adaptability, long shifts) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets each) → Education (if provided) → Languages (if provided) → Footer: References available upon request
+Header → Professional Summary (3-4 lines: versatile, comfortable in remote/isolated locations, flexible hours, available immediately) → Core Skills (10 skills, 2-column: customer service, food preparation, fuel pump operation, cash handling/EFTPOS, RSA if applicable, food safety, cleaning & hygiene, stock management, remote work adaptability, long shifts) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets) → Education (if provided) → Languages (if provided) → Footer: References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 
-  // ── STATION HAND ──────────────────────────────────────────────────────────
   if (job === 'station') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs.'
       : aiLevel === 2
-      ? 'Enhance the user experience with relevant station hand keywords. Do not invent new jobs.'
-      : `Invent realistic station hand experience ONLY from these categories:
-  - Cattle or sheep mustering (motorbike, on foot, horse if applicable)
-  - Fencing & post driving
-  - Livestock handling (feeding, drafting, drenching)
-  - Water trough maintenance & infrastructure checks
-  - General property maintenance (shed work, machinery clean-up)
-  - 4WD vehicle operation across rough terrain
-  Realistic locations: NT (Katherine, Darwin region), QLD (Longreach, Mount Isa region), WA (Kimberley, Pilbara).
-  Never use mining, hospitality, construction or farm picking jobs.
-  Generate 2-3 jobs minimum, 5-6 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for station hand and pastoral work.
-Generate a 1-PAGE professional resume for a Station Hand / Jackaroo position in Australia.
+      ? 'Enhance user experience with station hand keywords. Do not invent new jobs.'
+      : `Invent realistic station hand experience ONLY from: cattle/sheep mustering (motorbike, on foot), fencing & post driving, livestock handling (feeding, drafting, drenching), water trough maintenance, general property maintenance, 4WD operation. Locations: NT (Katherine), QLD (Longreach, Mount Isa), WA (Kimberley). Never use mining, hospitality or farm picking. Generate 2-3 jobs, 5-6 bullets each.`;
+    return `You are an expert Australian resume writer. Generate a 1-PAGE resume for Station Hand / Jackaroo.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 STRUCTURE — 1 FULL PAGE, NO WHITE SPACE:
-Header → Professional Summary (3-4 lines, include: physically fit, comfortable with remote living, willing to relocate, available immediately) → Core Skills (10 skills, 2-column: cattle/sheep mustering, motorbike riding level if applicable, horse riding level if applicable, fencing & post driving, livestock handling, water infrastructure maintenance, 4WD operation, general property maintenance, physical endurance, team collaboration) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets each) → Education (if provided) → Languages (if provided) → Footer: References available upon request
+Header → Professional Summary (3-4 lines: physically fit, comfortable with remote living, willing to relocate, available immediately) → Core Skills (10 skills, 2-column: mustering, motorbike riding if applicable, horse riding if applicable, fencing & post driving, livestock handling, water infrastructure, 4WD operation, property maintenance, physical endurance, teamwork) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets) → Education (if provided) → Languages (if provided) → Footer: References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 
-  // ── CONSTRUCTION ──────────────────────────────────────────────────────────
   if (job === 'construction') {
     const aiText = aiLevel === 1
-      ? 'Use ONLY the experience the user provided. Rewrite it cleanly with action verbs.'
+      ? 'Use ONLY the experience the user provided. Rewrite cleanly with action verbs.'
       : aiLevel === 2
-      ? 'Enhance the user experience with relevant construction keywords. Do not invent new jobs.'
-      : `Invent realistic construction labouring experience ONLY from these categories:
-  - General labourer on residential or commercial build sites
-  - Site preparation & clean-up
-  - Materials handling & delivery
-  - Trade assistant (carpenters, concreters, tilers)
-  - Formwork & concrete support (basic)
-  - Basic power tool & hand tool operation
-  NEVER include scaffolding (requires a ticket).
-  Realistic locations: Perth, Brisbane, Sydney, Melbourne, Gold Coast.
-  Never use mining, farm, hospitality or roadhouse jobs.
-  Generate 2-3 jobs minimum, 5-6 bullet points each.`;
-
-    return `You are an expert Australian resume writer specialized in ATS-optimized CVs for construction labour.
-Generate a 1-PAGE professional resume for a Construction Labourer position in Australia.
+      ? 'Enhance user experience with construction keywords. Do not invent new jobs.'
+      : `Invent realistic construction experience ONLY from: general labourer on residential/commercial sites, site preparation & clean-up, materials handling & delivery, trade assistant (carpenters, concreters, tilers), formwork & concrete support, basic power/hand tool operation. NEVER include scaffolding (requires a ticket). Locations: Perth, Brisbane, Sydney, Melbourne. Never use mining, farm or hospitality. Generate 2-3 jobs, 5-6 bullets each.`;
+    return `You are an expert Australian resume writer. Generate a 1-PAGE resume for Construction Labourer.
 ${candidateInfo}
-AI LEVEL FOR WORK EXPERIENCE: ${aiText}
+AI LEVEL: ${aiText}
 STRUCTURE — 1 FULL PAGE, NO WHITE SPACE:
-Header → Professional Summary (3-4 lines, include: White Card certified, physically fit, safety-conscious, available immediately) → Core Skills (10 skills, 2-column: site preparation & clean-up, materials handling, trade assistant support, manual handling & heavy lifting, power tool operation, PPE compliance, WHS/OHS procedures, hazard identification, formwork support, team collaboration) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets each) → Education (if provided) → Languages (if provided) → Footer: References available upon request
+Header → Professional Summary (3-4 lines: White Card certified, physically fit, safety-conscious, available immediately) → Core Skills (10 skills, 2-column: site preparation & clean-up, materials handling, trade assistant support, manual handling & heavy lifting, power tool operation, PPE compliance, WHS/OHS procedures, hazard identification, formwork support, teamwork) → Certifications (only real tickets) → Work Experience (antéchronological, 2-3 jobs, 5-6 bullets) → Education (if provided) → Languages (if provided) → Footer: References available upon request
 ${strictRules}
 Return ONLY valid JSON: ${jsonSchema}`;
   }
 }
+
+// ─── STRIPE ───────────────────────────────────────────────────────────────────
+// REMPLACE PAR TA CLE PUBLIQUE STRIPE
+const stripe = Stripe('REMPLACE_PAR_TA_CLE_PUBLIQUE');
+let stripeElements = null;
+let currentPaymentIntentId = null;
+let pendingPrompt = null;
 
 let currentLang = 'en';
 let selectedJob = 'mine_utility';
@@ -670,7 +641,7 @@ function getSelectedTickets() {
 function openModal() { document.getElementById('ai-modal').classList.add('open'); }
 function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
 
-async function generateCV() {
+async function startPayment() {
   const t = i18n[currentLang];
   const firstName = document.getElementById('firstName').value.trim();
   const lastName = document.getElementById('lastName').value.trim();
@@ -679,26 +650,85 @@ async function generateCV() {
   const aiLevel = parseInt(document.getElementById('ai-slider').value);
   const cvLang = document.getElementById('cv-lang').value;
   const tickets = getSelectedTickets();
-  const phone = document.getElementById('phone').value;
-  const email = document.getElementById('email').value;
-  const location = document.getElementById('location').value;
-  const visa = document.getElementById('visa').value;
-  const languages = document.getElementById('languages').value;
-  const education = document.getElementById('education').value;
-  const experience = document.getElementById('experience').value;
 
-  const prompt = buildPrompt(selectedJob, firstName, lastName, phone, email, location, visa, languages, education, experience, tickets, aiLevel, cvLang);
+  pendingPrompt = buildPrompt(
+    selectedJob, firstName, lastName,
+    document.getElementById('phone').value,
+    document.getElementById('email').value,
+    document.getElementById('location').value,
+    document.getElementById('visa').value,
+    document.getElementById('languages').value,
+    document.getElementById('education').value,
+    document.getElementById('experience').value,
+    tickets, aiLevel, cvLang
+  );
 
   document.getElementById('error-box').style.display = 'none';
-  document.getElementById('loading').style.display = 'block';
   document.getElementById('gen-btn').disabled = true;
+
+  try {
+    const res = await fetch('/api/payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    if (data.error) { showError(data.error); document.getElementById('gen-btn').disabled = false; return; }
+
+    currentPaymentIntentId = data.clientSecret.split('_secret_')[0];
+
+    stripeElements = stripe.elements({
+      clientSecret: data.clientSecret,
+      appearance: {
+        theme: 'night',
+        variables: {
+          colorPrimary: '#C9A84C',
+          colorBackground: '#1E1E1E',
+          colorText: '#F5F0E8',
+          colorTextSecondary: 'rgba(245,240,232,0.45)',
+          borderRadius: '6px',
+          fontFamily: 'DM Sans, sans-serif',
+        }
+      }
+    });
+
+    const paymentElement = stripeElements.create('payment');
+    document.getElementById('payment-element').innerHTML = '';
+    paymentElement.mount('#payment-element');
+    document.getElementById('payment-overlay').classList.add('open');
+  } catch(e) {
+    showError(i18n[currentLang].err_connection);
+    document.getElementById('gen-btn').disabled = false;
+  }
+}
+
+async function confirmPayment() {
+  const btn = document.getElementById('pay-btn');
+  const errEl = document.getElementById('payment-error');
+  btn.disabled = true;
+  errEl.style.display = 'none';
+
+  const { error } = await stripe.confirmPayment({
+    elements: stripeElements,
+    confirmParams: { return_url: window.location.href },
+    redirect: 'if_required'
+  });
+
+  if (error) {
+    errEl.textContent = error.message;
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    return;
+  }
+
+  closePayment();
+  document.getElementById('loading').style.display = 'block';
   document.getElementById('cv-result').style.display = 'none';
 
   try {
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify({ prompt: pendingPrompt, paymentIntentId: currentPaymentIntentId })
     });
     const data = await res.json();
     if (data.error) { showError(data.error); return; }
@@ -713,6 +743,12 @@ async function generateCV() {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('gen-btn').disabled = false;
   }
+}
+
+function closePayment() {
+  document.getElementById('payment-overlay').classList.remove('open');
+  document.getElementById('gen-btn').disabled = false;
+  document.getElementById('pay-btn').disabled = false;
 }
 
 function renderCV(d) {
@@ -848,5 +884,6 @@ function resetForm() {
 
 renderTickets('mine_utility');
 </script>
+
 </body>
 </html>
