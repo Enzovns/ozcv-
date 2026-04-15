@@ -539,7 +539,7 @@ function closePayment() {}
 
   // Build Stripe Payment Link with redirect URL
   const redirectUrl = encodeURIComponent(window.location.origin + window.location.pathname + '?paid=true');
-  const stripeUrl = STRIPE_PAYMENT_LINK;
+  const stripeUrl = STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/dRmdR97Io5FKbFDbqM1gs01';
   document.getElementById('stripe-pay-link').href = stripeUrl;
 
   document.getElementById('payment-overlay').classList.add('open');
