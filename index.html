@@ -23,6 +23,8 @@
     .lang-btn { background:none; border:none; color:var(--muted); padding:6px 14px; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; border-radius:4px; transition:all 0.2s; }
     .lang-btn.active { background:var(--gold); color:var(--dark); font-weight:600; }
     .hero { text-align:center; padding:64px 24px 48px; animation:fadeUp 0.6s ease forwards; }
+    /* ── POINT 1 : Badge hero ── */
+    .hero-badge { display:inline-block; border:1px solid var(--border); border-radius:20px; padding:6px 16px; font-size:11px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:20px; background:rgba(201,168,76,0.06); }
     .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,10vw,80px); letter-spacing:2px; line-height:1; margin-bottom:16px; }
     .hero h1 span { background:linear-gradient(135deg,var(--gold),var(--gold-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     .hero p { color:var(--muted); font-size:16px; max-width:480px; margin:0 auto 40px; line-height:1.6; }
@@ -119,14 +121,16 @@
 </nav>
 
 <div class="hero">
-  <h1>Your Resume.<br><span>Built in Seconds.</span></h1>
-  <p>Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
+  <!-- POINT 1 : Badge hero -->
+  <div class="hero-badge">AI-Powered • Made for Australia</div>
+  <h1 id="hero-title">Your Resume.<br><span id="hero-title-span">Built in Seconds.</span></h1>
+  <p id="hero-sub">Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
   <div class="steps">
-    <div class="step"><div class="step-num">1</div><span>Choose job type</span></div>
+    <div class="step"><div class="step-num">1</div><span id="step1">Choose job type</span></div>
     <div class="step-divider">→</div>
-    <div class="step"><div class="step-num">2</div><span>Fill your info</span></div>
+    <div class="step"><div class="step-num">2</div><span id="step2">Fill your info</span></div>
     <div class="step-divider">→</div>
-    <div class="step"><div class="step-num">3</div><span>Download PDF</span></div>
+    <div class="step"><div class="step-num">3</div><span id="step3">Download PDF</span></div>
   </div>
 </div>
 
@@ -134,23 +138,24 @@
 
   <div class="success-banner" id="success-banner">
     <div style="font-size:28px">✅</div>
-    <div><strong>Payment confirmed!</strong><span>Your CV is being generated...</span></div>
+    <div><strong id="success-title">Payment confirmed!</strong><span id="success-sub">Your CV is being generated...</span></div>
   </div>
 
   <div class="section">
-    <div class="section-title">SELECT JOB TYPE</div>
+    <div class="section-title" id="label-jobtype">SELECT JOB TYPE</div>
     <div class="job-grid">
-      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label">Mine Utility</div><div class="sub">Camp, Cleaning, Kitchen</div></div>
-      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label">Mine Entry Level</div><div class="sub">Labourer, Trade Asst, Sentry</div></div>
-      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label">Farm Work</div><div class="sub">Harvest, Picking</div></div>
-      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label">Hospitality</div><div class="sub">Pub, Hotel, Cafe</div></div>
-      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label">Roadhouse</div><div class="sub">Remote service</div></div>
-      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label">Station Hand</div><div class="sub">Cattle, Sheep</div></div>
-      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label">Construction</div><div class="sub">Labour, Trade</div></div>
+      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label" id="jc-mine_utility">Mine Utility</div><div class="sub">Camp, Cleaning, Kitchen</div></div>
+      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label" id="jc-mine_entry">Mine Entry Level</div><div class="sub">Labourer, Trade Asst, Sentry</div></div>
+      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" id="jc-farm">Farm Work</div><div class="sub">Harvest, Picking</div></div>
+      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" id="jc-hospitality">Hospitality</div><div class="sub">Pub, Hotel, Café</div></div>
+      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" id="jc-roadhouse">Roadhouse</div><div class="sub">Remote service</div></div>
+      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" id="jc-station">Station Hand</div><div class="sub">Cattle, Sheep</div></div>
+      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" id="jc-construction">Construction</div><div class="sub">Labour, Trade</div></div>
     </div>
     <div class="tickets-box" id="tickets-box">
-      <div style="font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:500;">Tickets & Certifications</div>
-      <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:6px;">Tick the ones you have.</p>
+      <div style="font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:500;" id="label-tickets">Tickets & Certifications</div>
+      <!-- POINT 2 : Sous-titre tickets recommandés -->
+      <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:6px;" id="label-tickets-sub">These are the recommended minimum tickets for this job. Tick the ones you have.</p>
       <div class="tickets-chips" id="tickets-chips"></div>
       <div class="tickets-custom">
         <input type="text" id="tickets-custom" placeholder="+ Add other tickets (comma separated)..." />
@@ -159,14 +164,14 @@
   </div>
 
   <div class="section">
-    <div class="section-title">PERSONAL INFORMATION</div>
+    <div class="section-title" id="label-personal">PERSONAL INFORMATION</div>
     <div class="form-grid">
-      <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="John" /></div>
-      <div class="field"><label>Last Name</label><input type="text" id="lastName" placeholder="Smith" /></div>
-      <div class="field"><label>Phone</label><input type="text" id="phone" placeholder="+61 400 000 000" /></div>
-      <div class="field"><label>Email</label><input type="text" id="email" placeholder="john@email.com" /></div>
-      <div class="field"><label>Location</label><input type="text" id="location" placeholder="Perth, WA" /></div>
-      <div class="field"><label>Visa / Work Rights</label>
+      <div class="field"><label id="lbl-firstname">First Name</label><input type="text" id="firstName" placeholder="John" /></div>
+      <div class="field"><label id="lbl-lastname">Last Name</label><input type="text" id="lastName" placeholder="Smith" /></div>
+      <div class="field"><label id="lbl-phone">Phone</label><input type="text" id="phone" placeholder="+61 400 000 000" /></div>
+      <div class="field"><label id="lbl-email">Email</label><input type="text" id="email" placeholder="john@email.com" /></div>
+      <div class="field"><label id="lbl-location">Location</label><input type="text" id="location" placeholder="Perth, WA" /></div>
+      <div class="field"><label id="lbl-visa">Visa / Work Rights</label>
         <select id="visa">
           <option value="Full Work Rights in Australia">Australian Citizen</option>
           <option value="Full Work Rights in Australia">Permanent Resident</option>
@@ -180,46 +185,46 @@
   </div>
 
   <div class="section">
-    <div class="section-title">EXPERIENCE & SKILLS</div>
+    <div class="section-title" id="label-exp">EXPERIENCE & SKILLS</div>
     <div class="form-grid full">
-      <div class="field"><label>Past Experience (leave empty if none)</label><textarea id="experience" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
-      <div class="field"><label>Languages spoken</label><input type="text" id="languages" placeholder="e.g. English, French, Spanish..." /></div>
-      <div class="field"><label>Education (optional)</label><input type="text" id="education" placeholder="e.g. High School Diploma - Belgium" /></div>
+      <div class="field"><label id="lbl-experience">Past Experience (leave empty if none)</label><textarea id="experience" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
+      <div class="field"><label id="lbl-languages">Languages spoken</label><input type="text" id="languages" placeholder="e.g. English, French, Spanish..." /></div>
+      <div class="field"><label id="lbl-education">Education (optional)</label><input type="text" id="education" placeholder="e.g. High School Diploma – Belgium" /></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">
-      AI ASSISTANCE LEVEL
+      <span id="label-ailevel">AI ASSISTANCE LEVEL</span>
       <button class="help-btn" onclick="openModal()">?</button>
       <span style="flex:1;height:1px;background:var(--border);display:block;margin-left:2px"></span>
     </div>
     <div class="ai-slider-wrap">
       <div class="ai-slider-header">
         <div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:4px">How much should AI fill in your work experience?</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px" id="label-aiquestion">How much should AI fill in your work experience?</div>
           <div class="ai-level" id="ai-level-label">BALANCED</div>
         </div>
         <div style="font-size:32px" id="ai-emoji">⚖️</div>
       </div>
       <input type="range" min="1" max="3" value="2" id="ai-slider" oninput="updateSlider(this.value)" />
       <div class="slider-labels">
-        <span>My experience only</span>
-        <span>Balanced</span>
-        <span>AI fills in your experience</span>
+        <span id="slider-l1">My experience only</span>
+        <span id="slider-l2">Balanced</span>
+        <span id="slider-l3">AI fills in your experience</span>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">CV LANGUAGE</div>
+    <div class="section-title" id="label-cvlang">CV LANGUAGE</div>
     <div class="form-grid">
-      <div class="field"><label>Generate CV in</label>
+      <div class="field"><label id="lbl-cvlang">Generate CV in</label>
         <select id="cv-lang">
           <option value="English">🇦🇺 English</option>
-          <option value="French">🇫🇷 Francais</option>
-          <option value="Spanish">🇪🇸 Espanol</option>
-          <option value="Portuguese">🇧🇷 Portugues</option>
+          <option value="French">🇫🇷 Français</option>
+          <option value="Spanish">🇪🇸 Español</option>
+          <option value="Portuguese">🇧🇷 Português</option>
           <option value="German">🇩🇪 Deutsch</option>
           <option value="Italian">🇮🇹 Italiano</option>
         </select>
@@ -227,75 +232,191 @@
     </div>
   </div>
 
-<button class="gen-btn" id="gen-btn" onclick="handleGenerate()">✦ GENERATE MY RESUME — $5 AUD</button>
+<button class="gen-btn" id="gen-btn" onclick="handleGenerate()">✦ <span id="btn-generate">GENERATE MY RESUME — $5 AUD</span></button>
 
   <div class="error-box" id="error-box"></div>
-  <div class="loading" id="loading"><div class="spinner"></div><p>AI is crafting your resume...</p></div>
+  <div class="loading" id="loading"><div class="spinner"></div><p id="loading-text">AI is crafting your resume...</p></div>
 
   <div class="cv-result" id="cv-result">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:13px;color:var(--gold);margin-bottom:20px;">✅ Resume ready! Download your PDF below.</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:13px;color:var(--gold);margin-bottom:20px;" id="cv-ready-msg">✅ Resume ready! Download your PDF below.</div>
     <div class="cv-actions">
-      <button class="btn-download" onclick="downloadPDF()">⬇ DOWNLOAD PDF</button>
-      <button class="btn-new" onclick="resetForm()">← New Resume</button>
+      <button class="btn-download" onclick="downloadPDF()" id="btn-download">⬇ DOWNLOAD PDF</button>
+      <button class="btn-new" onclick="resetForm()" id="btn-new">← New Resume</button>
     </div>
     <div id="cv-paper"></div>
   </div>
 </div>
 
+<!-- Modal AI levels -->
+
 <div class="modal-overlay" id="ai-modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
-    <div class="modal-title">AI ASSISTANCE LEVELS</div>
-    <div class="modal-item"><div class="modal-emoji">📝</div><div><div class="modal-item-title">Level 1 — My experience only</div><div class="modal-item-desc">We only use what you wrote. Nothing is added or invented.</div></div></div>
-    <div class="modal-item"><div class="modal-emoji">⚖️</div><div><div class="modal-item-title">Level 2 — Balanced</div><div class="modal-item-desc">We improve your wording and add action verbs. No new jobs invented.</div></div></div>
-    <div class="modal-item"><div class="modal-emoji">🤖</div><div><div class="modal-item-title">Level 3 — AI fills in your experience</div><div class="modal-item-desc">AI creates realistic past jobs tailored to your chosen sector.</div></div></div>
-    <button class="modal-close" onclick="closeModal()">Close</button>
+    <div class="modal-title" id="modal-title">AI ASSISTANCE LEVELS</div>
+    <div class="modal-item"><div class="modal-emoji">📝</div><div><div class="modal-item-title" id="modal-l1-title">Level 1 — My experience only</div><div class="modal-item-desc" id="modal-l1-desc">We only use what you wrote. Nothing is added or invented.</div></div></div>
+    <div class="modal-item"><div class="modal-emoji">⚖️</div><div><div class="modal-item-title" id="modal-l2-title">Level 2 — Balanced</div><div class="modal-item-desc" id="modal-l2-desc">We improve your wording and add action verbs. No new jobs invented.</div></div></div>
+    <div class="modal-item"><div class="modal-emoji">🤖</div><div><div class="modal-item-title" id="modal-l3-title">Level 3 — AI fills in your experience</div><div class="modal-item-desc" id="modal-l3-desc">AI creates realistic past jobs tailored to your chosen sector.</div></div></div>
+    <button class="modal-close" onclick="closeModal()" id="modal-close">Close</button>
   </div>
 </div>
 
 <script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
 var STRIPE_LINK = 'https://buy.stripe.com/dRmdR97Io5FKbFDbqM1gs01';
 
+// ─── STATE ────────────────────────────────────────────────────────────────────
 var selectedJob = 'mine_utility';
 var cvData = null;
 var currentLang = 'en';
 
-var jobTickets = {
-  mine_utility: ['White Card','RSA','Food Safety','Police Check / VEVO','Drug and Alcohol Test'],
-  mine_entry:   ['White Card','Working at Heights','Confined Space','Gas Testing','First Aid','Police Check / VEVO','Drug and Alcohol Test','Drivers Licence'],
-  farm:         [],
-  hospitality:  ['RSA','Food Safety'],
-  roadhouse:    ['RSA','Food Safety','Drivers Licence','First Aid'],
-  station:      ['Drivers Licence (Manual)','Motorbike Licence'],
-  construction: ['White Card']
+// ─── POINT 6 : Système i18n complet EN/FR ─────────────────────────────────────
+var i18n = {
+  en: {
+    hero_badge: 'AI-Powered • Made for Australia',
+    hero_title: 'Your Resume.',
+    hero_span: 'Built in Seconds.',
+    hero_sub: 'Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
+    step1: 'Choose job type', step2: 'Fill your info', step3: 'Download PDF',
+    label_jobtype: 'SELECT JOB TYPE',
+    label_tickets: 'Tickets & Certifications',
+    label_tickets_sub: 'These are the recommended minimum tickets for this job. Tick the ones you have.',
+    label_personal: 'PERSONAL INFORMATION',
+    label_exp: 'EXPERIENCE & SKILLS',
+    label_ailevel: 'AI ASSISTANCE LEVEL',
+    label_aiquestion: 'How much should AI fill in your work experience?',
+    slider_l1: 'My experience only', slider_l2: 'Balanced', slider_l3: 'AI fills in your experience',
+    ai_labels: ['MY EXPERIENCE ONLY','BALANCED','AI FILLS IN YOUR EXPERIENCE'],
+    label_cvlang: 'CV LANGUAGE',
+    lbl_cvlang: 'Generate CV in',
+    lbl_firstname: 'First Name', lbl_lastname: 'Last Name', lbl_phone: 'Phone',
+    lbl_email: 'Email', lbl_location: 'Location', lbl_visa: 'Visa / Work Rights',
+    lbl_experience: 'Past Experience (leave empty if none)',
+    lbl_languages: 'Languages spoken', lbl_education: 'Education (optional)',
+    btn_generate: 'GENERATE MY RESUME — $5 AUD',
+    btn_download: '⬇ DOWNLOAD PDF', btn_new: '← New Resume',
+    loading_text: 'AI is crafting your resume...',
+    success_title: 'Payment confirmed!', success_sub: 'Your CV is being generated...',
+    cv_ready_msg: '✅ Resume ready! Download your PDF below.',
+    err_name: 'Please enter your first and last name.',
+    err_session: 'Session expired. Please fill the form again.',
+    err_connection: 'Connection error. Please try again.',
+    modal_title: 'AI ASSISTANCE LEVELS',
+    modal_l1_title: 'Level 1 — My experience only', modal_l1_desc: 'We only use what you wrote. Nothing is added or invented.',
+    modal_l2_title: 'Level 2 — Balanced', modal_l2_desc: 'We improve your wording and add action verbs. No new jobs invented.',
+    modal_l3_title: 'Level 3 — AI fills in your experience', modal_l3_desc: 'AI creates realistic past jobs tailored to your chosen sector.',
+    modal_close: 'Close',
+    tickets_custom_placeholder: '+ Add other tickets (comma separated)...'
+  },
+  fr: {
+    hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
+    hero_title: 'Ton CV.',
+    hero_span: 'Prêt en Secondes.',
+    hero_sub: 'CV australiens professionnels pour les mines, l\'agriculture, l\'hôtellerie et plus. Optimisé par IA, prêt à envoyer.',
+    step1: 'Choisis le poste', step2: 'Remplis tes infos', step3: 'Télécharge le PDF',
+    label_jobtype: 'TYPE DE POSTE',
+    label_tickets: 'Tickets & Certifications',
+    label_tickets_sub: 'Ce sont les tickets minimum recommandés pour ce poste. Coche ceux que tu as.',
+    label_personal: 'INFORMATIONS PERSONNELLES',
+    label_exp: 'EXPÉRIENCE & COMPÉTENCES',
+    label_ailevel: 'NIVEAU D\'ASSISTANCE IA',
+    label_aiquestion: 'Combien l\'IA doit-elle compléter ton expérience ?',
+    slider_l1: 'Mon expérience uniquement', slider_l2: 'Équilibré', slider_l3: 'L\'IA complète mon expérience',
+    ai_labels: ['MON EXPÉRIENCE UNIQUEMENT','ÉQUILIBRÉ','L\'IA COMPLÈTE TON EXPÉRIENCE'],
+    label_cvlang: 'LANGUE DU CV',
+    lbl_cvlang: 'Générer le CV en',
+    lbl_firstname: 'Prénom', lbl_lastname: 'Nom', lbl_phone: 'Téléphone',
+    lbl_email: 'Email', lbl_location: 'Localisation', lbl_visa: 'Visa / Droits de travail',
+    lbl_experience: 'Expérience passée (laisser vide si aucune)',
+    lbl_languages: 'Langues parlées', lbl_education: 'Formation (optionnel)',
+    btn_generate: 'GÉNÉRER MON CV — 5$ AUD',
+    btn_download: '⬇ TÉLÉCHARGER LE PDF', btn_new: '← Nouveau CV',
+    loading_text: 'L\'IA prépare ton CV...',
+    success_title: 'Paiement confirmé !', success_sub: 'Ton CV est en cours de génération...',
+    cv_ready_msg: '✅ CV prêt ! Télécharge ton PDF ci-dessous.',
+    err_name: 'Veuillez entrer votre prénom et nom.',
+    err_session: 'Session expirée. Veuillez remplir le formulaire à nouveau.',
+    err_connection: 'Erreur de connexion. Veuillez réessayer.',
+    modal_title: 'NIVEAUX D\'ASSISTANCE IA',
+    modal_l1_title: 'Niveau 1 — Mon expérience uniquement', modal_l1_desc: 'On n\'utilise que ce que tu as écrit. Rien n\'est ajouté ou inventé.',
+    modal_l2_title: 'Niveau 2 — Équilibré', modal_l2_desc: 'On améliore ta formulation et on ajoute des verbes d\'action. Aucun nouveau poste inventé.',
+    modal_l3_title: 'Niveau 3 — L\'IA complète ton expérience', modal_l3_desc: 'L\'IA crée des expériences réalistes adaptées à ton secteur.',
+    modal_close: 'Fermer',
+    tickets_custom_placeholder: '+ Ajouter d\'autres tickets (séparés par des virgules)...'
+  }
 };
 
-window.addEventListener('DOMContentLoaded', function() {
-  renderTickets('mine_utility');
-  updateSlider(2);
-  var params = new URLSearchParams(window.location.search);
-  if (params.get('paid') === 'true') {
-    window.history.replaceState({}, '', window.location.pathname);
-    var saved = sessionStorage.getItem('ozcv_form');
-    if (saved) {
-      document.getElementById('success-banner').style.display = 'flex';
-      generateCV(JSON.parse(saved));
-    } else {
-      showError('Session expired. Please fill the form again.');
-    }
-  }
-});
+function applyLang(lang) {
+  var t = i18n[lang];
+  document.querySelector('.hero-badge').textContent = t.hero_badge;
+  document.getElementById('hero-title').childNodes[0].textContent = t.hero_title + '\n';
+  document.getElementById('hero-title-span').textContent = t.hero_span;
+  document.getElementById('hero-sub').textContent = t.hero_sub;
+  document.getElementById('step1').textContent = t.step1;
+  document.getElementById('step2').textContent = t.step2;
+  document.getElementById('step3').textContent = t.step3;
+  document.getElementById('label-jobtype').childNodes[0].textContent = t.label_jobtype;
+  document.getElementById('label-tickets').textContent = t.label_tickets;
+  document.getElementById('label-tickets-sub').textContent = t.label_tickets_sub;
+  document.getElementById('label-personal').childNodes[0].textContent = t.label_personal;
+  document.getElementById('label-exp').childNodes[0].textContent = t.label_exp;
+  document.getElementById('label-ailevel').textContent = t.label_ailevel;
+  document.getElementById('label-aiquestion').textContent = t.label_aiquestion;
+  document.getElementById('slider-l1').textContent = t.slider_l1;
+  document.getElementById('slider-l2').textContent = t.slider_l2;
+  document.getElementById('slider-l3').textContent = t.slider_l3;
+  document.getElementById('label-cvlang').childNodes[0].textContent = t.label_cvlang;
+  document.getElementById('lbl-cvlang').textContent = t.lbl_cvlang;
+  document.getElementById('lbl-firstname').textContent = t.lbl_firstname;
+  document.getElementById('lbl-lastname').textContent = t.lbl_lastname;
+  document.getElementById('lbl-phone').textContent = t.lbl_phone;
+  document.getElementById('lbl-email').textContent = t.lbl_email;
+  document.getElementById('lbl-location').textContent = t.lbl_location;
+  document.getElementById('lbl-visa').textContent = t.lbl_visa;
+  document.getElementById('lbl-experience').textContent = t.lbl_experience;
+  document.getElementById('lbl-languages').textContent = t.lbl_languages;
+  document.getElementById('lbl-education').textContent = t.lbl_education;
+  document.getElementById('btn-generate').textContent = t.btn_generate;
+  document.getElementById('btn-download').textContent = t.btn_download;
+  document.getElementById('btn-new').textContent = t.btn_new;
+  document.getElementById('loading-text').textContent = t.loading_text;
+  document.getElementById('success-title').textContent = t.success_title;
+  document.getElementById('success-sub').textContent = t.success_sub;
+  document.getElementById('cv-ready-msg').textContent = t.cv_ready_msg;
+  document.getElementById('modal-title').textContent = t.modal_title;
+  document.getElementById('modal-l1-title').textContent = t.modal_l1_title;
+  document.getElementById('modal-l1-desc').textContent = t.modal_l1_desc;
+  document.getElementById('modal-l2-title').textContent = t.modal_l2_title;
+  document.getElementById('modal-l2-desc').textContent = t.modal_l2_desc;
+  document.getElementById('modal-l3-title').textContent = t.modal_l3_title;
+  document.getElementById('modal-l3-desc').textContent = t.modal_l3_desc;
+  document.getElementById('modal-close').textContent = t.modal_close;
+  document.getElementById('tickets-custom').placeholder = t.tickets_custom_placeholder;
+  updateSlider(document.getElementById('ai-slider').value);
+}
 
-function handleGenerate() {
-  var firstName = document.getElementById('firstName').value.trim();
-  var lastName = document.getElementById('lastName').value.trim();
-  if (!firstName || !lastName) {
-    showError('Please enter your first and last name.');
-    return;
-  }
-  var formData = {
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
+  applyLang(lang);
+}
+
+// ─── TICKETS ──────────────────────────────────────────────────────────────────
+var jobTickets = {
+  mine_utility: ['White Card','RSA','Food Safety','Police Check / VEVO','Drug & Alcohol Test'],
+  mine_entry:   ['White Card','Working at Heights','Confined Space','Gas Testing','First Aid','Police Check / VEVO','Drug & Alcohol Test','Driver\'s Licence'],
+  farm:         [],
+  hospitality:  ['RSA','Food Handling Certificate'],
+  roadhouse:    ['RSA','Food Handling Certificate','Driver\'s Licence','First Aid'],
+  station:      ['Driver\'s Licence (Manual)','Motorbike Licence'],
+  construction: ['White Card','Working at Heights','Forklift']
+};
+
+// ─── POINT 7 : saveFormData / loadFormData ────────────────────────────────────
+function saveFormData() {
+  var data = {
     job: selectedJob,
-    firstName: firstName,
-    lastName: lastName,
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
     phone: document.getElementById('phone').value.trim(),
     email: document.getElementById('email').value.trim(),
     location: document.getElementById('location').value.trim(),
@@ -305,9 +426,63 @@ function handleGenerate() {
     education: document.getElementById('education').value.trim(),
     aiLevel: document.getElementById('ai-slider').value,
     cvLang: document.getElementById('cv-lang').value,
-    tickets: getSelectedTickets()
+    tickets: getSelectedTickets(),
+    lang: currentLang
   };
-  sessionStorage.setItem('ozcv_form', JSON.stringify(formData));
+  sessionStorage.setItem('ozcv_form', JSON.stringify(data));
+}
+
+function loadFormData(data) {
+  selectedJob = data.job || 'mine_utility';
+  document.querySelectorAll('.job-card').forEach(function(c) { c.classList.remove('active'); });
+  var cards = document.querySelectorAll('.job-card');
+  cards.forEach(function(c) {
+    if (c.getAttribute('onclick') && c.getAttribute('onclick').indexOf(selectedJob) !== -1) {
+      c.classList.add('active');
+    }
+  });
+  renderTickets(selectedJob);
+  document.getElementById('firstName').value = data.firstName || '';
+  document.getElementById('lastName').value = data.lastName || '';
+  document.getElementById('phone').value = data.phone || '';
+  document.getElementById('email').value = data.email || '';
+  document.getElementById('location').value = data.location || '';
+  document.getElementById('visa').value = data.visa || '';
+  document.getElementById('experience').value = data.experience || '';
+  document.getElementById('languages').value = data.languages || '';
+  document.getElementById('education').value = data.education || '';
+  document.getElementById('ai-slider').value = data.aiLevel || 2;
+  document.getElementById('cv-lang').value = data.cvLang || 'English';
+  updateSlider(data.aiLevel || 2);
+  if (data.lang) setLang(data.lang);
+}
+
+// ─── POINT 8 : Détection ?paid=true ──────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  renderTickets('mine_utility');
+  updateSlider(2);
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('paid') === 'true') {
+    window.history.replaceState({}, '', window.location.pathname);
+    var saved = sessionStorage.getItem('ozcv_form');
+    if (saved) {
+      var formData = JSON.parse(saved);
+      loadFormData(formData);
+      document.getElementById('success-banner').style.display = 'flex';
+      generateCV(formData);
+    } else {
+      showError(i18n[currentLang].err_session);
+    }
+  }
+});
+
+// ─── GENERATE FLOW ────────────────────────────────────────────────────────────
+function handleGenerate() {
+  var t = i18n[currentLang];
+  var firstName = document.getElementById('firstName').value.trim();
+  var lastName = document.getElementById('lastName').value.trim();
+  if (!firstName || !lastName) { showError(t.err_name); return; }
+  saveFormData();
   window.location.href = STRIPE_LINK;
 }
 
@@ -325,12 +500,13 @@ async function generateCV(formData) {
     if (data.error) { showError(data.error); return; }
     var clean = data.result.replace(/```json|```/g, '').trim();
     cvData = JSON.parse(clean);
+    cvData._job = formData.job;
     renderCV(cvData);
     document.getElementById('cv-result').style.display = 'block';
     document.getElementById('cv-result').scrollIntoView({ behavior: 'smooth' });
     sessionStorage.removeItem('ozcv_form');
   } catch(e) {
-    showError('Connection error. Please try again.');
+    showError(i18n[currentLang].err_connection);
   } finally {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('gen-btn').disabled = false;
@@ -338,6 +514,7 @@ async function generateCV(formData) {
   }
 }
 
+// ─── JOB / TICKETS ────────────────────────────────────────────────────────────
 function selectJob(el, type) {
   document.querySelectorAll('.job-card').forEach(function(c) { c.classList.remove('active'); });
   el.classList.add('active');
@@ -364,8 +541,10 @@ function getSelectedTickets() {
   return checked;
 }
 
+// ─── UI HELPERS ───────────────────────────────────────────────────────────────
 function updateSlider(val) {
-  var labels = ['MY EXPERIENCE ONLY','BALANCED','AI FILLS IN YOUR EXPERIENCE'];
+  var t = i18n[currentLang];
+  var labels = t.ai_labels;
   var emojis = ['📝','⚖️','🤖'];
   document.getElementById('ai-level-label').textContent = labels[val-1];
   document.getElementById('ai-emoji').textContent = emojis[val-1];
@@ -374,18 +553,12 @@ function updateSlider(val) {
     'linear-gradient(to right,var(--gold) 0%,var(--gold) '+p+'%,#1E1E1E '+p+'%)';
 }
 
-function setLang(lang) {
-  currentLang = lang;
-  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
-}
-
 function openModal() { document.getElementById('ai-modal').classList.add('open'); }
 function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
 
 function showError(msg) {
   var b = document.getElementById('error-box');
-  b.textContent = 'Error: ' + msg;
+  b.textContent = '⚠ ' + msg;
   b.style.display = 'block';
   document.getElementById('loading').style.display = 'none';
   document.getElementById('gen-btn').disabled = false;
@@ -393,88 +566,220 @@ function showError(msg) {
 
 function resetForm() {
   document.getElementById('cv-result').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
+// ─── PROMPT BUILDER ───────────────────────────────────────────────────────────
 function buildPrompt(f) {
   var aiLevel = parseInt(f.aiLevel);
   var tickets = f.tickets && f.tickets.length ? f.tickets.join(', ') : 'none';
   var rules = 'STRICT RULES: Never invent tickets. Never invent languages. Never use Present as end date. All jobs must have past end dates. No photo, no date of birth. Visa exactly as provided. Write in ' + f.cvLang + '. Return ONLY valid JSON no markdown.';
-  var mines = 'VERIFIED CLOSED MINES for invented experience: Cook Colliery Blackwater QLD closed Nov 2025, Millennium Coal Mine Moranbah QLD closed 2023, Ravensthorpe Nickel Mine WA closed Apr 2024, Ranger Uranium Mine NT closed Jan 2021. NEVER use Giant Mine.';
+  var mines = 'VERIFIED CLOSED MINES (use only these for invented mining experience): Cook Colliery Blackwater QLD closed Nov 2025, Millennium Coal Mine Moranbah QLD closed 2023, Ravensthorpe Nickel Mine WA closed Apr 2024, Ranger Uranium Mine NT closed Jan 2021. NEVER use Giant Mine Canada.';
   var schema = '{"name":"","jobTitle":"","phone":"","email":"","location":"","visa":"","summary":"","skills":[""],"licences":[""],"experience":[{"role":"","company":"","period":"Month YYYY - Month YYYY","duties":[""]}],"languages":[""],"education":""}';
   var info = 'CANDIDATE: Name: '+f.firstName+' '+f.lastName+', Phone: '+(f.phone||'not provided')+', Email: '+(f.email||'not provided')+', Location: '+(f.location||'Australia')+', Visa: '+f.visa+', Languages: '+(f.languages||'not provided')+', Education: '+(f.education||'not provided')+', Tickets: '+tickets+', Experience: '+(f.experience||'none');
   var aiTexts = {
-    mine_utility: ['Use ONLY experience provided. Rewrite cleanly with action verbs.','Enhance wording with ATS keywords. Do not invent new jobs.','Invent realistic experience from: industrial camp cleaning, housekeeping, kitchen hand, HACCP, waste management, chemical handling. Use verified closed mines. 3-4 jobs 6-8 bullets each.'],
-    mine_entry: ['Use ONLY experience provided.','Enhance wording with ATS keywords. Do not invent new jobs.','Invent from: general labourer mine sites, trade assistant, sentry spotter. Use verified closed mines. 3-4 jobs 6-8 bullets.'],
-    farm: ['Use ONLY experience provided.','Enhance with farm keywords. Do not invent new jobs.','Invent from: fruit vegetable picking, packing shed, general farm hand, tractor operation. QLD VIC SA WA NSW regions. 2-3 jobs 5-6 bullets.'],
-    hospitality: ['Use ONLY experience provided.','Enhance with hospitality keywords. Do not invent new jobs.','Invent from: waiter, bar staff RSA, kitchen hand, barista. Sydney Melbourne Brisbane Perth Cairns. 2-3 jobs 5-6 bullets.'],
-    roadhouse: ['Use ONLY experience provided.','Enhance with roadhouse keywords. Do not invent new jobs.','Invent from: counter service, food prep, fuel pump, cash handling, cleaning. Great Northern Hwy WA Stuart Hwy NT Nullarbor SA. 2-3 jobs 5-6 bullets.'],
-    station: ['Use ONLY experience provided.','Enhance with station hand keywords. Do not invent new jobs.','Invent from: mustering, fencing, livestock handling, water troughs, 4WD. NT QLD WA Kimberley. 2-3 jobs 5-6 bullets.'],
-    construction: ['Use ONLY experience provided.','Enhance with construction keywords. Do not invent new jobs.','Invent from: general labourer, site prep, materials handling, trade assistant, formwork. Perth Brisbane Sydney Melbourne. NEVER include scaffolding. 2-3 jobs 5-6 bullets.']
+    mine_utility: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance wording with ATS keywords for mining camp support. Do not invent new jobs.',
+      'Invent realistic experience from: FIFO industrial camp cleaning, housekeeping, accommodation cleaning, kitchen hand, HACCP food safety, waste management, chemical handling, PPE compliance, HSE procedures. Use verified closed mines only. 3-4 jobs, 6-8 bullets each. Mention Drug & Alcohol free.'
+    ],
+    mine_entry: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance wording with ATS keywords for mine labourer / trade assistant. Do not invent new jobs.',
+      'Invent realistic experience from: general labourer mine sites, trade assistant (assisting boilermakers, electricians, fitters), sentry/spotter, rock pitching, worksite prep, manual handling, shutdown support. Use verified closed mines only. 3-4 jobs, 6-8 bullets. Mention Drug & Alcohol free and FIFO available.'
+    ],
+    farm: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance with farm/agriculture keywords. Do not invent new jobs.',
+      'Invent realistic experience from: fruit and vegetable picking, packing shed, general farm hand, tractor operation, irrigation, crop monitoring. QLD VIC SA WA NSW regions. 2-3 jobs, 5-6 bullets each.'
+    ],
+    hospitality: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance with hospitality/service industry keywords. Do not invent new jobs.',
+      'Invent realistic experience from: waiter/waitress, bar staff (RSA), kitchen hand, barista, front desk. Real venues in Sydney Melbourne Brisbane Perth Cairns. 2-3 jobs, 5-6 bullets each.'
+    ],
+    roadhouse: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance with roadhouse/remote service keywords. Do not invent new jobs.',
+      'Invent realistic experience from: counter service, food prep, fuel pump operation, cash handling, cleaning, remote site support. Real Australian highways: Great Northern Hwy WA, Stuart Hwy NT, Nullarbor SA. 2-3 jobs, 5-6 bullets each.'
+    ],
+    station: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance with station hand / jackaroo keywords. Do not invent new jobs.',
+      'Invent realistic experience from: mustering, fencing, livestock handling, water trough maintenance, 4WD driving, motorbike, droving. Real pastoral regions: NT, QLD, WA Kimberley. 2-3 jobs, 5-6 bullets each.'
+    ],
+    construction: [
+      'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
+      'Enhance with construction/labourer keywords. Do not invent new jobs.',
+      'Invent realistic experience from: general labourer, site prep, materials handling, trade assistant, formwork, concrete works. Real cities: Perth Brisbane Sydney Melbourne. NEVER include scaffolding unless ticket confirmed. 2-3 jobs, 5-6 bullets each.'
+    ]
   };
-  var titles = {mine_utility:'FIFO Utility Worker - Mine Site Support',mine_entry:'Mine Labourer / Trade Assistant / Sentry',farm:'Farm Worker / Fruit Picker',hospitality:'Hospitality All-Rounder',roadhouse:'Roadhouse All-Rounder',station:'Station Hand / Jackaroo',construction:'Construction Labourer'};
+  var titles = {
+    mine_utility: 'FIFO Utility Worker — Mine Site Support',
+    mine_entry: 'Mine Labourer / Trade Assistant',
+    farm: 'Farm Worker / Fruit Picker',
+    hospitality: 'Hospitality All-Rounder',
+    roadhouse: 'Roadhouse All-Rounder',
+    station: 'Station Hand / Jackaroo',
+    construction: 'Construction Labourer'
+  };
   var pages = (f.job==='mine_utility'||f.job==='mine_entry') ? '2-PAGE' : '1-PAGE';
   var aiText = (aiTexts[f.job]||aiTexts['farm'])[aiLevel-1];
-  return 'You are an expert Australian resume writer. Generate a '+pages+' resume for '+titles[f.job]+'. '+info+'. AI LEVEL: '+aiText+' '+mines+' '+rules+' Return ONLY valid JSON: '+schema;
+  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+rules+' Return ONLY valid JSON no preamble: '+schema;
 }
 
+// ─── RENDER CV (preview HTML) ────────────────────────────────────────────────
 function renderCV(d) {
-  var lic = d.licences && d.licences.length ? '<div class="cv-section"><h3>Licences and Certificates</h3><ul style="columns:2">'+d.licences.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul></div>' : '';
-  var edu = d.education && d.education.trim() ? '<div class="cv-section"><h3>Education</h3><p>'+d.education+'</p></div>' : '';
-  var lang = d.languages && d.languages.length ? '<div class="cv-section"><h3>Languages</h3><p>'+d.languages.join(', ')+'</p></div>' : '';
+  var lic = d.licences && d.licences.length
+    ? '<div class="cv-section"><h3>Licences and Certificates</h3><ul style="columns:2">'+d.licences.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul></div>' : '';
+  var edu = d.education && d.education.trim()
+    ? '<div class="cv-section"><h3>Education</h3><p>'+d.education+'</p></div>' : '';
+  var lang = d.languages && d.languages.length
+    ? '<div class="cv-section"><h3>Languages</h3><p>'+d.languages.join(', ')+'</p></div>' : '';
   document.getElementById('cv-paper').innerHTML =
-    '<h2>'+d.name+'</h2><div class="cv-title">'+d.jobTitle+'</div>' +
-    '<div class="cv-contact">'+d.phone+' | '+d.email+' | '+d.location+' | '+d.visa+'</div>' +
-    '<div class="cv-section"><h3>Professional Summary</h3><p>'+d.summary+'</p></div>' + lic +
+    '<h2>'+d.name+'</h2><div class="cv-title">'+d.jobTitle+'</div>'+
+    '<div class="cv-contact">'+d.phone+' | '+d.email+' | '+d.location+' | '+d.visa+'</div>'+
+    '<div class="cv-section"><h3>Professional Summary</h3><p>'+d.summary+'</p></div>'+lic+
     '<div class="cv-section"><h3>Work Experience</h3>'+
     d.experience.map(function(e){
       return '<div class="exp-item"><div class="exp-header"><span class="exp-role">'+e.role+'</span><span class="exp-date">'+e.period+'</span></div><div class="exp-company">'+e.company+'</div><ul>'+e.duties.map(function(du){return '<li>'+du+'</li>';}).join('')+'</ul></div>';
-    }).join('') + '</div>' +
-    '<div class="cv-section"><h3>Key Skills</h3><ul style="columns:2">'+d.skills.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>' +
-    edu + lang +
+    }).join('')+'</div>'+
+    '<div class="cv-section"><h3>Key Skills</h3><ul style="columns:2">'+d.skills.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>'+
+    edu+lang+
     '<p style="font-size:11px;color:#888;margin-top:16px;border-top:1px solid #eee;padding-top:10px">References available upon request</p>';
 }
 
+// ─── POINT 10 : Templates PDF différenciés par secteur ───────────────────────
 function downloadPDF() {
   if (!cvData) return;
+  var job = cvData._job || selectedJob;
+  var isMining = (job === 'mine_utility' || job === 'mine_entry');
   var jsPDF = window.jspdf.jsPDF;
-  var doc = new jsPDF({unit:'mm',format:'a4'});
-  var y=20,lm=20,rm=190,lw=170;
-  doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);
-  doc.text(cvData.name,lm,y);y+=7;
-  doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
-  doc.text(cvData.jobTitle,lm,y);y+=5;
-  doc.setFontSize(8.5);doc.setTextColor(100,100,100);
-  doc.splitTextToSize(cvData.phone+' | '+cvData.email+' | '+cvData.location+' | '+cvData.visa,lw).forEach(function(l){doc.text(l,lm,y);y+=4;});
-  y+=2;doc.setDrawColor(17,17,17);doc.setLineWidth(0.8);doc.line(lm,y,rm,y);y+=7;
-  function chk(n){if(y+(n||10)>275){doc.addPage();y=20;}}
-  function sec(t){chk(12);doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);doc.text(t.toUpperCase(),lm,y);y+=6;doc.setFont('helvetica','normal');doc.setTextColor(50,50,50);}
-  function txt(t){doc.setFontSize(9);doc.splitTextToSize(t,lw).forEach(function(l){chk();doc.text(l,lm,y);y+=4.5;});}
-  function bul(t){doc.setFontSize(9);doc.splitTextToSize('- '+t,lw-4).forEach(function(l,i){chk();doc.text(l,lm+(i===0?2:5),y);y+=4.5;});}
-  sec('Professional Summary');txt(cvData.summary);y+=3;
-  if(cvData.licences&&cvData.licences.length){
-    sec('Licences and Certificates');
-    var h=Math.ceil(cvData.licences.length/2);
-    var c1=cvData.licences.slice(0,h),c2=cvData.licences.slice(h);
-    for(var i=0;i<Math.max(c1.length,c2.length);i++){chk();doc.setFontSize(9);if(c1[i])doc.text('✓  '+c1[i],lm,y);if(c2[i])doc.text('✓  '+c2[i],lm+lw/2,y);y+=5;}
-    y+=2;
+  var doc = new jsPDF({ unit:'mm', format:'a4' });
+  var lm=18, rm=192, lw=174, y=0;
+
+  // ── Couleurs selon secteur ──
+  var accent = [17,17,17];
+  if (job === 'mine_utility' || job === 'mine_entry') accent = [20,60,100];      // bleu marine mining
+  else if (job === 'construction') accent = [180,80,0];                           // orange construction
+  else if (job === 'hospitality' || job === 'roadhouse') accent = [140,20,20];   // rouge hospitality
+  else if (job === 'farm' || job === 'station') accent = [40,100,40];            // vert farm/station
+
+  function chk(n) { if (y+(n||10) > 278) { doc.addPage(); y = 18; } }
+
+  // ── EN-TÊTE ──
+  y = 22;
+  doc.setFillColor(accent[0], accent[1], accent[2]);
+  doc.rect(0, 0, 210, 36, 'F');
+  doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+  doc.text(cvData.name, lm, y); y += 7;
+  doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(220,220,220);
+  doc.text(cvData.jobTitle, lm, y); y = 44;
+
+  // ── CONTACT ligne ──
+  doc.setFontSize(8.5); doc.setTextColor(80,80,80);
+  var contactLine = [cvData.phone, cvData.email, cvData.location, cvData.visa].filter(Boolean).join('  |  ');
+  doc.splitTextToSize(contactLine, lw).forEach(function(l) { doc.text(l, lm, y); y += 4.5; });
+  y += 3;
+  doc.setDrawColor(accent[0], accent[1], accent[2]); doc.setLineWidth(0.8); doc.line(lm, y, rm, y); y += 7;
+
+  // ── FONCTIONS HELPERS ──
+  function sec(title) {
+    chk(14);
+    doc.setFontSize(8); doc.setFont('helvetica','bold');
+    doc.setTextColor(accent[0], accent[1], accent[2]);
+    doc.text(title.toUpperCase(), lm, y); y += 1.5;
+    doc.setDrawColor(accent[0], accent[1], accent[2]); doc.setLineWidth(0.3);
+    doc.line(lm, y, rm, y); y += 5;
+    doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
   }
+  function txt(t) {
+    doc.setFontSize(9);
+    doc.splitTextToSize(t, lw).forEach(function(l) { chk(); doc.text(l, lm, y); y += 4.5; });
+  }
+  function bul(t) {
+    doc.setFontSize(9);
+    doc.splitTextToSize('• ' + t, lw-4).forEach(function(l, i) {
+      chk(); doc.text(l, lm + (i===0 ? 2 : 6), y); y += 4.5;
+    });
+  }
+
+  // ── RÉSUMÉ ──
+  sec('Professional Summary'); txt(cvData.summary); y += 4;
+
+  // ── TICKETS / LICENCES ──
+  if (cvData.licences && cvData.licences.length) {
+    sec('Licences & Certifications');
+    var half = Math.ceil(cvData.licences.length / 2);
+    var col1 = cvData.licences.slice(0, half), col2 = cvData.licences.slice(half);
+    for (var i=0; i<Math.max(col1.length, col2.length); i++) {
+      chk();
+      doc.setFontSize(9);
+      if (col1[i]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('✓', lm+1, y); doc.setTextColor(50,50,50); doc.text(col1[i], lm+6, y); }
+      if (col2[i]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('✓', lm+lw/2+1, y); doc.setTextColor(50,50,50); doc.text(col2[i], lm+lw/2+6, y); }
+      y += 5;
+    }
+    y += 3;
+  }
+
+  // ── EXPÉRIENCE ──
   sec('Work Experience');
-  cvData.experience.forEach(function(e){
-    chk(15);doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(17,17,17);doc.text(e.role,lm,y);
-    doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);doc.text(e.period,rm-doc.getTextWidth(e.period),y);y+=5;
-    doc.setTextColor(80,80,80);doc.text(e.company,lm,y);y+=5;doc.setTextColor(50,50,50);
-    e.duties.forEach(function(d){bul(d);});y+=3;
+  cvData.experience.forEach(function(e) {
+    chk(16);
+    doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
+    doc.text(e.role, lm, y);
+    doc.setFontSize(8.5); doc.setFont('helvetica','italic'); doc.setTextColor(120,120,120);
+    var periodW = doc.getTextWidth(e.period);
+    doc.text(e.period, rm - periodW, y); y += 5;
+    doc.setFontSize(9); doc.setFont('helvetica','normal');
+    doc.setTextColor(accent[0], accent[1], accent[2]);
+    doc.text(e.company, lm, y); y += 5;
+    doc.setTextColor(50,50,50);
+    e.duties.forEach(function(d) { bul(d); });
+    y += 3;
   });
+
+  // ── SKILLS ──
   sec('Key Skills');
-  var sh=Math.ceil(cvData.skills.length/2),sk1=cvData.skills.slice(0,sh),sk2=cvData.skills.slice(sh);
-  for(var j=0;j<Math.max(sk1.length,sk2.length);j++){chk();doc.setFontSize(9);if(sk1[j])doc.text('• '+sk1[j],lm,y);if(sk2[j])doc.text('• '+sk2[j],lm+lw/2,y);y+=5;}
-  y+=2;
-  if(cvData.education&&cvData.education.trim()){sec('Education');txt(cvData.education);y+=3;}
-  if(cvData.languages&&cvData.languages.length){sec('Languages');txt(cvData.languages.join(', '));y+=3;}
-  chk(10);doc.setDrawColor(200,200,200);doc.setLineWidth(0.3);doc.line(lm,y,rm,y);y+=5;
-  doc.setFontSize(8);doc.setTextColor(150,150,150);doc.text('References available upon request',lm,y);
-  doc.save(cvData.name.replace(/\s+/g,'_')+'_Resume.pdf');
+  var sh = Math.ceil(cvData.skills.length/2);
+  var sk1 = cvData.skills.slice(0,sh), sk2 = cvData.skills.slice(sh);
+  for (var j=0; j<Math.max(sk1.length,sk2.length); j++) {
+    chk();
+    doc.setFontSize(9);
+    if (sk1[j]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('▸', lm, y); doc.setTextColor(50,50,50); doc.text(sk1[j], lm+5, y); }
+    if (sk2[j]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('▸', lm+lw/2, y); doc.setTextColor(50,50,50); doc.text(sk2[j], lm+lw/2+5, y); }
+    y += 5;
+  }
+  y += 3;
+
+  // ── EDUCATION ──
+  if (cvData.education && cvData.education.trim()) { sec('Education'); txt(cvData.education); y += 3; }
+
+  // ── LANGUAGES ──
+  if (cvData.languages && cvData.languages.length) { sec('Languages'); txt(cvData.languages.join(', ')); y += 3; }
+
+  // ── MINING : mentions spécifiques page 2 ──
+  if (isMining) {
+    chk(20);
+    doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+    doc.setTextColor(accent[0], accent[1], accent[2]);
+    doc.text('Additional Information', lm, y); y += 6;
+    doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
+    ['Committed to Drug & Alcohol free workplace policies.',
+     'Available for FIFO rotations — immediate start from Perth, WA.',
+     'Able to pass pre-employment medical and D&A screening.'
+    ].forEach(function(item) { bul(item); });
+    y += 3;
+  }
+
+  // ── PIED DE PAGE ──
+  chk(12);
+  doc.setDrawColor(200,200,200); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5;
+  doc.setFontSize(8); doc.setTextColor(150,150,150);
+  doc.text('References available upon request', lm, y);
+
+  doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
 </script>
 
