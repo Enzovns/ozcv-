@@ -574,7 +574,21 @@ function resetForm() {
 function buildPrompt(f) {
   var aiLevel = parseInt(f.aiLevel);
   var tickets = f.tickets && f.tickets.length ? f.tickets.join(', ') : 'none';
-  var rules = 'STRICT RULES: Never invent tickets. Never invent languages. Never use Present as end date. All jobs must have past end dates. No photo, no date of birth. Visa exactly as provided. Write in ' + f.cvLang + '. Return ONLY valid JSON no markdown.';
+  var now = new Date();
+  var currentMonth = now.toLocaleString('en-AU', { month: 'long' });
+  var currentYear = now.getFullYear();
+  var lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  var lastMonth = lastMonthDate.toLocaleString('en-AU', { month: 'long' });
+  var lastMonthYear = lastMonthDate.getFullYear();
+  var threeYearsAgo = now.getFullYear() - 3;
+  var rules = 'STRICT RULES: Never invent tickets. Never invent languages. No photo, no date of birth. Visa exactly as provided. Write in ' + f.cvLang + '. Return ONLY valid JSON no markdown. ' +
+    'DATE RULES (CRITICAL — follow exactly): ' +
+    '(1) ALL invented experience must fall within the last 3 years only (from ' + threeYearsAgo + ' to ' + currentYear + '). Never use dates before ' + threeYearsAgo + ' for invented jobs. ' +
+    '(2) The most recent job must end in ' + lastMonth + ' ' + lastMonthYear + ' or ' + currentMonth + ' ' + currentYear + ' — maximum 1 month before today. ' +
+    '(3) Jobs must be listed in reverse chronological order (most recent first). ' +
+    '(4) Jobs must be CONTINUOUS with no more than 2 months gap between any two jobs. Example: if job A ends March 2025, job B must start no earlier than January 2025. ' +
+    '(5) Never leave unexplained time gaps. If the candidate provided their own experience with older dates, keep those dates exactly as given but still apply rules 3 and 4 to invented jobs only. ' +
+    '(6) Never use "Present" as an end date — always use a specific month and year.';
   var mines = 'VERIFIED CLOSED MINES (use only these for invented mining experience): Cook Colliery Blackwater QLD closed Nov 2025, Millennium Coal Mine Moranbah QLD closed 2023, Ravensthorpe Nickel Mine WA closed Apr 2024, Ranger Uranium Mine NT closed Jan 2021. NEVER use Giant Mine Canada.';
   var schema = '{"name":"","jobTitle":"","phone":"","email":"","location":"","visa":"","summary":"","skills":[""],"licences":[""],"experience":[{"role":"","company":"","period":"Month YYYY - Month YYYY","duties":[""]}],"languages":[""],"education":""}';
   var info = 'CANDIDATE: Name: '+f.firstName+' '+f.lastName+', Phone: '+(f.phone||'not provided')+', Email: '+(f.email||'not provided')+', Location: '+(f.location||'Australia')+', Visa: '+f.visa+', Languages: '+(f.languages||'not provided')+', Education: '+(f.education||'not provided')+', Tickets: '+tickets+', Experience: '+(f.experience||'none');
