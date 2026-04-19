@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — OzCV</title>
+  <meta name="description" content="OzCV privacy policy. Your personal data is used only to generate your CV and is never stored." />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C97A;
+      --dark: #0D0D0D; --dark2: #161616; --dark3: #1E1E1E;
+      --border: rgba(201,168,76,0.2); --text: #F5F0E8; --muted: rgba(245,240,232,0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    nav { display:flex; align-items:center; justify-content:space-between; padding:20px 32px; border-bottom:1px solid var(--border); background:rgba(13,13,13,0.95); }
+    .logo { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; background:linear-gradient(135deg,var(--gold),var(--gold-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-decoration:none; }
+    .back-link { font-size:13px; color:var(--muted); text-decoration:none; border:1px solid var(--border); padding:8px 16px; border-radius:6px; transition:all 0.2s; }
+    .back-link:hover { border-color:var(--gold); color:var(--gold); }
+    .container { max-width:760px; margin:0 auto; padding:48px 24px 80px; }
+    h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,6vw,52px); letter-spacing:2px; background:linear-gradient(135deg,var(--gold),var(--gold-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px; }
+    .last-updated { font-size:12px; color:var(--muted); margin-bottom:40px; }
+    .section { background:var(--dark2); border:1px solid var(--border); border-radius:12px; padding:28px; margin-bottom:20px; }
+    .section h2 { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--gold); margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+    .section p { font-size:14px; color:var(--text); line-height:1.7; margin-bottom:12px; }
+    .section p:last-child { margin-bottom:0; }
+    .section ul { padding-left:20px; margin-bottom:12px; }
+    .section ul li { font-size:14px; color:var(--text); line-height:1.7; margin-bottom:6px; }
+    .highlight { background:rgba(201,168,76,0.08); border:1px solid var(--border); border-radius:8px; padding:14px 18px; margin-bottom:12px; }
+    .highlight p { margin-bottom:0; color:var(--gold); font-weight:500; }
+    a { color:var(--gold); }
+    a:hover { text-decoration:underline; }
+    footer { text-align:center; padding:32px 20px 40px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+    footer a { color:var(--gold); text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/">OzCV</a>
+  <a class="back-link" href="/">← Back to CV Builder</a>
+</nav>
+
+<div class="container">
+  <h1>Privacy Policy</h1>
+  <p class="last-updated">Last updated: 19 April 2025</p>
+
+  <div class="highlight">
+    <p>Your personal data is used only to generate your CV. It is never stored, sold, or shared with third parties beyond what is strictly necessary to produce your resume.</p>
+  </div>
+
+  <div class="section">
+    <h2>1. Who We Are</h2>
+    <p>OzCV (<a href="https://ozcv.vercel.app">ozcv.vercel.app</a>) is an AI-powered CV generation service designed for people seeking work in Australia — including working holiday visa holders, migrants, and local workers in sectors such as mining, farming, hospitality, and construction.</p>
+    <p>For any privacy-related enquiries, contact us at: <a href="mailto:enzo.vanes@hotmail.com">enzo.vanes@hotmail.com</a></p>
+  </div>
+
+  <div class="section">
+    <h2>2. What Data We Collect</h2>
+    <p>When you use OzCV, you provide the following information to generate your CV:</p>
+    <ul>
+      <li>Full name (first and last name)</li>
+      <li>Phone number</li>
+      <li>Email address</li>
+      <li>Location (city / state)</li>
+      <li>Visa / work rights status</li>
+      <li>Work experience and skills (free text)</li>
+      <li>Languages spoken</li>
+      <li>Education details (optional)</li>
+      <li>Tickets and certifications held</li>
+    </ul>
+    <p>We do not collect your date of birth, national ID number, or any financial information beyond what is processed by Stripe for payment.</p>
+  </div>
+
+  <div class="section">
+    <h2>3. How We Use Your Data</h2>
+    <p>Your personal information is used <strong>solely</strong> to generate your CV. Specifically:</p>
+    <ul>
+      <li>Your data is assembled into a prompt and sent to the Anthropic API (Claude AI) to produce your resume content.</li>
+      <li>The generated CV is returned to your browser and displayed for download.</li>
+      <li>Your session data is stored temporarily in your browser's <code>sessionStorage</code> to allow the page to reload after payment. This data is cleared from your browser once your CV is generated.</li>
+    </ul>
+    <p>We do not use your data for marketing, profiling, advertising, or any purpose other than generating your CV.</p>
+  </div>
+
+  <div class="section">
+    <h2>4. Data Storage and Retention</h2>
+    <div class="highlight">
+      <p>We do not store your personal data on any server. Your information is never written to a database.</p>
+    </div>
+    <p>Your data exists only:</p>
+    <ul>
+      <li>In your browser's <code>sessionStorage</code> during the CV generation flow (cleared after CV is produced).</li>
+      <li>In transit to the Anthropic API to generate the resume text (governed by Anthropic's data policies).</li>
+    </ul>
+    <p>Server-side logs (Vercel) may temporarily record request metadata (IP address, timestamp) for operational purposes in accordance with Vercel's standard logging practices. These logs do not contain your CV data or personal information.</p>
+  </div>
+
+  <div class="section">
+    <h2>5. Third-Party Services</h2>
+    <p>OzCV uses the following third-party services to operate:</p>
+    <ul>
+      <li><strong>Vercel</strong> — Hosting and serverless infrastructure. Your requests pass through Vercel's servers based in the USA. Vercel may collect standard request metadata. See <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel's Privacy Policy</a>.</li>
+      <li><strong>Anthropic (Claude AI)</strong> — AI model used to generate your CV content. Your prompt (containing your CV data) is sent to Anthropic's API. Anthropic does not use API inputs to train its models by default. See <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">Anthropic's Privacy Policy</a>.</li>
+      <li><strong>Stripe</strong> — Payment processing. OzCV never sees or stores your card details. All payment data is handled directly by Stripe. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's Privacy Policy</a>.</li>
+      <li><strong>Google Fonts</strong> — Font delivery. Your browser may send a request to Google's servers to load fonts. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Australian Privacy Act 1988</h2>
+    <p>OzCV handles personal information in accordance with the <strong>Australian Privacy Act 1988 (Cth)</strong> and the Australian Privacy Principles (APPs). In particular:</p>
+    <ul>
+      <li><strong>APP 3</strong> — We only collect personal information that is reasonably necessary to provide the CV generation service.</li>
+      <li><strong>APP 5</strong> — We are transparent about why we collect your data (to generate your CV) and who it may be disclosed to (Anthropic, Vercel).</li>
+      <li><strong>APP 6</strong> — We only use your information for the purpose it was collected (CV generation). We do not disclose it for any other purpose.</li>
+      <li><strong>APP 11</strong> — We take reasonable steps to protect your data. Because we do not store it, retention risk is minimised.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>7. GDPR — European Users</h2>
+    <p>If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, the following applies under the <strong>General Data Protection Regulation (GDPR)</strong>:</p>
+    <ul>
+      <li><strong>Legal basis:</strong> We process your data on the basis of <em>contract performance</em> (Article 6(1)(b) GDPR) — your data is necessary to deliver the CV you have requested.</li>
+      <li><strong>Data minimisation:</strong> We only process data that is strictly necessary to generate your CV.</li>
+      <li><strong>Right of access:</strong> You have the right to request information about how your data is processed.</li>
+      <li><strong>Right to erasure:</strong> Because we do not store your data, there is nothing to delete. If you believe data may have been retained, contact us at <a href="mailto:enzo.vanes@hotmail.com">enzo.vanes@hotmail.com</a>.</li>
+      <li><strong>Right to object:</strong> You may withdraw consent and stop using the service at any time.</li>
+      <li><strong>International transfers:</strong> Your data is processed by Vercel and Anthropic, which may involve transfers to the United States. These transfers are made under standard contractual clauses or equivalent safeguards.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>8. Cookies and Tracking</h2>
+    <p>OzCV does not use cookies or tracking pixels. We do not use Google Analytics or any third-party analytics tool.</p>
+    <p>Your browser's <code>sessionStorage</code> is used to temporarily hold your form data between the form submission and the CV generation step (after payment). This data is stored locally in your browser only and is not accessible to us.</p>
+  </div>
+
+  <div class="section">
+    <h2>9. Children's Privacy</h2>
+    <p>OzCV is not intended for use by persons under the age of 16. We do not knowingly collect personal information from children.</p>
+  </div>
+
+  <div class="section">
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Changes will be reflected by the "Last updated" date at the top of this page. Continued use of the service after changes constitutes acceptance of the updated policy.</p>
+  </div>
+
+  <div class="section">
+    <h2>11. Contact</h2>
+    <p>For any privacy-related questions, data requests, or concerns, please contact:</p>
+    <p><strong>Email:</strong> <a href="mailto:enzo.vanes@hotmail.com">enzo.vanes@hotmail.com</a></p>
+    <p>We aim to respond to all enquiries within 5 business days.</p>
+  </div>
+</div>
+
+<footer>
+  <a href="/">← Back to OzCV</a>
+  <span>© 2025 OzCV — AI CV Generator for Australia</span>
+</footer>
+
+</body>
+</html>
