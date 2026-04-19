@@ -4,7 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OzCV — AI Resume Builder Australia</title>
+  <title>OzCV — AI CV Generator for Australia | Mining, FIFO & Working Holiday</title>
+  <meta name="description" content="Generate a professional Australian CV in seconds. Tailored for mining, FIFO, farming, hospitality and working holiday visa holders. AI-powered, $5 AUD." />
+  <meta name="keywords" content="Australian CV generator, FIFO resume Australia, mining CV Australia, working holiday visa resume Australia, resume builder Australia" />
+  <link rel="canonical" href="https://ozcv.vercel.app" />
+  <meta property="og:title" content="OzCV — AI CV Generator for Australia" />
+  <meta property="og:description" content="Professional Australian CVs for mining, FIFO, farming, hospitality and more. AI-powered, ready to download, $5 AUD." />
+  <meta property="og:url" content="https://ozcv.vercel.app" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="OzCV" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="OzCV — AI CV Generator for Australia" />
+  <meta name="twitter:description" content="Professional Australian CVs for mining, FIFO, farming, hospitality and more." />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
@@ -108,6 +119,14 @@
     .modal-item-desc { font-size:12px; color:var(--muted); line-height:1.5; }
     .modal-close { width:100%; margin-top:20px; background:transparent; border:1px solid var(--border); color:var(--muted); padding:10px; border-radius:6px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; }
     .modal-close:hover { border-color:var(--gold); color:var(--gold); }
+    .ticket-popup-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+    .ticket-popup-item:last-child { border-bottom:none; }
+    .ticket-popup-check { color:var(--gold); font-size:15px; flex-shrink:0; }
+    .ticket-popup-name { font-size:13px; color:var(--text); }
+    footer { text-align:center; padding:32px 20px 40px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+    footer a { color:var(--gold); text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+    .footer-links { display:flex; gap:24px; }
   </style>
 </head>
 <body>
@@ -247,8 +266,17 @@
   </div>
 </div>
 
-<!-- Modal AI levels -->
+<!-- Ticket Tips Popup -->
+<div class="modal-overlay" id="ticket-popup" onclick="if(event.target===this)closeTicketPopup()">
+  <div class="modal-box">
+    <div class="modal-title" id="ticket-popup-title">REQUIRED TICKETS</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5;" id="ticket-popup-sub">These tickets are typically required for this role in Australia. Make sure you have them before applying.</p>
+    <div id="ticket-popup-list"></div>
+    <button class="modal-close" onclick="closeTicketPopup()" id="ticket-popup-close">Got it</button>
+  </div>
+</div>
 
+<!-- Modal AI levels -->
 <div class="modal-overlay" id="ai-modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
     <div class="modal-title" id="modal-title">AI ASSISTANCE LEVELS</div>
@@ -304,7 +332,10 @@ var i18n = {
     modal_l2_title: 'Level 2 — Balanced', modal_l2_desc: 'We improve your wording and add action verbs. No new jobs invented.',
     modal_l3_title: 'Level 3 — AI fills in your experience', modal_l3_desc: 'AI creates realistic past jobs tailored to your chosen sector.',
     modal_close: 'Close',
-    tickets_custom_placeholder: '+ Add other tickets (comma separated)...'
+    tickets_custom_placeholder: '+ Add other tickets (comma separated)...',
+    ticket_popup_title: 'REQUIRED TICKETS',
+    ticket_popup_sub: 'These tickets are typically required for this role in Australia. Make sure you have them before applying.',
+    ticket_popup_close: 'Got it'
   },
   fr: {
     hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
@@ -340,7 +371,10 @@ var i18n = {
     modal_l2_title: 'Niveau 2 — Équilibré', modal_l2_desc: 'On améliore ta formulation et on ajoute des verbes d\'action. Aucun nouveau poste inventé.',
     modal_l3_title: 'Niveau 3 — L\'IA complète ton expérience', modal_l3_desc: 'L\'IA crée des expériences réalistes adaptées à ton secteur.',
     modal_close: 'Fermer',
-    tickets_custom_placeholder: '+ Ajouter d\'autres tickets (séparés par des virgules)...'
+    tickets_custom_placeholder: '+ Ajouter d\'autres tickets (séparés par des virgules)...',
+    ticket_popup_title: 'TICKETS REQUIS',
+    ticket_popup_sub: 'Ces tickets sont généralement requis pour ce poste en Australie. Assure-toi de les avoir avant de postuler.',
+    ticket_popup_close: 'Compris'
   }
 };
 
@@ -390,6 +424,9 @@ function applyLang(lang) {
   document.getElementById('modal-l3-desc').textContent = t.modal_l3_desc;
   document.getElementById('modal-close').textContent = t.modal_close;
   document.getElementById('tickets-custom').placeholder = t.tickets_custom_placeholder;
+  document.getElementById('ticket-popup-title').textContent = t.ticket_popup_title;
+  document.getElementById('ticket-popup-sub').textContent = t.ticket_popup_sub;
+  document.getElementById('ticket-popup-close').textContent = t.ticket_popup_close;
   updateSlider(document.getElementById('ai-slider').value);
 }
 
@@ -409,6 +446,16 @@ var jobTickets = {
   roadhouse:    ['RSA','Food Handling Certificate','Driver\'s Licence','First Aid'],
   station:      ['Driver\'s Licence (Manual)','Motorbike Licence'],
   construction: ['White Card','Working at Heights','Forklift']
+};
+
+var requiredTickets = {
+  mine_utility: ['White Card','Working at Heights','Confined Space Entry','Gas Testing'],
+  mine_entry:   ['White Card','Working at Heights','Confined Space Entry','Gas Testing'],
+  hospitality:  ['RSA — Responsible Service of Alcohol','Food Handling Certificate'],
+  roadhouse:    ['RSA — Responsible Service of Alcohol','Food Handling Certificate'],
+  construction: ['White Card','Working at Heights','Forklift Licence'],
+  farm:         [],
+  station:      []
 };
 
 // ─── POINT 7 : saveFormData / loadFormData ────────────────────────────────────
@@ -520,6 +567,21 @@ function selectJob(el, type) {
   el.classList.add('active');
   selectedJob = type;
   renderTickets(type);
+  openTicketPopup(type);
+}
+
+function openTicketPopup(type) {
+  var tickets = requiredTickets[type] || [];
+  if (!tickets.length) return;
+  var list = document.getElementById('ticket-popup-list');
+  list.innerHTML = tickets.map(function(t) {
+    return '<div class="ticket-popup-item"><span class="ticket-popup-check">✓</span><span class="ticket-popup-name">'+t+'</span></div>';
+  }).join('');
+  document.getElementById('ticket-popup').classList.add('open');
+}
+
+function closeTicketPopup() {
+  document.getElementById('ticket-popup').classList.remove('open');
 }
 
 function renderTickets(type) {
@@ -796,6 +858,14 @@ function downloadPDF() {
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
 </script>
+
+<footer>
+  <div class="footer-links">
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="mailto:enzo.vanes@hotmail.com">Contact</a>
+  </div>
+  <span>© 2025 OzCV — AI CV Generator for Australia</span>
+</footer>
 
 </body>
 </html>
