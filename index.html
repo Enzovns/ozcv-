@@ -251,6 +251,31 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-title" id="label-jobad">JOB AD MATCHING</div>
+    <div class="form-grid full">
+      <div class="field">
+        <label id="lbl-jobad">Paste the job ad here (optional)</label>
+        <textarea id="job-description" placeholder="Copy-paste the full job description from Seek, Indeed, LinkedIn... (optional but recommended)" style="min-height:120px;"></textarea>
+      </div>
+    </div>
+    <div class="ai-slider-wrap" style="margin-top:16px;">
+      <div class="ai-slider-header">
+        <div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px" id="label-creativity-question">How aggressively should AI tailor your CV to this job?</div>
+          <div class="ai-level" id="creativity-label">BALANCED</div>
+        </div>
+        <div style="font-size:32px" id="creativity-emoji">⚖️</div>
+      </div>
+      <input type="range" min="0" max="100" value="50" id="creativity-slider" oninput="updateCreativity(this.value)" />
+      <div class="slider-labels">
+        <span id="creativity-l1">Reformulate only</span>
+        <span id="creativity-l2">Add responsibilities</span>
+        <span id="creativity-l3">Add experience</span>
+      </div>
+    </div>
+  </div>
+
 <button class="gen-btn" id="gen-btn" onclick="handleGenerate()">✦ <span id="btn-generate">GENERATE MY RESUME — $5 AUD</span></button>
 
   <div class="error-box" id="error-box"></div>
@@ -258,6 +283,10 @@
 
   <div class="cv-result" id="cv-result">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:13px;color:var(--gold);margin-bottom:20px;" id="cv-ready-msg">✅ Resume ready! Download your PDF below.</div>
+    <div id="match-score-badge" style="display:none;align-items:center;gap:12px;background:rgba(40,130,40,0.1);border:1px solid rgba(40,130,40,0.3);border-radius:6px;padding:12px 18px;font-size:13px;color:var(--text);margin-bottom:20px;">
+      <span style="font-size:22px;">🎯</span>
+      <span><span id="match-score-msg">Your CV matches</span> <strong id="match-score-value" style="color:#6abf6a;font-family:'Bebas Neue',sans-serif;font-size:22px;">0</strong>% <span id="match-score-suffix">of this job's requirements</span></span>
+    </div>
     <div class="cv-actions">
       <button class="btn-download" onclick="downloadPDF()" id="btn-download">⬇ DOWNLOAD PDF</button>
       <button class="btn-new" onclick="resetForm()" id="btn-new">← New Resume</button>
@@ -335,7 +364,15 @@ var i18n = {
     tickets_custom_placeholder: '+ Add other tickets (comma separated)...',
     ticket_popup_title: 'REQUIRED TICKETS',
     ticket_popup_sub: 'These tickets are typically required for this role in Australia. Make sure you have them before applying.',
-    ticket_popup_close: 'Got it'
+    ticket_popup_close: 'Got it',
+    label_jobad: 'JOB AD MATCHING',
+    lbl_jobad: 'Paste the job ad here (optional)',
+    jobad_placeholder: 'Copy-paste the full job description from Seek, Indeed, LinkedIn... (optional but recommended)',
+    label_creativity_question: 'How aggressively should AI tailor your CV to this job?',
+    creativity_labels: ['REFORMULATE ONLY','ADD RESPONSIBILITIES','ADD EXPERIENCE'],
+    creativity_l1: 'Reformulate only', creativity_l2: 'Add responsibilities', creativity_l3: 'Add experience',
+    match_score_msg: 'Your CV matches',
+    match_score_suffix: 'of this job\'s requirements'
   },
   fr: {
     hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
@@ -374,7 +411,15 @@ var i18n = {
     tickets_custom_placeholder: '+ Ajouter d\'autres tickets (séparés par des virgules)...',
     ticket_popup_title: 'TICKETS REQUIS',
     ticket_popup_sub: 'Ces tickets sont généralement requis pour ce poste en Australie. Assure-toi de les avoir avant de postuler.',
-    ticket_popup_close: 'Compris'
+    ticket_popup_close: 'Compris',
+    label_jobad: 'OFFRE D\'EMPLOI',
+    lbl_jobad: 'Colle l\'offre d\'emploi ici (optionnel)',
+    jobad_placeholder: 'Copie-colle l\'offre complète depuis Seek, Indeed, LinkedIn... (optionnel mais recommandé)',
+    label_creativity_question: 'Comment l\'IA doit-elle adapter ton CV à cette offre ?',
+    creativity_labels: ['REFORMULER SEULEMENT','AJOUTER DES RESPONSABILITÉS','AJOUTER UNE EXPÉRIENCE'],
+    creativity_l1: 'Reformuler seulement', creativity_l2: 'Ajouter des responsabilités', creativity_l3: 'Ajouter une expérience',
+    match_score_msg: 'Ton CV correspond à',
+    match_score_suffix: 'des exigences de ce poste'
   }
 };
 
@@ -427,7 +472,17 @@ function applyLang(lang) {
   document.getElementById('ticket-popup-title').textContent = t.ticket_popup_title;
   document.getElementById('ticket-popup-sub').textContent = t.ticket_popup_sub;
   document.getElementById('ticket-popup-close').textContent = t.ticket_popup_close;
+  document.getElementById('label-jobad').childNodes[0].textContent = t.label_jobad;
+  document.getElementById('lbl-jobad').textContent = t.lbl_jobad;
+  document.getElementById('job-description').placeholder = t.jobad_placeholder;
+  document.getElementById('label-creativity-question').textContent = t.label_creativity_question;
+  document.getElementById('creativity-l1').textContent = t.creativity_l1;
+  document.getElementById('creativity-l2').textContent = t.creativity_l2;
+  document.getElementById('creativity-l3').textContent = t.creativity_l3;
+  document.getElementById('match-score-msg').textContent = t.match_score_msg;
+  document.getElementById('match-score-suffix').textContent = t.match_score_suffix;
   updateSlider(document.getElementById('ai-slider').value);
+  updateCreativity(document.getElementById('creativity-slider').value);
 }
 
 function setLang(lang) {
@@ -474,6 +529,8 @@ function saveFormData() {
     aiLevel: document.getElementById('ai-slider').value,
     cvLang: document.getElementById('cv-lang').value,
     tickets: getSelectedTickets(),
+    jobDescription: document.getElementById('job-description').value.trim(),
+    aiCreativity: document.getElementById('creativity-slider').value,
     lang: currentLang
   };
   sessionStorage.setItem('ozcv_form', JSON.stringify(data));
@@ -500,7 +557,10 @@ function loadFormData(data) {
   document.getElementById('education').value = data.education || '';
   document.getElementById('ai-slider').value = data.aiLevel || 2;
   document.getElementById('cv-lang').value = data.cvLang || 'English';
+  document.getElementById('job-description').value = data.jobDescription || '';
+  document.getElementById('creativity-slider').value = data.aiCreativity || 50;
   updateSlider(data.aiLevel || 2);
+  updateCreativity(data.aiCreativity || 50);
   if (data.lang) setLang(data.lang);
 }
 
@@ -508,6 +568,7 @@ function loadFormData(data) {
 window.addEventListener('DOMContentLoaded', function() {
   renderTickets('mine_utility');
   updateSlider(2);
+  updateCreativity(50);
   var params = new URLSearchParams(window.location.search);
   if (params.get('paid') === 'true') {
     window.history.replaceState({}, '', window.location.pathname);
@@ -541,13 +602,17 @@ async function generateCV(formData) {
     var res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: buildPrompt(formData) })
+      body: JSON.stringify({ prompt: buildPrompt(formData), jobDescription: formData.jobDescription || '', aiCreativity: parseInt(formData.aiCreativity) || 50 })
     });
     var data = await res.json();
     if (data.error) { showError(data.error); return; }
     var clean = data.result.replace(/```json|```/g, '').trim();
     cvData = JSON.parse(clean);
     cvData._job = formData.job;
+    if (formData.jobDescription && cvData.matchScore) {
+      document.getElementById('match-score-value').textContent = cvData.matchScore;
+      document.getElementById('match-score-badge').style.display = 'flex';
+    }
     renderCV(cvData);
     document.getElementById('cv-result').style.display = 'block';
     document.getElementById('cv-result').scrollIntoView({ behavior: 'smooth' });
@@ -615,6 +680,19 @@ function updateSlider(val) {
     'linear-gradient(to right,var(--gold) 0%,var(--gold) '+p+'%,#1E1E1E '+p+'%)';
 }
 
+function updateCreativity(val) {
+  var v = parseInt(val);
+  var t = i18n[currentLang];
+  var label, emoji;
+  if (v <= 30) { label = t.creativity_labels[0]; emoji = '📝'; }
+  else if (v <= 70) { label = t.creativity_labels[1]; emoji = '⚖️'; }
+  else { label = t.creativity_labels[2]; emoji = '🚀'; }
+  document.getElementById('creativity-label').textContent = label;
+  document.getElementById('creativity-emoji').textContent = emoji;
+  document.getElementById('creativity-slider').style.background =
+    'linear-gradient(to right,var(--gold) 0%,var(--gold) '+v+'%,#1E1E1E '+v+'%)';
+}
+
 function openModal() { document.getElementById('ai-modal').classList.add('open'); }
 function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
 
@@ -629,6 +707,7 @@ function showError(msg) {
 function resetForm() {
   document.getElementById('cv-result').style.display = 'none';
   document.getElementById('error-box').style.display = 'none';
+  document.getElementById('match-score-badge').style.display = 'none';
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
@@ -652,7 +731,7 @@ function buildPrompt(f) {
     '(5) Never leave unexplained time gaps. If the candidate provided their own experience with older dates, keep those dates exactly as given but still apply rules 3 and 4 to invented jobs only. ' +
     '(6) Never use "Present" as an end date — always use a specific month and year.';
   var mines = 'VERIFIED CLOSED MINES (use only these for invented mining experience): Cook Colliery Blackwater QLD closed Nov 2025, Millennium Coal Mine Moranbah QLD closed 2023, Ravensthorpe Nickel Mine WA closed Apr 2024, Ranger Uranium Mine NT closed Jan 2021. NEVER use Giant Mine Canada.';
-  var schema = '{"name":"","jobTitle":"","phone":"","email":"","location":"","visa":"","summary":"","skills":[""],"licences":[""],"experience":[{"role":"","company":"","period":"Month YYYY - Month YYYY","duties":[""]}],"languages":[""],"education":""}';
+  var schema = '{"name":"","jobTitle":"","phone":"","email":"","location":"","visa":"","summary":"","skills":[""],"licences":[""],"experience":[{"role":"","company":"","period":"Month YYYY - Month YYYY","duties":[""]}],"languages":[""],"education":"","matchScore":0}';
   var info = 'CANDIDATE: Name: '+f.firstName+' '+f.lastName+', Phone: '+(f.phone||'not provided')+', Email: '+(f.email||'not provided')+', Location: '+(f.location||'Australia')+', Visa: '+f.visa+', Languages: '+(f.languages||'not provided')+', Education: '+(f.education||'not provided')+', Tickets: '+tickets+', Experience: '+(f.experience||'none');
   var aiTexts = {
     mine_utility: [
@@ -726,11 +805,130 @@ function renderCV(d) {
     '<p style="font-size:11px;color:#888;margin-top:16px;border-top:1px solid #eee;padding-top:10px">References available upon request</p>';
 }
 
+// ─── ATS MINING PDF (single-column, ATS-friendly) ────────────────────────────
+function downloadMiningPDF() {
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit:'mm', format:'a4' });
+  var lm = 18, rm = 192, lw = 174, y = 0;
+  var navy = [20, 60, 100];
+
+  function chk(n) { if (y + (n || 10) > 278) { doc.addPage(); y = 18; } }
+
+  function sec(title) {
+    chk(14);
+    doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.setTextColor(navy[0], navy[1], navy[2]);
+    doc.text(title, lm, y); y += 2;
+    doc.setDrawColor(navy[0], navy[1], navy[2]); doc.setLineWidth(0.4);
+    doc.line(lm, y, rm, y); y += 6;
+    doc.setFont('helvetica','normal'); doc.setTextColor(40, 40, 40);
+  }
+
+  function txt(str) {
+    doc.setFontSize(10);
+    doc.splitTextToSize(str, lw).forEach(function(l) { chk(); doc.text(l, lm, y); y += 5; });
+  }
+
+  function bul(str) {
+    doc.setFontSize(10);
+    doc.splitTextToSize(str, lw - 5).forEach(function(l, i) {
+      chk(); doc.text(i === 0 ? '-' : ' ', lm, y); doc.text(l, lm + 5, y); y += 5;
+    });
+  }
+
+  function toMMYYYY(str) {
+    var m = {
+      January:'01',February:'02',March:'03',April:'04',May:'05',June:'06',
+      July:'07',August:'08',September:'09',October:'10',November:'11',December:'12',
+      Janvier:'01','F\u00e9vrier':'02',Mars:'03',Avril:'04',Mai:'05',Juin:'06',
+      Juillet:'07','Ao\u00fbt':'08',Septembre:'09',Octobre:'10',Novembre:'11','D\u00e9cembre':'12'
+    };
+    var p = str.trim().split(' ');
+    return (m[p[0]] || p[0]) + '/' + (p[1] || '');
+  }
+  function atsDate(period) {
+    var parts = period.split(/\s*[\u2013-]\s*/);
+    if (parts.length === 2) return toMMYYYY(parts[0].trim()) + ' - ' + toMMYYYY(parts[1].trim());
+    return period;
+  }
+
+  // ── HEADER ──
+  y = 22;
+  doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(20, 20, 20);
+  doc.text(cvData.name, lm, y); y += 7;
+  doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.setTextColor(navy[0], navy[1], navy[2]);
+  doc.text(cvData.jobTitle, lm, y); y += 4;
+  doc.setDrawColor(navy[0], navy[1], navy[2]); doc.setLineWidth(0.7); doc.line(lm, y, rm, y); y += 7;
+
+  // ── CONTACT ──
+  doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(50, 50, 50);
+  var contact = [];
+  if (cvData.phone) contact.push('Phone: ' + cvData.phone);
+  if (cvData.email) contact.push('Email: ' + cvData.email);
+  if (cvData.location) contact.push('Location: ' + cvData.location);
+  if (cvData.visa) contact.push('Work Rights: ' + cvData.visa);
+  contact.push('Availability: FIFO / Immediate Start');
+  doc.splitTextToSize(contact.join('   |   '), lw).forEach(function(l) { chk(); doc.text(l, lm, y); y += 5; });
+  y += 5;
+
+  // ── PROFESSIONAL SUMMARY ──
+  sec('PROFESSIONAL SUMMARY');
+  txt(cvData.summary); y += 4;
+
+  // ── TICKETS & CERTIFICATIONS ──
+  if (cvData.licences && cvData.licences.length) {
+    sec('TICKETS & CERTIFICATIONS');
+    cvData.licences.forEach(function(lic) {
+      chk(); doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(40,40,40);
+      doc.text('- ' + lic, lm, y); y += 5;
+    });
+    y += 3;
+  }
+
+  // ── CORE SKILLS ──
+  if (cvData.skills && cvData.skills.length) {
+    sec('CORE SKILLS');
+    cvData.skills.forEach(function(s) { bul(s); });
+    y += 3;
+  }
+
+  // ── WORK EXPERIENCE ──
+  sec('WORK EXPERIENCE');
+  cvData.experience.forEach(function(e) {
+    chk(18);
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(20, 20, 20);
+    doc.text(e.role, lm, y);
+    var ds = atsDate(e.period);
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(80, 80, 80);
+    doc.text(ds, rm - doc.getTextWidth(ds), y); y += 5;
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(60, 60, 60);
+    doc.text(e.company, lm, y); y += 5;
+    doc.setTextColor(40, 40, 40);
+    e.duties.forEach(function(d) { bul(d); });
+    y += 4;
+  });
+
+  // ── EDUCATION ──
+  if (cvData.education && cvData.education.trim()) { sec('EDUCATION'); txt(cvData.education); y += 3; }
+
+  // ── LANGUAGES ──
+  if (cvData.languages && cvData.languages.length) { sec('LANGUAGES'); txt(cvData.languages.join(', ')); y += 3; }
+
+  // ── FOOTER ──
+  chk(12);
+  doc.setDrawColor(180,180,180); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5;
+  doc.setFontSize(9); doc.setTextColor(130, 130, 130);
+  doc.text('References available upon request', lm, y);
+
+  doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
+}
+
 // ─── POINT 10 : Templates PDF différenciés par secteur ───────────────────────
 function downloadPDF() {
   if (!cvData) return;
   var job = cvData._job || selectedJob;
-  var isMining = (job === 'mine_utility' || job === 'mine_entry');
+  if (job === 'mine_utility' || job === 'mine_entry') { downloadMiningPDF(); return; }
+  var isMining = false;
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit:'mm', format:'a4' });
   var lm=18, rm=192, lw=174, y=0;
