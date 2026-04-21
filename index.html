@@ -737,37 +737,37 @@ function buildPrompt(f) {
     mine_utility: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance wording with ATS keywords for mining camp support. Do not invent new jobs.',
-      'Invent realistic experience from: FIFO industrial camp cleaning, housekeeping, accommodation cleaning, kitchen hand, HACCP food safety, waste management, chemical handling, PPE compliance, HSE procedures. Use verified closed mines only. 3-4 jobs, 6-8 bullets each. Mention Drug & Alcohol free.'
+      'Invent realistic experience from: FIFO industrial camp cleaning, housekeeping, accommodation cleaning, kitchen hand, HACCP food safety, waste management, chemical handling, PPE compliance, HSE procedures. Use verified closed mines only. 3-4 jobs, max 6 bullets each. Mention Drug & Alcohol free.'
     ],
     mine_entry: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance wording with ATS keywords for mine labourer / trade assistant. Do not invent new jobs.',
-      'Invent realistic experience from: general labourer mine sites, trade assistant (assisting boilermakers, electricians, fitters), sentry/spotter, rock pitching, worksite prep, manual handling, shutdown support. Use verified closed mines only. 3-4 jobs, 6-8 bullets. Mention Drug & Alcohol free and FIFO available.'
+      'Invent realistic experience from: general labourer mine sites, trade assistant (assisting boilermakers, electricians, fitters), sentry/spotter, rock pitching, worksite prep, manual handling, shutdown support. Use verified closed mines only. 3-4 jobs, max 6 bullets. Mention Drug & Alcohol free and FIFO available.'
     ],
     farm: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance with farm/agriculture keywords. Do not invent new jobs.',
-      'Invent realistic experience from: fruit and vegetable picking, packing shed, general farm hand, tractor operation, irrigation, crop monitoring. QLD VIC SA WA NSW regions. 2-3 jobs, 5-6 bullets each.'
+      'Invent realistic experience from: fruit and vegetable picking, packing shed, general farm hand, tractor operation, irrigation, crop monitoring. QLD VIC SA WA NSW regions. 2-3 jobs, EXACTLY 4 bullets each.'
     ],
     hospitality: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance with hospitality/service industry keywords. Do not invent new jobs.',
-      'Invent realistic experience from: waiter/waitress, bar staff (RSA), kitchen hand, barista, front desk. Real venues in Sydney Melbourne Brisbane Perth Cairns. 2-3 jobs, 5-6 bullets each.'
+      'Invent realistic experience from: waiter/waitress, bar staff (RSA), kitchen hand, barista, front desk. Real venues in Sydney Melbourne Brisbane Perth Cairns. 2-3 jobs, EXACTLY 4 bullets each.'
     ],
     roadhouse: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance with roadhouse/remote service keywords. Do not invent new jobs.',
-      'Invent realistic experience from: counter service, food prep, fuel pump operation, cash handling, cleaning, remote site support. Real Australian highways: Great Northern Hwy WA, Stuart Hwy NT, Nullarbor SA. 2-3 jobs, 5-6 bullets each.'
+      'Invent realistic experience from: counter service, food prep, fuel pump operation, cash handling, cleaning, remote site support. Real Australian highways: Great Northern Hwy WA, Stuart Hwy NT, Nullarbor SA. 2-3 jobs, EXACTLY 4 bullets each.'
     ],
     station: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance with station hand / jackaroo keywords. Do not invent new jobs.',
-      'Invent realistic experience from: mustering, fencing, livestock handling, water trough maintenance, 4WD driving, motorbike, droving. Real pastoral regions: NT, QLD, WA Kimberley. 2-3 jobs, 5-6 bullets each.'
+      'Invent realistic experience from: mustering, fencing, livestock handling, water trough maintenance, 4WD driving, motorbike, droving. Real pastoral regions: NT, QLD, WA Kimberley. 2-3 jobs, EXACTLY 4 bullets each.'
     ],
     construction: [
       'Use ONLY the experience provided. Rewrite cleanly with action verbs.',
       'Enhance with construction/labourer keywords. Do not invent new jobs.',
-      'Invent realistic experience from: general labourer, site prep, materials handling, trade assistant, formwork, concrete works. Real cities: Perth Brisbane Sydney Melbourne. NEVER include scaffolding unless ticket confirmed. 2-3 jobs, 5-6 bullets each.'
+      'Invent realistic experience from: general labourer, site prep, materials handling, trade assistant, formwork, concrete works. Real cities: Perth Brisbane Sydney Melbourne. NEVER include scaffolding unless ticket confirmed. 2-3 jobs, EXACTLY 4 bullets each.'
     ]
   };
   var titles = {
@@ -779,19 +779,26 @@ function buildPrompt(f) {
     station: 'Station Hand / Jackaroo',
     construction: 'Construction Labourer'
   };
-  var pages = (f.job==='mine_utility'||f.job==='mine_entry') ? '2-PAGE' : '1-PAGE';
+  var isMiningJob = (f.job==='mine_utility'||f.job==='mine_entry');
+  var pages = isMiningJob ? '2-PAGE' : '1-PAGE';
+  var pageRule = isMiningJob
+    ? 'PAGE CONSTRAINT: This is a 2-PAGE CV maximum. Max 4 work experience entries. Max 6 bullet points per experience. Never go to a 3rd page. '
+    : 'PAGE CONSTRAINT (CRITICAL — 1 PAGE ONLY): Max 3 work experience entries. EXACTLY 4 bullet points per experience, no more, no fewer. Summary max 3 sentences. Max 8 skills. All text must be concise to fit on a single A4 page. ';
+  var eduRule = 'EDUCATION RULE: If no education is provided or the field is empty, set "education" to "" (empty string). NEVER write "Not provided", "N/A", "none", "not specified", or any placeholder. Leave it as empty string "". ';
+  var langRule = 'LANGUAGES RULE: NEVER copy the user\'s raw language input verbatim. ALWAYS translate to English and reformat each language as "Language – Level" (e.g. "French – Native", "English – Fluent"). Standard levels: Native / Fluent / Professional working proficiency / Intermediate / Conversational / Basic. Return each language as a separate item in the languages array. Interpret French, mixed-language, or informal input and convert to professional English format. ALL text in the CV must be in the target language (' + f.cvLang + ') — if a user writes in French or any other language, translate everything to ' + f.cvLang + '. ';
   var aiText = (aiTexts[f.job]||aiTexts['farm'])[aiLevel-1];
-  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+rules+' Return ONLY valid JSON no preamble: '+schema;
+  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+rules+' '+pageRule+eduRule+langRule+'Return ONLY valid JSON no preamble: '+schema;
 }
 
 // ─── RENDER CV (preview HTML) ────────────────────────────────────────────────
 function renderCV(d) {
   var lic = d.licences && d.licences.length
     ? '<div class="cv-section"><h3>Licences and Certificates</h3><ul style="columns:2">'+d.licences.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul></div>' : '';
-  var edu = d.education && d.education.trim()
-    ? '<div class="cv-section"><h3>Education</h3><p>'+d.education+'</p></div>' : '';
-  var lang = d.languages && d.languages.length
-    ? '<div class="cv-section"><h3>Languages</h3><p>'+d.languages.join(', ')+'</p></div>' : '';
+  var eduStr = d.education && d.education.trim();
+  var edu = eduStr && !/^(not provided|n\/a|none|na|not specified|-)$/i.test(eduStr)
+    ? '<div class="cv-section"><h3>Education</h3><p>'+eduStr+'</p></div>' : '';
+  var lang = d.languages && d.languages.filter(function(l){return l&&l.trim();}).length
+    ? '<div class="cv-section"><h3>Languages</h3><p>'+d.languages.join(' &bull; ')+'</p></div>' : '';
   document.getElementById('cv-paper').innerHTML =
     '<h2>'+d.name+'</h2><div class="cv-title">'+d.jobTitle+'</div>'+
     '<div class="cv-contact">'+d.phone+' | '+d.email+' | '+d.location+' | '+d.visa+'</div>'+
@@ -810,29 +817,38 @@ function downloadMiningPDF() {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit:'mm', format:'a4' });
   var lm = 18, rm = 192, lw = 174, y = 0;
-  var navy = [20, 60, 100];
+  var hitBottom = false;
 
-  function chk(n) { if (y + (n || 10) > 278) { doc.addPage(); y = 18; } }
+  function chk(n) {
+    if (hitBottom) return;
+    if (y + (n || 10) > 278) {
+      if (doc.getNumberOfPages() < 2) { doc.addPage(); y = 18; }
+      else { hitBottom = true; }
+    }
+  }
 
   function sec(title) {
     chk(14);
+    if (hitBottom) return;
     doc.setFontSize(9); doc.setFont('helvetica','bold');
-    doc.setTextColor(navy[0], navy[1], navy[2]);
+    doc.setTextColor(0, 0, 0);
     doc.text(title, lm, y); y += 2;
-    doc.setDrawColor(navy[0], navy[1], navy[2]); doc.setLineWidth(0.4);
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.4);
     doc.line(lm, y, rm, y); y += 6;
     doc.setFont('helvetica','normal'); doc.setTextColor(40, 40, 40);
   }
 
   function txt(str) {
+    if (hitBottom) return;
     doc.setFontSize(10);
-    doc.splitTextToSize(str, lw).forEach(function(l) { chk(); doc.text(l, lm, y); y += 5; });
+    doc.splitTextToSize(str, lw).forEach(function(l) { chk(); if (!hitBottom) { doc.text(l, lm, y); y += 5; } });
   }
 
   function bul(str) {
+    if (hitBottom) return;
     doc.setFontSize(10);
     doc.splitTextToSize(str, lw - 5).forEach(function(l, i) {
-      chk(); doc.text(i === 0 ? '-' : ' ', lm, y); doc.text(l, lm + 5, y); y += 5;
+      chk(); if (!hitBottom) { doc.text(i === 0 ? '-' : ' ', lm, y); doc.text(l, lm + 5, y); y += 5; }
     });
   }
 
@@ -854,11 +870,11 @@ function downloadMiningPDF() {
 
   // ── HEADER ──
   y = 22;
-  doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(20, 20, 20);
+  doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(0, 0, 0);
   doc.text(cvData.name, lm, y); y += 7;
-  doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.setTextColor(navy[0], navy[1], navy[2]);
+  doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.setTextColor(60, 60, 60);
   doc.text(cvData.jobTitle, lm, y); y += 4;
-  doc.setDrawColor(navy[0], navy[1], navy[2]); doc.setLineWidth(0.7); doc.line(lm, y, rm, y); y += 7;
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.7); doc.line(lm, y, rm, y); y += 7;
 
   // ── CONTACT ──
   doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(50, 50, 50);
@@ -895,8 +911,10 @@ function downloadMiningPDF() {
   // ── WORK EXPERIENCE ──
   sec('WORK EXPERIENCE');
   cvData.experience.forEach(function(e) {
+    if (hitBottom) return;
     chk(18);
-    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(20, 20, 20);
+    if (hitBottom) return;
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0, 0, 0);
     doc.text(e.role, lm, y);
     var ds = atsDate(e.period);
     doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(80, 80, 80);
@@ -909,149 +927,145 @@ function downloadMiningPDF() {
   });
 
   // ── EDUCATION ──
-  if (cvData.education && cvData.education.trim()) { sec('EDUCATION'); txt(cvData.education); y += 3; }
+  var mEduStr = cvData.education && cvData.education.trim();
+  if (mEduStr && !/^(not provided|n\/a|none|na|not specified|-)$/i.test(mEduStr)) {
+    sec('EDUCATION'); txt(mEduStr); y += 3;
+  }
 
   // ── LANGUAGES ──
-  if (cvData.languages && cvData.languages.length) { sec('LANGUAGES'); txt(cvData.languages.join(', ')); y += 3; }
+  var mLangs = cvData.languages && cvData.languages.filter(function(l){return l&&l.trim();});
+  if (mLangs && mLangs.length) { sec('LANGUAGES'); txt(mLangs.join(' • ')); y += 3; }
 
   // ── FOOTER ──
   chk(12);
-  doc.setDrawColor(180,180,180); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5;
-  doc.setFontSize(9); doc.setTextColor(130, 130, 130);
-  doc.text('References available upon request', lm, y);
+  if (!hitBottom) {
+    doc.setDrawColor(180,180,180); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5;
+    doc.setFontSize(9); doc.setTextColor(130, 130, 130);
+    doc.text('References available upon request', lm, y);
+  }
 
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
 
-// ─── POINT 10 : Templates PDF différenciés par secteur ───────────────────────
+// ─── STANDARD PDF — 1-PAGE, NOIR ET BLANC ────────────────────────────────────
 function downloadPDF() {
   if (!cvData) return;
   var job = cvData._job || selectedJob;
   if (job === 'mine_utility' || job === 'mine_entry') { downloadMiningPDF(); return; }
-  var isMining = false;
+
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit:'mm', format:'a4' });
   var lm=18, rm=192, lw=174, y=0;
+  var hitBottom = false;
 
-  // ── Couleurs selon secteur ──
-  var accent = [17,17,17];
-  if (job === 'mine_utility' || job === 'mine_entry') accent = [20,60,100];      // bleu marine mining
-  else if (job === 'construction') accent = [180,80,0];                           // orange construction
-  else if (job === 'hospitality' || job === 'roadhouse') accent = [140,20,20];   // rouge hospitality
-  else if (job === 'farm' || job === 'station') accent = [40,100,40];            // vert farm/station
+  function chk(n) {
+    if (hitBottom) return;
+    if (y + (n||10) > 275) { hitBottom = true; }
+  }
 
-  function chk(n) { if (y+(n||10) > 278) { doc.addPage(); y = 18; } }
-
-  // ── EN-TÊTE ──
+  // ── HEADER ──
   y = 22;
-  doc.setFillColor(accent[0], accent[1], accent[2]);
-  doc.rect(0, 0, 210, 36, 'F');
-  doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+  doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(0,0,0);
   doc.text(cvData.name, lm, y); y += 7;
-  doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(220,220,220);
-  doc.text(cvData.jobTitle, lm, y); y = 44;
+  doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(70,70,70);
+  doc.text(cvData.jobTitle, lm, y); y += 4;
+  doc.setDrawColor(0,0,0); doc.setLineWidth(0.7); doc.line(lm, y, rm, y); y += 5;
 
-  // ── CONTACT ligne ──
+  // ── CONTACT ──
   doc.setFontSize(8.5); doc.setTextColor(80,80,80);
   var contactLine = [cvData.phone, cvData.email, cvData.location, cvData.visa].filter(Boolean).join('  |  ');
-  doc.splitTextToSize(contactLine, lw).forEach(function(l) { doc.text(l, lm, y); y += 4.5; });
+  doc.splitTextToSize(contactLine, lw).forEach(function(l) { if(!hitBottom){ doc.text(l, lm, y); y += 4.5; } });
   y += 3;
-  doc.setDrawColor(accent[0], accent[1], accent[2]); doc.setLineWidth(0.8); doc.line(lm, y, rm, y); y += 7;
 
-  // ── FONCTIONS HELPERS ──
+  // ── HELPERS ──
   function sec(title) {
-    chk(14);
-    doc.setFontSize(8); doc.setFont('helvetica','bold');
-    doc.setTextColor(accent[0], accent[1], accent[2]);
+    chk(12);
+    if (hitBottom) return;
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(0,0,0);
     doc.text(title.toUpperCase(), lm, y); y += 1.5;
-    doc.setDrawColor(accent[0], accent[1], accent[2]); doc.setLineWidth(0.3);
+    doc.setDrawColor(0,0,0); doc.setLineWidth(0.3);
     doc.line(lm, y, rm, y); y += 5;
     doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
   }
   function txt(t) {
+    if (hitBottom) return;
     doc.setFontSize(9);
-    doc.splitTextToSize(t, lw).forEach(function(l) { chk(); doc.text(l, lm, y); y += 4.5; });
+    doc.splitTextToSize(t, lw).forEach(function(l) { chk(); if(!hitBottom){ doc.text(l, lm, y); y += 4.5; } });
   }
   function bul(t) {
+    if (hitBottom) return;
     doc.setFontSize(9);
     doc.splitTextToSize('• ' + t, lw-4).forEach(function(l, i) {
-      chk(); doc.text(l, lm + (i===0 ? 2 : 6), y); y += 4.5;
+      chk(); if(!hitBottom){ doc.text(l, lm+(i===0?2:6), y); y += 4.5; }
     });
   }
 
-  // ── RÉSUMÉ ──
-  sec('Professional Summary'); txt(cvData.summary); y += 4;
+  // ── SUMMARY ──
+  sec('Professional Summary'); txt(cvData.summary); y += 3;
 
-  // ── TICKETS / LICENCES ──
+  // ── LICENCES ──
   if (cvData.licences && cvData.licences.length) {
     sec('Licences & Certifications');
     var half = Math.ceil(cvData.licences.length / 2);
     var col1 = cvData.licences.slice(0, half), col2 = cvData.licences.slice(half);
     for (var i=0; i<Math.max(col1.length, col2.length); i++) {
-      chk();
-      doc.setFontSize(9);
-      if (col1[i]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('✓', lm+1, y); doc.setTextColor(50,50,50); doc.text(col1[i], lm+6, y); }
-      if (col2[i]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('✓', lm+lw/2+1, y); doc.setTextColor(50,50,50); doc.text(col2[i], lm+lw/2+6, y); }
+      chk(); if (hitBottom) break;
+      doc.setFontSize(9); doc.setTextColor(50,50,50);
+      if (col1[i]) doc.text('- ' + col1[i], lm, y);
+      if (col2[i]) doc.text('- ' + col2[i], lm+lw/2, y);
       y += 5;
     }
-    y += 3;
+    y += 2;
   }
 
-  // ── EXPÉRIENCE ──
+  // ── EXPERIENCE (max 3 jobs, max 4 duties each) ──
   sec('Work Experience');
-  cvData.experience.forEach(function(e) {
-    chk(16);
-    doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
+  var exps = cvData.experience.slice(0, 3);
+  exps.forEach(function(e) {
+    if (hitBottom) return;
+    chk(14);
+    if (hitBottom) return;
+    doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(0,0,0);
     doc.text(e.role, lm, y);
-    doc.setFontSize(8.5); doc.setFont('helvetica','italic'); doc.setTextColor(120,120,120);
-    var periodW = doc.getTextWidth(e.period);
-    doc.text(e.period, rm - periodW, y); y += 5;
-    doc.setFontSize(9); doc.setFont('helvetica','normal');
-    doc.setTextColor(accent[0], accent[1], accent[2]);
+    doc.setFontSize(8.5); doc.setFont('helvetica','italic'); doc.setTextColor(100,100,100);
+    var pw = doc.getTextWidth(e.period);
+    doc.text(e.period, rm-pw, y); y += 5;
+    doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.setTextColor(75,75,75);
     doc.text(e.company, lm, y); y += 5;
-    doc.setTextColor(50,50,50);
-    e.duties.forEach(function(d) { bul(d); });
-    y += 3;
+    doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
+    e.duties.slice(0, 4).forEach(function(d) { bul(d); });
+    y += 2;
   });
+  y += 2;
 
-  // ── SKILLS ──
+  // ── SKILLS (max 8, 2 columns) ──
   sec('Key Skills');
-  var sh = Math.ceil(cvData.skills.length/2);
-  var sk1 = cvData.skills.slice(0,sh), sk2 = cvData.skills.slice(sh);
+  var skills = cvData.skills.slice(0, 8);
+  var sh = Math.ceil(skills.length/2);
+  var sk1 = skills.slice(0,sh), sk2 = skills.slice(sh);
   for (var j=0; j<Math.max(sk1.length,sk2.length); j++) {
-    chk();
-    doc.setFontSize(9);
-    if (sk1[j]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('▸', lm, y); doc.setTextColor(50,50,50); doc.text(sk1[j], lm+5, y); }
-    if (sk2[j]) { doc.setTextColor(accent[0], accent[1], accent[2]); doc.text('▸', lm+lw/2, y); doc.setTextColor(50,50,50); doc.text(sk2[j], lm+lw/2+5, y); }
+    chk(); if (hitBottom) break;
+    doc.setFontSize(9); doc.setTextColor(50,50,50);
+    if (sk1[j]) doc.text('• ' + sk1[j], lm, y);
+    if (sk2[j]) doc.text('• ' + sk2[j], lm+lw/2, y);
     y += 5;
   }
-  y += 3;
+  y += 2;
 
   // ── EDUCATION ──
-  if (cvData.education && cvData.education.trim()) { sec('Education'); txt(cvData.education); y += 3; }
-
-  // ── LANGUAGES ──
-  if (cvData.languages && cvData.languages.length) { sec('Languages'); txt(cvData.languages.join(', ')); y += 3; }
-
-  // ── MINING : mentions spécifiques page 2 ──
-  if (isMining) {
-    chk(20);
-    doc.setFontSize(8.5); doc.setFont('helvetica','bold');
-    doc.setTextColor(accent[0], accent[1], accent[2]);
-    doc.text('Additional Information', lm, y); y += 6;
-    doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
-    ['Committed to Drug & Alcohol free workplace policies.',
-     'Available for FIFO rotations — immediate start from Perth, WA.',
-     'Able to pass pre-employment medical and D&A screening.'
-    ].forEach(function(item) { bul(item); });
-    y += 3;
+  var sEduStr = cvData.education && cvData.education.trim();
+  if (sEduStr && !/^(not provided|n\/a|none|na|not specified|-)$/i.test(sEduStr)) {
+    sec('Education'); txt(sEduStr); y += 2;
   }
 
-  // ── PIED DE PAGE ──
-  chk(12);
-  doc.setDrawColor(200,200,200); doc.setLineWidth(0.3); doc.line(lm, y, rm, y); y += 5;
+  // ── LANGUAGES ──
+  var sLangs = cvData.languages && cvData.languages.filter(function(l){return l&&l.trim();});
+  if (sLangs && sLangs.length) { sec('Languages'); txt(sLangs.join(' • ')); y += 2; }
+
+  // ── FOOTER (fixé en bas de page 1) ──
+  doc.setDrawColor(190,190,190); doc.setLineWidth(0.3); doc.line(lm, 284, rm, 284);
   doc.setFontSize(8); doc.setTextColor(150,150,150);
-  doc.text('References available upon request', lm, y);
+  doc.text('References available upon request', lm, 289);
 
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
