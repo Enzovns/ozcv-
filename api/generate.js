@@ -53,7 +53,12 @@ module.exports = async (req, res) => {
         `- NEVER invent languages, visa status, or work rights.\n` +
         `- NEVER fabricate company names outside candidate's real history (exception: closed/real Australian mines per existing rules).\n` +
         `- Use EXACT keyword wording from the job ad (e.g. "Working at Heights" not "Work at height", "Confined Space" not "confined spaces").\n\n` +
-        `STEP 4 — Set matchScore (0-100) = percentage of the job ad's key requirements that the final CV covers. Include it in the JSON response as "matchScore".`;
+        `STEP 4 — Set matchScore (0-100) = percentage of the job ad's key requirements that the final CV covers. Include it in the JSON response as "matchScore".\n\n` +
+        `GLOBAL RULES (always apply regardless of job ad):\n` +
+        `EDUCATION: If no education was provided, set "education" to "" (empty string). NEVER write "Not provided", "N/A", "none", or any placeholder.\n` +
+        `LANGUAGES: NEVER copy the user's raw input verbatim. ALWAYS translate to English and reformat as "Language – Level" (e.g. "French – Native", "English – Fluent"). ` +
+        `Use standard levels: Native / Fluent / Professional working proficiency / Intermediate / Conversational / Basic. Each language as a separate array item. ` +
+        `Interpret French, mixed-language, or informal input and convert to professional English format.`;
     }
 
     const message = await client.messages.create(requestParams);
