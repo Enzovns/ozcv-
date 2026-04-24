@@ -163,13 +163,13 @@
   <div class="section">
     <div class="section-title" id="label-jobtype">SELECT JOB TYPE</div>
     <div class="job-grid">
-      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label" id="jc-mine_utility">Mine Utility</div><div class="sub">Camp, Cleaning, Kitchen</div></div>
-      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label" id="jc-mine_entry">Mine Entry Level</div><div class="sub">Labourer, Trade Asst, Sentry</div></div>
-      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" id="jc-farm">Farm Work</div><div class="sub">Harvest, Picking</div></div>
-      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" id="jc-hospitality">Hospitality</div><div class="sub">Pub, Hotel, Café</div></div>
-      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" id="jc-roadhouse">Roadhouse</div><div class="sub">Remote service</div></div>
-      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" id="jc-station">Station Hand</div><div class="sub">Cattle, Sheep</div></div>
-      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" id="jc-construction">Construction</div><div class="sub">Labour, Trade</div></div>
+      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label" id="jc-mine_utility">Mine Utility</div><div class="sub" id="jcs-mine_utility">Camp, Cleaning, Kitchen</div></div>
+      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label" id="jc-mine_entry">Mine Entry Level</div><div class="sub" id="jcs-mine_entry">Labourer, Trade Asst, Sentry</div></div>
+      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" id="jc-farm">Farm Work</div><div class="sub" id="jcs-farm">Harvest, Picking</div></div>
+      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" id="jc-hospitality">Hospitality</div><div class="sub" id="jcs-hospitality">Pub, Hotel, Café</div></div>
+      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" id="jc-roadhouse">Roadhouse</div><div class="sub" id="jcs-roadhouse">Remote service</div></div>
+      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" id="jc-station">Station Hand</div><div class="sub" id="jcs-station">Cattle, Sheep</div></div>
+      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" id="jc-construction">Construction</div><div class="sub" id="jcs-construction">Labour, Trade</div></div>
     </div>
     <div class="tickets-box" id="tickets-box">
       <div style="font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:500;" id="label-tickets">Tickets & Certifications</div>
@@ -206,9 +206,9 @@
   <div class="section">
     <div class="section-title" id="label-exp">EXPERIENCE & SKILLS</div>
     <div class="form-grid full">
-      <div class="field"><label id="lbl-experience">Past Experience (leave empty if none)</label><textarea id="experience" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
-      <div class="field"><label id="lbl-languages">Languages spoken</label><input type="text" id="languages" placeholder="e.g. English, French, Spanish..." /></div>
-      <div class="field"><label id="lbl-education">Education (optional)</label><input type="text" id="education" placeholder="e.g. High School Diploma – Belgium" /></div>
+      <div class="field"><label id="lbl-experience">Past Experience (leave empty if none)</label><textarea id="experience"></textarea></div>
+      <div class="field"><label id="lbl-languages">Languages spoken</label><input type="text" id="languages" /></div>
+      <div class="field"><label id="lbl-education">Education (optional)</label><input type="text" id="education" /></div>
     </div>
   </div>
 
@@ -372,7 +372,17 @@ var i18n = {
     creativity_labels: ['REFORMULATE ONLY','ADD RESPONSIBILITIES','ADD EXPERIENCE'],
     creativity_l1: 'Reformulate only', creativity_l2: 'Add responsibilities', creativity_l3: 'Add experience',
     match_score_msg: 'Your CV matches',
-    match_score_suffix: 'of this job\'s requirements'
+    match_score_suffix: 'of this job\'s requirements',
+    jc_mine_utility: 'Mine Utility', jcs_mine_utility: 'Camp, Cleaning, Kitchen',
+    jc_mine_entry: 'Mine Entry Level', jcs_mine_entry: 'Labourer, Trade Asst, Sentry',
+    jc_farm: 'Farm Work', jcs_farm: 'Harvest, Picking',
+    jc_hospitality: 'Hospitality', jcs_hospitality: 'Pub, Hotel, Café',
+    jc_roadhouse: 'Roadhouse', jcs_roadhouse: 'Remote service',
+    jc_station: 'Station Hand', jcs_station: 'Cattle, Sheep',
+    jc_construction: 'Construction', jcs_construction: 'Labour, Trade',
+    experience_placeholder: 'e.g. 6 months on a cattle station in QLD, bar work in a backpacker hostel...',
+    languages_placeholder: 'e.g. English, French, Spanish...',
+    education_placeholder: 'e.g. High School Diploma – Belgium'
   },
   fr: {
     hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
@@ -419,7 +429,17 @@ var i18n = {
     creativity_labels: ['REFORMULER SEULEMENT','AJOUTER DES RESPONSABILITÉS','AJOUTER UNE EXPÉRIENCE'],
     creativity_l1: 'Reformuler seulement', creativity_l2: 'Ajouter des responsabilités', creativity_l3: 'Ajouter une expérience',
     match_score_msg: 'Ton CV correspond à',
-    match_score_suffix: 'des exigences de ce poste'
+    match_score_suffix: 'des exigences de ce poste',
+    jc_mine_utility: 'Utilitaire Mine', jcs_mine_utility: 'Camp, Nettoyage, Cuisine',
+    jc_mine_entry: 'Mine Débutant', jcs_mine_entry: 'Manœuvre, Asst. Métier, Gardien',
+    jc_farm: 'Travail Agricole', jcs_farm: 'Récolte, Cueillette',
+    jc_hospitality: 'Hôtellerie', jcs_hospitality: 'Pub, Hôtel, Café',
+    jc_roadhouse: 'Roadhouse', jcs_roadhouse: 'Service en zone isolée',
+    jc_station: 'Station Hand', jcs_station: 'Bovins, Ovins',
+    jc_construction: 'Construction', jcs_construction: 'Manœuvre, Métier',
+    experience_placeholder: 'ex : 6 mois dans une ferme en QLD, service au bar dans un hostel...',
+    languages_placeholder: 'ex : Français, Anglais, Espagnol...',
+    education_placeholder: 'ex : Baccalauréat – Belgique'
   }
 };
 
@@ -481,6 +501,23 @@ function applyLang(lang) {
   document.getElementById('creativity-l3').textContent = t.creativity_l3;
   document.getElementById('match-score-msg').textContent = t.match_score_msg;
   document.getElementById('match-score-suffix').textContent = t.match_score_suffix;
+  document.getElementById('jc-mine_utility').textContent = t.jc_mine_utility;
+  document.getElementById('jcs-mine_utility').textContent = t.jcs_mine_utility;
+  document.getElementById('jc-mine_entry').textContent = t.jc_mine_entry;
+  document.getElementById('jcs-mine_entry').textContent = t.jcs_mine_entry;
+  document.getElementById('jc-farm').textContent = t.jc_farm;
+  document.getElementById('jcs-farm').textContent = t.jcs_farm;
+  document.getElementById('jc-hospitality').textContent = t.jc_hospitality;
+  document.getElementById('jcs-hospitality').textContent = t.jcs_hospitality;
+  document.getElementById('jc-roadhouse').textContent = t.jc_roadhouse;
+  document.getElementById('jcs-roadhouse').textContent = t.jcs_roadhouse;
+  document.getElementById('jc-station').textContent = t.jc_station;
+  document.getElementById('jcs-station').textContent = t.jcs_station;
+  document.getElementById('jc-construction').textContent = t.jc_construction;
+  document.getElementById('jcs-construction').textContent = t.jcs_construction;
+  document.getElementById('experience').placeholder = t.experience_placeholder;
+  document.getElementById('languages').placeholder = t.languages_placeholder;
+  document.getElementById('education').placeholder = t.education_placeholder;
   updateSlider(document.getElementById('ai-slider').value);
   updateCreativity(document.getElementById('creativity-slider').value);
 }
@@ -569,6 +606,7 @@ window.addEventListener('DOMContentLoaded', function() {
   renderTickets('mine_utility');
   updateSlider(2);
   updateCreativity(50);
+  applyLang('en');
   var params = new URLSearchParams(window.location.search);
   if (params.get('paid') === 'true') {
     window.history.replaceState({}, '', window.location.pathname);

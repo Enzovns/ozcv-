@@ -31,9 +31,15 @@ ozcv.vercel.app | $5 AUD per CV
 - Fake mines = Australian closed/real mines only
 
 ## TODO Priority
-- [ ] Privacy Policy page (URGENT — legal)
-- [ ] Fix FR/EN language toggle bug
-- [ ] Validate 7 remaining PDF templates
-- [ ] Ticket tips popup per sector
-- [ ] Integrate sector templates into AI prompt
-- [ ] Verify api/generate.js logs no personal data
+- [x] Privacy Policy page — DONE (privacy-policy.html, linked in footer)
+- [x] Fix FR/EN language toggle bug — DONE (job cards, subs, placeholders translated)
+- [x] Validate 7 remaining PDF templates — DONE (B&W, 1-page enforcement)
+- [x] Ticket tips popup per sector — DONE (modal on sector select)
+- [x] Integrate sector templates into AI prompt — DONE (sector aiTexts + pageRule)
+- [x] Verify api/generate.js logs no personal data — DONE (only err.message logged)
+
+## Features Added
+- Job ad scanner + AI creativity slider (0-100) with matchScore badge
+- ATS-friendly mining PDF (single-column, MM/YYYY dates, no color)
+- SEO meta tags + og:tags + sitemap.xml
+- Education/language rules in prompt (no "Not provided", auto-format langs)
