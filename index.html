@@ -127,6 +127,18 @@
     footer a { color:var(--gold); text-decoration:none; }
     footer a:hover { text-decoration:underline; }
     .footer-links { display:flex; gap:24px; }
+    /* ── ATS Mode Toggle ── */
+    .ats-toggle-wrap { display:flex; align-items:center; gap:14px; background:var(--dark2); border:1px solid var(--border); border-radius:8px; padding:16px 20px; margin-bottom:10px; flex-wrap:wrap; }
+    .ats-toggle-label { font-size:13px; color:var(--muted); font-weight:500; transition:color 0.2s; user-select:none; }
+    .ats-toggle-label.active { color:var(--gold); }
+    .switch { position:relative; display:inline-block; width:50px; height:27px; flex-shrink:0; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; inset:0; background:var(--dark3); border:1px solid var(--border); border-radius:27px; transition:0.25s; }
+    .slider:before { position:absolute; content:""; height:19px; width:19px; left:3px; bottom:3px; background:var(--muted); border-radius:50%; transition:0.25s; }
+    .switch input:checked + .slider { background:rgba(46,204,113,0.15); border-color:#2ecc71; }
+    .switch input:checked + .slider:before { transform:translateX(23px); background:#2ecc71; }
+    .ats-toggle-badge { font-size:10px; background:rgba(46,204,113,0.12); border:1px solid rgba(46,204,113,0.3); color:#2ecc71; border-radius:20px; padding:2px 10px; letter-spacing:1px; font-weight:600; }
+    .ats-hint { font-size:12px; color:#2ecc71; margin-bottom:10px; padding:10px 16px; background:rgba(46,204,113,0.06); border:1px solid rgba(46,204,113,0.2); border-radius:6px; display:none; line-height:1.5; }
   </style>
 </head>
 <body>
@@ -276,6 +288,19 @@
     </div>
   </div>
 
+<div class="ats-toggle-wrap">
+  <span class="ats-toggle-label" id="ats-lbl-visual">Mode Visuel</span>
+  <label class="switch">
+    <input type="checkbox" id="atsModeToggle" onchange="setAtsMode(this.checked)">
+    <span class="slider"></span>
+  </label>
+  <span class="ats-toggle-label" id="ats-lbl-ats">Mode ATS</span>
+  <span class="ats-toggle-badge" id="ats-badge" style="display:none">100% ATS</span>
+</div>
+<div class="ats-hint" id="ats-hint">
+  ✓ CV optimisé pour passer les filtres automatiques (PageUp, Workday, Seek, Indeed AU) — Single-column · Helvetica · Keywords mining intégrés
+</div>
+
 <button class="gen-btn" id="gen-btn" onclick="handleGenerate()">✦ <span id="btn-generate">GENERATE MY RESUME — $5 AUD</span></button>
 
   <div class="error-box" id="error-box"></div>
@@ -324,6 +349,7 @@ var STRIPE_LINK = 'https://buy.stripe.com/dRmdR97Io5FKbFDbqM1gs01';
 var selectedJob = 'mine_utility';
 var cvData = null;
 var currentLang = 'en';
+var atsMode = false;
 
 // ─── POINT 6 : Système i18n complet EN/FR ─────────────────────────────────────
 var i18n = {
@@ -474,7 +500,7 @@ function applyLang(lang) {
   document.getElementById('lbl-languages').textContent = t.lbl_languages;
   document.getElementById('lbl-education').textContent = t.lbl_education;
   document.getElementById('btn-generate').textContent = t.btn_generate;
-  document.getElementById('btn-download').textContent = t.btn_download;
+  if (!atsMode) document.getElementById('btn-download').textContent = t.btn_download;
   document.getElementById('btn-new').textContent = t.btn_new;
   document.getElementById('loading-text').textContent = t.loading_text;
   document.getElementById('success-title').textContent = t.success_title;
@@ -568,7 +594,8 @@ function saveFormData() {
     tickets: getSelectedTickets(),
     jobDescription: document.getElementById('job-description').value.trim(),
     aiCreativity: document.getElementById('creativity-slider').value,
-    lang: currentLang
+    lang: currentLang,
+    atsMode: atsMode
   };
   sessionStorage.setItem('ozcv_form', JSON.stringify(data));
 }
@@ -599,6 +626,7 @@ function loadFormData(data) {
   updateSlider(data.aiLevel || 2);
   updateCreativity(data.aiCreativity || 50);
   if (data.lang) setLang(data.lang);
+  setAtsMode(data.atsMode || false);
 }
 
 // ─── POINT 8 : Détection ?paid=true ──────────────────────────────────────────
@@ -734,6 +762,19 @@ function updateCreativity(val) {
 function openModal() { document.getElementById('ai-modal').classList.add('open'); }
 function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
 
+function setAtsMode(val) {
+  atsMode = val;
+  document.getElementById('atsModeToggle').checked = val;
+  document.getElementById('ats-hint').style.display = val ? 'block' : 'none';
+  document.getElementById('ats-badge').style.display = val ? 'inline-block' : 'none';
+  var lblAts = document.getElementById('ats-lbl-ats');
+  var lblVis = document.getElementById('ats-lbl-visual');
+  lblAts.classList.toggle('active', val);
+  lblVis.classList.toggle('active', !val);
+  var btnDl = document.getElementById('btn-download');
+  if (btnDl) btnDl.textContent = val ? '⬇ DOWNLOAD ATS PDF' : '⬇ DOWNLOAD PDF';
+}
+
 function showError(msg) {
   var b = document.getElementById('error-box');
   b.textContent = '⚠ ' + msg;
@@ -825,7 +866,11 @@ function buildPrompt(f) {
   var eduRule = 'EDUCATION RULE: If no education is provided or the field is empty, set "education" to "" (empty string). NEVER write "Not provided", "N/A", "none", "not specified", or any placeholder. Leave it as empty string "". ';
   var langRule = 'LANGUAGES RULE: NEVER copy the user\'s raw language input verbatim. ALWAYS translate to English and reformat each language as "Language – Level" (e.g. "French – Native", "English – Fluent"). Standard levels: Native / Fluent / Professional working proficiency / Intermediate / Conversational / Basic. Return each language as a separate item in the languages array. Interpret French, mixed-language, or informal input and convert to professional English format. ALL text in the CV must be in the target language (' + f.cvLang + ') — if a user writes in French or any other language, translate everything to ' + f.cvLang + '. ';
   var aiText = (aiTexts[f.job]||aiTexts['farm'])[aiLevel-1];
-  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+rules+' '+pageRule+eduRule+langRule+'Return ONLY valid JSON no preamble: '+schema;
+  var atsMiningRule = '';
+  if (f.atsMode && isMiningJob) {
+    atsMiningRule = 'ATS MODE — MANDATORY KEYWORD DENSITY: The "skills" array MUST contain 12-15 items and include at least 10 of these exact keywords (exact spelling/capitalisation): White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, Manual Handling, JSA, SWMS, Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), HSE, PPE compliance, FIFO, DIDO, 12-hour shifts, shutdown, Pilbara, open-cut, mobile plant, drug and alcohol testing, pre-employment medical, full work rights Australia. Each "duties" bullet MUST contain at least one ATS keyword from this list. The "summary" MUST reference FIFO availability and Drug & Alcohol compliance explicitly. ';
+  }
+  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+atsMiningRule+rules+' '+pageRule+eduRule+langRule+'Return ONLY valid JSON no preamble: '+schema;
 }
 
 // ─── RENDER CV (preview HTML) ────────────────────────────────────────────────
@@ -985,9 +1030,162 @@ function downloadMiningPDF() {
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
 
+// ─── ATS MODE PDF — 100% ATS-FRIENDLY, TOUS SECTEURS ─────────────────────────
+function generatePDF_ATS_Mode() {
+  if (!cvData) return;
+  var job = cvData._job || selectedJob;
+  var isMining = (job === 'mine_utility' || job === 'mine_entry');
+  var maxPages = isMining ? 2 : 1;
+
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  var lm = 20, rm = 190, lw = 170, y = 0;
+  var hitBottom = false;
+
+  function chk(n) {
+    if (hitBottom) return;
+    if (y + (n || 10) > 277) {
+      if (doc.getNumberOfPages() < maxPages) { doc.addPage(); y = 20; }
+      else { hitBottom = true; }
+    }
+  }
+
+  function secATS(title) {
+    if (hitBottom) return;
+    chk(14); if (hitBottom) return;
+    y += 2;
+    doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    doc.text(title, lm, y); y += 2;
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5);
+    doc.line(lm, y, rm, y); y += 6;
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+  }
+
+  function txtATS(str, sz) {
+    if (hitBottom) return;
+    doc.setFontSize(sz || 10.5);
+    doc.splitTextToSize(str, lw).forEach(function(l) {
+      chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5.5; }
+    });
+  }
+
+  function bulATS(str) {
+    if (hitBottom) return;
+    doc.setFontSize(10.5);
+    doc.splitTextToSize(str, lw - 6).forEach(function(l, i) {
+      chk(6);
+      if (!hitBottom) { doc.text(i === 0 ? '-' : ' ', lm, y); doc.text(l, lm + 5, y); y += 5.5; }
+    });
+  }
+
+  function atsSpelledDate(period) {
+    // Keep full month names, normalise separator to en-dash
+    return period.replace(/\s*[-–—]\s*/g, ' – ').trim();
+  }
+
+  var atsHeadlines = {
+    mine_utility: 'MINING UTILITY WORKER | FIFO READY | DRUG & ALCOHOL FREE',
+    mine_entry:   'MINE LABOURER | TRADE ASSISTANT | FIFO AVAILABLE',
+    farm:         'FARM WORKER | FRUIT PICKER | HARVEST',
+    hospitality:  'HOSPITALITY ALL-ROUNDER | FOOD HANDLING',
+    roadhouse:    'ROADHOUSE WORKER | REMOTE LOCATIONS READY',
+    station:      'STATION HAND | JACKAROO | LIVESTOCK',
+    construction: 'CONSTRUCTION LABOURER | WHITE CARD | SITE READY'
+  };
+
+  // ── HEADER (name + headline in body, never PDF header/footer) ──
+  y = 20;
+  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text(cvData.name || '', lm, y); y += 7;
+
+  doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  var headline = atsHeadlines[job] || cvData.jobTitle || '';
+  doc.text(headline, lm, y); y += 5;
+
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.7);
+  doc.line(lm, y, rm, y); y += 7;
+
+  // ── CONTACT (in body) ──
+  doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+  var cp = [];
+  if (cvData.phone)    cp.push('Phone: ' + cvData.phone);
+  if (cvData.email)    cp.push('Email: ' + cvData.email);
+  if (cvData.location) cp.push('Location: ' + cvData.location);
+  if (cvData.visa)     cp.push('Work Rights: ' + cvData.visa);
+  if (isMining)        cp.push('Availability: FIFO / DIDO | Immediate Start');
+  doc.splitTextToSize(cp.join('  |  '), lw).forEach(function(l) {
+    chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5; }
+  });
+  y += 5;
+
+  // ── PROFESSIONAL SUMMARY ──
+  secATS('PROFESSIONAL SUMMARY');
+  txtATS(cvData.summary || ''); y += 3;
+
+  // ── CERTIFICATIONS ──
+  if (cvData.licences && cvData.licences.length) {
+    secATS('CERTIFICATIONS');
+    cvData.licences.forEach(function(lic) { bulATS(lic); });
+    y += 2;
+  }
+
+  // ── SKILLS ──
+  if (cvData.skills && cvData.skills.length) {
+    secATS('SKILLS');
+    cvData.skills.forEach(function(s) { bulATS(s); });
+    y += 2;
+  }
+
+  // ── WORK EXPERIENCE ──
+  secATS('WORK EXPERIENCE');
+  var expLimit = isMining ? 4 : 3;
+  var dutyLimit = isMining ? 7 : 5;
+  cvData.experience.slice(0, expLimit).forEach(function(e) {
+    if (hitBottom) return;
+    chk(20); if (hitBottom) return;
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    doc.text(e.role || '', lm, y);
+    var dateStr = atsSpelledDate(e.period || '');
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+    doc.text(dateStr, rm - doc.getTextWidth(dateStr), y); y += 5.5;
+    doc.setFontSize(10); doc.setFont('helvetica', 'italic'); doc.setTextColor(0, 0, 0);
+    doc.text(e.company || '', lm, y); y += 5.5;
+    doc.setFont('helvetica', 'normal');
+    e.duties.slice(0, dutyLimit).forEach(function(d) { bulATS(d); });
+    y += 3;
+  });
+
+  // ── EDUCATION (omit section entirely if empty) ──
+  var eduStr = cvData.education && cvData.education.trim();
+  if (eduStr && !/^(not provided|n\/a|none|na|not specified|-)$/i.test(eduStr)) {
+    secATS('EDUCATION'); txtATS(eduStr); y += 2;
+  }
+
+  // ── LANGUAGES ──
+  var langs = cvData.languages && cvData.languages.filter(function(l) { return l && l.trim(); });
+  if (langs && langs.length) {
+    secATS('LANGUAGES');
+    langs.forEach(function(l) { txtATS(l); });
+    y += 2;
+  }
+
+  // ── REFERENCES ──
+  chk(12);
+  if (!hitBottom) {
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.3);
+    doc.line(lm, y, rm, y); y += 5;
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+    doc.text('References available upon request', lm, y);
+  }
+
+  doc.save((cvData.name || 'CV').replace(/\s+/g, '_') + '_ATS.pdf');
+}
+
 // ─── STANDARD PDF — 1-PAGE, NOIR ET BLANC ────────────────────────────────────
 function downloadPDF() {
   if (!cvData) return;
+  // ATS mode: toujours utiliser generatePDF_ATS_Mode() quel que soit le secteur
+  if (atsMode) { generatePDF_ATS_Mode(); return; }
   var job = cvData._job || selectedJob;
   if (job === 'mine_utility' || job === 'mine_entry') { downloadMiningPDF(); return; }
 
