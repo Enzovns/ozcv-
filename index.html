@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OzCV — AI CV Generator for Australia | Mining, FIFO & Working Holiday</title>
+  <title>OzCV — ATS-Friendly AI CV Generator Australia | Mining, FIFO & Working Holiday</title>
   <meta name="description" content="Generate a professional Australian CV in seconds. Tailored for mining, FIFO, farming, hospitality and working holiday visa holders. AI-powered, $5 AUD." />
   <meta name="keywords" content="Australian CV generator, FIFO resume Australia, mining CV Australia, working holiday visa resume Australia, resume builder Australia" />
   <link rel="canonical" href="https://ozcv.vercel.app" />
@@ -145,6 +145,74 @@
     .ats-toggle-wrap { position:relative; }
     .ats-toggle-wrap .ats-tooltip { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(13,13,13,0.97); border:1px solid var(--border); border-radius:6px; padding:7px 14px; font-size:11px; color:var(--muted); white-space:nowrap; pointer-events:none; z-index:200; }
     .ats-toggle-wrap.ats-disabled:hover .ats-tooltip { display:block; }
+    /* ── Trust Band (Obj 5) ── */
+    .trust-band { background:rgba(201,168,76,0.04); border-bottom:1px solid var(--border); padding:10px 24px; text-align:center; font-size:11.5px; color:var(--muted); letter-spacing:0.4px; line-height:1.8; }
+    .trust-band strong { color:var(--gold); }
+    /* ── Pricing (Obj 2) ── */
+    .pricing-section { margin-bottom:24px; }
+    .pricing-label { font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,4vw,28px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
+    .pricing-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:20px; line-height:1.5; }
+    .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    @media(max-width:680px){ .pricing-grid { grid-template-columns:1fr; } }
+    .pricing-card { background:var(--dark2); border:1px solid var(--border); border-radius:12px; padding:24px 18px; position:relative; display:flex; flex-direction:column; cursor:pointer; transition:all 0.2s; }
+    .pricing-card:hover { border-color:var(--gold); transform:translateY(-2px); }
+    .pricing-card.selected { border-color:var(--gold); background:rgba(201,168,76,0.07); box-shadow:0 0 0 2px rgba(201,168,76,0.15); }
+    .pricing-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--dark); font-size:9px; font-weight:700; letter-spacing:1.5px; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .pricing-tier { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); margin-bottom:4px; }
+    .pricing-price { font-family:'Bebas Neue',sans-serif; font-size:40px; color:var(--text); line-height:1; margin-bottom:2px; }
+    .pricing-currency { font-size:11px; color:var(--muted); margin-bottom:14px; }
+    .pricing-features { list-style:none; margin-bottom:16px; flex:1; }
+    .pricing-features li { font-size:12px; color:var(--muted); padding:5px 0; border-bottom:1px solid rgba(201,168,76,0.06); display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
+    .pricing-features li::before { content:'✓'; color:var(--gold); font-size:11px; flex-shrink:0; margin-top:2px; }
+    .pricing-select-btn { width:100%; padding:10px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; cursor:pointer; border-radius:6px; transition:all 0.2s; border:1px solid var(--border); background:transparent; color:var(--muted); }
+    .pricing-card.selected .pricing-select-btn { background:linear-gradient(135deg,var(--gold),var(--gold-light)); border:none; color:var(--dark); }
+    /* ── ATS Score CTA (Obj 3) ── */
+    .ats-score-cta { background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.01)); border:1px solid var(--border); border-radius:12px; padding:24px 22px; margin-bottom:20px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .ats-score-cta-icon { font-size:36px; flex-shrink:0; }
+    .ats-score-cta-text { flex:1; min-width:180px; }
+    .ats-score-cta-text h3 { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--text); margin-bottom:5px; }
+    .ats-score-cta-text p { font-size:12px; color:var(--muted); line-height:1.6; }
+    .ats-score-cta-btn { background:transparent; border:1px solid var(--gold); color:var(--gold); padding:10px 20px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; cursor:pointer; border-radius:6px; transition:all 0.2s; white-space:nowrap; flex-shrink:0; }
+    .ats-score-cta-btn:hover { background:var(--gold); color:var(--dark); }
+    /* ── ATS Score Modal (Obj 3) ── */
+    .ats-score-modal-box { max-width:500px; width:100%; }
+    .ats-upload-area { border:2px dashed var(--border); border-radius:8px; padding:28px; text-align:center; cursor:pointer; transition:border-color 0.2s; margin-bottom:14px; }
+    .ats-upload-area:hover, .ats-upload-area.drag { border-color:var(--gold); }
+    .ats-upload-area p { font-size:12px; color:var(--muted); margin-top:8px; }
+    .score-result-wrap { display:none; }
+    .score-circle-outer { display:flex; justify-content:center; margin:12px 0 6px; }
+    .score-breakdown-item { font-size:12px; padding:5px 0; border-bottom:1px solid var(--border); color:var(--muted); display:flex; gap:8px; align-items:flex-start; }
+    .score-breakdown-item::before { content:'✓'; color:#6abf6a; flex-shrink:0; }
+    .score-breakdown-item.weak::before { content:'✕'; color:#ff8070; }
+    .score-cta-row { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .score-cta-btn { flex:1; padding:10px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:1.5px; cursor:pointer; border-radius:6px; border:none; background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--dark); min-width:80px; }
+    /* ── Premium Success Banner (Obj 2) ── */
+    .premium-banner { background:rgba(201,168,76,0.08); border:1px solid var(--gold); border-radius:10px; padding:20px 24px; margin-bottom:20px; display:none; }
+    .premium-banner strong { color:var(--gold); font-size:16px; display:block; margin-bottom:8px; }
+    .premium-banner p { font-size:13px; color:var(--text); line-height:1.75; }
+    .premium-banner a { color:var(--gold); }
+    /* ── Exit Intent (Obj 4) ── */
+    .exit-modal-box { max-width:380px; width:100%; text-align:center; }
+    .exit-title { font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:2px; color:var(--text); margin:12px 0 8px; }
+    .exit-subtitle { font-size:13px; color:var(--muted); margin-bottom:14px; line-height:1.6; }
+    .exit-code-box { display:inline-block; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:4px; color:var(--gold); background:rgba(201,168,76,0.1); border:1.5px dashed var(--gold); border-radius:8px; padding:10px 22px; margin-bottom:8px; }
+    .exit-validity { font-size:11px; color:var(--muted); margin-bottom:18px; }
+    .exit-use-btn { width:100%; padding:13px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:3px; cursor:pointer; border-radius:8px; background:linear-gradient(135deg,var(--gold),var(--gold-light)); border:none; color:var(--dark); transition:all 0.2s; }
+    .exit-use-btn:hover { filter:brightness(1.1); }
+    .exit-dismiss { display:block; margin-top:10px; font-size:12px; color:var(--muted); cursor:pointer; background:none; border:none; width:100%; }
+    .exit-dismiss:hover { color:var(--text); }
+    /* ── FAQ (Obj 6) ── */
+    .faq-section { padding:0 20px 60px; }
+    .faq-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(24px,5vw,34px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
+    .faq-heading-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:24px; }
+    .faq-item { background:var(--dark2); border:1px solid var(--border); border-radius:8px; margin-bottom:8px; overflow:hidden; }
+    .faq-q { width:100%; background:none; border:none; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; text-align:left; gap:12px; }
+    .faq-q:hover { color:var(--gold); }
+    .faq-icon { color:var(--gold); font-size:20px; flex-shrink:0; transition:transform 0.2s; line-height:1; }
+    .faq-item.open .faq-icon { transform:rotate(45deg); }
+    .faq-a { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+    .faq-item.open .faq-a { max-height:400px; }
+    .faq-a p { padding:0 20px 16px; font-size:13px; color:var(--muted); line-height:1.75; }
   </style>
 </head>
 <body>
@@ -156,6 +224,11 @@
     <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
   </div>
 </nav>
+
+<!-- Obj 5 — Trust band -->
+<div class="trust-band">
+  <strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimisé pour <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>
+</div>
 
 <div class="hero">
   <!-- POINT 1 : Badge hero -->
@@ -176,6 +249,76 @@
   <div class="success-banner" id="success-banner">
     <div style="font-size:28px">✅</div>
     <div><strong id="success-title">Payment confirmed!</strong><span id="success-sub">Your CV is being generated...</span></div>
+  </div>
+
+  <!-- Obj 2 — Premium success message -->
+  <div class="premium-banner" id="premium-banner">
+    <strong>🎉 Merci pour ton achat Premium !</strong>
+    <p>Enzo va te contacter sous 24h sur <strong>WhatsApp (+61 493 496 091)</strong> ou par email pour planifier ton appel. Tu peux aussi écrire directement : <a href="mailto:enzo.vanes@hotmail.com">enzo.vanes@hotmail.com</a></p>
+  </div>
+
+  <!-- Obj 3 — Free ATS Score CTA -->
+  <div class="ats-score-cta">
+    <div class="ats-score-cta-icon">🎯</div>
+    <div class="ats-score-cta-text">
+      <h3>Teste ton CV actuel — Gratuit</h3>
+      <p>75% des CV sont rejetés par les ATS avant même qu'un humain les lise. Découvre ton score en 30 secondes.</p>
+    </div>
+    <button class="ats-score-cta-btn" onclick="openAtsScoreModal()">Analyser mon CV gratuitement</button>
+  </div>
+
+  <!-- Obj 2 — Pricing -->
+  <div class="pricing-section">
+    <div class="pricing-label">CHOOSE YOUR PLAN</div>
+    <p class="pricing-sub">100% ATS-Friendly — Professional Australian CVs — Instant download</p>
+    <div class="pricing-grid">
+
+      <!-- Standard -->
+      <div class="pricing-card" id="tier-standard" onclick="selectTier('standard')">
+        <div class="pricing-tier">Standard</div>
+        <div class="pricing-price">$10</div>
+        <div class="pricing-currency">AUD — one-time</div>
+        <ul class="pricing-features">
+          <li>1 CV PDF professionnel</li>
+          <li>Choix parmi 8 templates</li>
+          <li>Mode Visuel</li>
+          <li>Téléchargement immédiat</li>
+        </ul>
+        <button class="pricing-select-btn">SELECT STANDARD</button>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card selected" id="tier-pro" onclick="selectTier('pro')">
+        <div class="pricing-badge">⭐ MOST POPULAR</div>
+        <div class="pricing-tier">Pro</div>
+        <div class="pricing-price">$19</div>
+        <div class="pricing-currency">AUD — one-time</div>
+        <ul class="pricing-features">
+          <li>Tout le Standard</li>
+          <li><strong style="color:var(--gold)">Mode ATS 100% optimisé</strong></li>
+          <li>Cover letter IA incluse</li>
+          <li>2 PDF : Visuel + ATS</li>
+          <li>Pop-up conseils tickets</li>
+        </ul>
+        <button class="pricing-select-btn">SELECT PRO</button>
+      </div>
+
+      <!-- Premium -->
+      <div class="pricing-card" id="tier-premium" onclick="selectTier('premium')">
+        <div class="pricing-tier">Premium</div>
+        <div class="pricing-price">$79</div>
+        <div class="pricing-currency">AUD — one-time</div>
+        <ul class="pricing-features">
+          <li>Tout le Pro</li>
+          <li>Appel 30min avec Enzo (WhatsApp)</li>
+          <li>CV créé en direct ensemble</li>
+          <li>Révisions illimitées 7 jours</li>
+          <li>Conseil mines qui recrutent</li>
+        </ul>
+        <button class="pricing-select-btn">SELECT PREMIUM</button>
+      </div>
+
+    </div>
   </div>
 
   <div class="section">
@@ -349,14 +492,12 @@
 </div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-var STRIPE_LINK = 'https://buy.stripe.com/dRmdR97Io5FKbFDbqM1gs01';
-
 // ─── STATE ────────────────────────────────────────────────────────────────────
 var selectedJob = 'mine_utility';
 var cvData = null;
 var currentLang = 'en';
 var atsMode = false;
+var selectedTier = 'pro'; // default: Pro (most popular)
 
 // ─── POINT 6 : Système i18n complet EN/FR ─────────────────────────────────────
 var i18n = {
@@ -602,7 +743,8 @@ function saveFormData() {
     jobDescription: document.getElementById('job-description').value.trim(),
     aiCreativity: document.getElementById('creativity-slider').value,
     lang: currentLang,
-    atsMode: atsMode
+    atsMode: atsMode,
+    tier: selectedTier
   };
   sessionStorage.setItem('ozcv_form', JSON.stringify(data));
 }
@@ -634,6 +776,7 @@ function loadFormData(data) {
   updateCreativity(data.aiCreativity || 50);
   if (data.lang) setLang(data.lang);
   setAtsMode(data.atsMode || false);
+  if (data.tier) selectTier(data.tier, true); // true = silent (no scroll)
 }
 
 // ─── POINT 8 : Détection ?paid=true ──────────────────────────────────────────
@@ -642,14 +785,20 @@ window.addEventListener('DOMContentLoaded', function() {
   updateSlider(2);
   updateCreativity(50);
   applyLang('en');
-  updateAtsModeAvailability('mine_utility'); // secteur par défaut = mining → toggle actif
+  updateAtsModeAvailability('mine_utility');
+  selectTier('pro', true); // default selected tier = Pro
+  initExitIntent();
   var params = new URLSearchParams(window.location.search);
   if (params.get('paid') === 'true') {
     window.history.replaceState({}, '', window.location.pathname);
+    var tier = params.get('tier') || 'pro';
     var saved = sessionStorage.getItem('ozcv_form');
     if (saved) {
       var formData = JSON.parse(saved);
       loadFormData(formData);
+      if (tier === 'premium') {
+        document.getElementById('premium-banner').style.display = 'block';
+      }
       document.getElementById('success-banner').style.display = 'flex';
       generateCV(formData);
     } else {
@@ -659,13 +808,31 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 // ─── GENERATE FLOW ────────────────────────────────────────────────────────────
-function handleGenerate() {
+async function handleGenerate() {
   var t = i18n[currentLang];
   var firstName = document.getElementById('firstName').value.trim();
   var lastName = document.getElementById('lastName').value.trim();
   if (!firstName || !lastName) { showError(t.err_name); return; }
   saveFormData();
-  window.location.href = STRIPE_LINK;
+  var btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  try {
+    var res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: selectedTier })
+    });
+    var data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      showError(data.error || 'Payment error. Please try again.');
+      btn.disabled = false;
+    }
+  } catch(e) {
+    showError(t.err_connection);
+    btn.disabled = false;
+  }
 }
 
 async function generateCV(formData) {
@@ -698,6 +865,105 @@ async function generateCV(formData) {
     document.getElementById('gen-btn').disabled = false;
     document.getElementById('success-banner').style.display = 'none';
   }
+}
+
+// ─── TIER SELECTION (Obj 2) ──────────────────────────────────────────────────
+function selectTier(tier, silent) {
+  selectedTier = tier;
+  ['standard','pro','premium'].forEach(function(t) {
+    var card = document.getElementById('tier-' + t);
+    if (card) card.classList.toggle('selected', t === tier);
+  });
+  var prices = { standard: '$10 AUD', pro: '$19 AUD', premium: '$79 AUD' };
+  document.getElementById('btn-generate').textContent = 'GENERATE MY RESUME — ' + (prices[tier] || '$10 AUD');
+  if (!silent) document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── ATS SCORE MODAL (Obj 3) ─────────────────────────────────────────────────
+function openAtsScoreModal() {
+  document.getElementById('ats-score-modal').classList.add('open');
+}
+function closeAtsScoreModal() {
+  document.getElementById('ats-score-modal').classList.remove('open');
+}
+
+async function analyzeAtsCV(file) {
+  if (!file) return;
+  document.getElementById('ats-upload-area').style.display = 'none';
+  document.getElementById('ats-score-loading').style.display = 'block';
+  document.getElementById('score-result-wrap').style.display = 'none';
+  try {
+    var reader = new FileReader();
+    reader.onload = async function(e) {
+      var base64 = e.target.result.split(',')[1];
+      var mediaType = file.type || 'application/pdf';
+      try {
+        var res = await fetch('/api/ats-score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileBase64: base64, mediaType: mediaType })
+        });
+        var result = await res.json();
+        if (result.error) { alert('Erreur : ' + result.error); return; }
+        displayAtsScore(result);
+      } catch(err) {
+        alert('Erreur de connexion. Réessaie.');
+      } finally {
+        document.getElementById('ats-score-loading').style.display = 'none';
+      }
+    };
+    reader.readAsDataURL(file);
+  } catch(e) {
+    document.getElementById('ats-score-loading').style.display = 'none';
+  }
+}
+
+function displayAtsScore(result) {
+  var score = result.score || 0;
+  // SVG circle: circumference 2*π*50 ≈ 314
+  var offset = 314 - (score / 100) * 314;
+  var arc = document.getElementById('score-arc');
+  var arcColor = score < 50 ? '#e74c3c' : score < 75 ? '#f39c12' : '#2ecc71';
+  arc.setAttribute('stroke', arcColor);
+  setTimeout(function() { arc.style.strokeDashoffset = offset; }, 50);
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('score-grade').textContent = result.grade || '';
+  document.getElementById('score-top-issue').textContent = result.top_issue ? '⚠ ' + result.top_issue : '';
+
+  var stEl = document.getElementById('score-strengths');
+  stEl.innerHTML = '<p style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Points forts</p>' +
+    (result.strengths || []).map(function(s) { return '<div class="score-breakdown-item">' + s + '</div>'; }).join('');
+
+  var wkEl = document.getElementById('score-weaknesses');
+  wkEl.innerHTML = '<p style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin:10px 0 6px">Points faibles</p>' +
+    (result.weaknesses || []).map(function(w) { return '<div class="score-breakdown-item weak">' + w + '</div>'; }).join('');
+
+  document.getElementById('score-result-wrap').style.display = 'block';
+}
+
+// ─── EXIT INTENT (Obj 4) ─────────────────────────────────────────────────────
+function initExitIntent() {
+  if (localStorage.getItem('ozcv_exit_shown')) return;
+  var fired = false;
+  document.addEventListener('mouseleave', function(e) {
+    if (fired || e.clientY >= 50) return;
+    fired = true;
+    localStorage.setItem('ozcv_exit_shown', '1');
+    setTimeout(function() {
+      document.getElementById('exit-modal').classList.add('open');
+    }, 200);
+  });
+}
+function closeExitModal() {
+  document.getElementById('exit-modal').classList.remove('open');
+}
+
+// ─── FAQ (Obj 6) ─────────────────────────────────────────────────────────────
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
+  if (!wasOpen) item.classList.add('open');
 }
 
 // ─── ATS AVAILABILITY — active toggle uniquement pour secteurs mining ────────
@@ -1344,6 +1610,90 @@ function downloadPDF() {
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
 </script>
+
+<!-- Obj 6 — FAQ -->
+<div class="faq-section">
+  <div class="faq-heading">FAQ</div>
+  <p class="faq-heading-sub">Questions fréquentes sur OzCV</p>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">C'est quoi un ATS et pourquoi c'est important ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Un ATS (Applicant Tracking System) est un logiciel utilisé par 97% des grandes entreprises australiennes (BHP, Rio Tinto, Fortescue, etc.) pour filtrer les CV avant qu'un humain les lise. 75% des CV sont rejetés à cette étape parce qu'ils sont mal formatés. Notre Mode ATS garantit que ton CV passe le filtre.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Combien de temps pour recevoir mon CV ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Immédiatement après le paiement. Le PDF se télécharge en moins de 30 secondes.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">J'ai un visa Working Holiday, ça marche pour moi ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui, parfaitement. Tous nos templates incluent automatiquement la mention "Full work rights in Australia" et "Working Holiday Visa" adaptée à ta situation.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Je n'ai pas de tickets White Card / Heights / Gas Test, je peux quand même générer un CV mining ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui, mais on te recommande de les passer (350–450 AUD au total) avant de postuler. Notre pop-up te guide vers les organismes les moins chers de Perth/Brisbane.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Vous inventez de la fausse expérience mining ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Non, jamais. On utilise UNIQUEMENT des mines australiennes réelles ou fermées (ex : Koolyanobbing fermé décembre 2024) comme références transférables. Tu peux mentionner que tu as travaillé pour le contractor sans vérification possible côté employeur.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quelle différence entre Standard et Pro ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Standard te donne 1 CV visuel. Pro te donne 2 versions (visuelle + ATS-optimisée) + une cover letter générée. Le Mode ATS triple tes chances de passer le filtre automatique pour les gros employeurs miniers.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">C'est quoi l'appel Premium ?<span class="faq-icon">+</span></button><div class="faq-a"><p>30 minutes en visio ou WhatsApp avec Enzo, fondateur d'OzCV et ancien backpacker FIFO. On crée ton CV ensemble en direct, on cible les bonnes mines (qui recrutent en ce moment), et tu repars avec un plan d'action sur 7 jours.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Remboursement possible ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Si ton CV ne te convient pas, on le refait gratuitement jusqu'à satisfaction. Si tu n'es toujours pas content après 2 révisions, remboursement intégral sous 7 jours.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Je parle pas anglais, ça marche ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui ! Tu remplis le formulaire en français, l'IA traduit et reformule en anglais professionnel australien. Tu peux relire avant téléchargement.</p></div></div>
+
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Mes données sont sécurisées ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui. On ne stocke aucune information personnelle après génération du PDF. Paiement sécurisé via Stripe (PCI-DSS Level 1).</p></div></div>
+</div>
+
+<!-- Obj 3 — ATS Score Modal -->
+<div class="modal-overlay" id="ats-score-modal" onclick="if(event.target===this)closeAtsScoreModal()">
+  <div class="modal-box ats-score-modal-box">
+    <div class="modal-title">🎯 ANALYSE ATS GRATUITE</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5">Upload ton CV actuel (PDF ou DOCX) — résultat en 30 secondes.</p>
+
+    <div class="ats-upload-area" id="ats-upload-area" onclick="document.getElementById('ats-file-input').click()">
+      <div style="font-size:32px">📄</div>
+      <p>Clique ici ou glisse ton CV (PDF / DOCX)</p>
+      <input type="file" id="ats-file-input" accept=".pdf,.docx" onchange="analyzeAtsCV(this.files[0])">
+    </div>
+
+    <div id="ats-score-loading" style="display:none;text-align:center;padding:24px">
+      <div class="spinner" style="margin:0 auto 12px"></div>
+      <p style="font-size:13px;color:var(--muted)">Analyse en cours...</p>
+    </div>
+
+    <div class="score-result-wrap" id="score-result-wrap">
+      <div class="score-circle-outer">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#1E1E1E" stroke-width="10"/>
+          <circle id="score-arc" cx="60" cy="60" r="50" fill="none" stroke="#C9A84C" stroke-width="10"
+            stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+            transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s ease"/>
+          <text id="score-num" x="60" y="66" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="28" fill="#F5F0E8">0</text>
+          <text x="60" y="80" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#888">/100</text>
+        </svg>
+      </div>
+      <p id="score-grade" style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gold);margin-bottom:4px"></p>
+      <p id="score-top-issue" style="text-align:center;font-size:12px;color:#ff8070;margin-bottom:14px"></p>
+      <div id="score-strengths"></div>
+      <div id="score-weaknesses"></div>
+      <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.25);border-radius:6px;padding:12px 16px;margin-top:14px;font-size:12px;color:#6abf6a;text-align:center">
+        Avec OzCV : <strong style="font-size:16px;font-family:'Bebas Neue',sans-serif">95%+</strong> garanti
+      </div>
+      <div class="score-cta-row">
+        <button class="score-cta-btn" onclick="selectTier('standard');closeAtsScoreModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">Standard — $10</button>
+        <button class="score-cta-btn" onclick="selectTier('pro');closeAtsScoreModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">Pro ATS — $19</button>
+      </div>
+    </div>
+
+    <button class="modal-close" onclick="closeAtsScoreModal()">Fermer</button>
+  </div>
+</div>
+
+<!-- Obj 4 — Exit Intent Modal -->
+<div class="modal-overlay" id="exit-modal" onclick="if(event.target===this)closeExitModal()">
+  <div class="modal-box exit-modal-box">
+    <div style="font-size:40px">🎒</div>
+    <div class="exit-title">Attends !</div>
+    <p class="exit-subtitle">Profite de <strong>-20%</strong> sur ton premier CV</p>
+    <div class="exit-code-box">BACKPACKER20</div>
+    <p class="exit-validity">Valable 24h sur tous les paliers · Entre le code sur la page de paiement Stripe</p>
+    <button class="exit-use-btn" onclick="closeExitModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">J'utilise le code</button>
+    <button class="exit-dismiss" onclick="closeExitModal()">Non merci</button>
+  </div>
+</div>
 
 <footer>
   <div class="footer-links">
