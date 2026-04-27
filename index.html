@@ -139,6 +139,12 @@
     .switch input:checked + .slider:before { transform:translateX(23px); background:#2ecc71; }
     .ats-toggle-badge { font-size:10px; background:rgba(46,204,113,0.12); border:1px solid rgba(46,204,113,0.3); color:#2ecc71; border-radius:20px; padding:2px 10px; letter-spacing:1px; font-weight:600; }
     .ats-hint { font-size:12px; color:#2ecc71; margin-bottom:10px; padding:10px 16px; background:rgba(46,204,113,0.06); border:1px solid rgba(46,204,113,0.2); border-radius:6px; display:none; line-height:1.5; }
+    .ats-toggle-wrap.ats-disabled { opacity:0.4; cursor:not-allowed; }
+    .ats-toggle-wrap.ats-disabled .switch,
+    .ats-toggle-wrap.ats-disabled label { pointer-events:none; }
+    .ats-toggle-wrap { position:relative; }
+    .ats-toggle-wrap .ats-tooltip { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(13,13,13,0.97); border:1px solid var(--border); border-radius:6px; padding:7px 14px; font-size:11px; color:var(--muted); white-space:nowrap; pointer-events:none; z-index:200; }
+    .ats-toggle-wrap.ats-disabled:hover .ats-tooltip { display:block; }
   </style>
 </head>
 <body>
@@ -288,7 +294,7 @@
     </div>
   </div>
 
-<div class="ats-toggle-wrap">
+<div class="ats-toggle-wrap" id="ats-toggle-wrap">
   <span class="ats-toggle-label" id="ats-lbl-visual">Mode Visuel</span>
   <label class="switch">
     <input type="checkbox" id="atsModeToggle" onchange="setAtsMode(this.checked)">
@@ -296,6 +302,7 @@
   </label>
   <span class="ats-toggle-label" id="ats-lbl-ats">Mode ATS</span>
   <span class="ats-toggle-badge" id="ats-badge" style="display:none">100% ATS</span>
+  <span class="ats-tooltip" id="ats-tooltip">Mode ATS disponible uniquement pour les secteurs Mining</span>
 </div>
 <div class="ats-hint" id="ats-hint">
   ✓ CV optimisé pour passer les filtres automatiques (PageUp, Workday, Seek, Indeed AU) — Single-column · Helvetica · Keywords mining intégrés
@@ -635,6 +642,7 @@ window.addEventListener('DOMContentLoaded', function() {
   updateSlider(2);
   updateCreativity(50);
   applyLang('en');
+  updateAtsModeAvailability('mine_utility'); // secteur par défaut = mining → toggle actif
   var params = new URLSearchParams(window.location.search);
   if (params.get('paid') === 'true') {
     window.history.replaceState({}, '', window.location.pathname);
@@ -692,6 +700,20 @@ async function generateCV(formData) {
   }
 }
 
+// ─── ATS AVAILABILITY — active toggle uniquement pour secteurs mining ────────
+function updateAtsModeAvailability(type) {
+  var isMining = (type === 'mine_utility' || type === 'mine_entry');
+  var wrap = document.getElementById('ats-toggle-wrap');
+  if (!wrap) return;
+  if (isMining) {
+    wrap.classList.remove('ats-disabled');
+  } else {
+    wrap.classList.add('ats-disabled');
+    // Désactive et remet à zéro si le toggle était ON
+    if (atsMode) setAtsMode(false);
+  }
+}
+
 // ─── JOB / TICKETS ────────────────────────────────────────────────────────────
 function selectJob(el, type) {
   document.querySelectorAll('.job-card').forEach(function(c) { c.classList.remove('active'); });
@@ -699,6 +721,7 @@ function selectJob(el, type) {
   selectedJob = type;
   renderTickets(type);
   openTicketPopup(type);
+  updateAtsModeAvailability(type);
 }
 
 function openTicketPopup(type) {
@@ -1030,135 +1053,150 @@ function downloadMiningPDF() {
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
 }
 
-// ─── ATS MODE PDF — 100% ATS-FRIENDLY, TOUS SECTEURS ─────────────────────────
+// ─── ATS MODE PDF — MINING UNIQUEMENT (mine_utility / mine_entry) ─────────────
+// Fonction SÉPARÉE — ne modifie PAS downloadMiningPDF() ni downloadPDF()
+// Appelée uniquement si atsModeToggle.checked && secteur mining
 function generatePDF_ATS_Mode() {
   if (!cvData) return;
   var job = cvData._job || selectedJob;
+
+  // Sécurité : cette fonction est réservée aux secteurs mining
   var isMining = (job === 'mine_utility' || job === 'mine_entry');
-  var maxPages = isMining ? 2 : 1;
+  if (!isMining) { downloadPDF(); return; }
 
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  // Marges 20mm tous côtés
   var lm = 20, rm = 190, lw = 170, y = 0;
   var hitBottom = false;
 
+  // 2 pages max pour mining
   function chk(n) {
     if (hitBottom) return;
     if (y + (n || 10) > 277) {
-      if (doc.getNumberOfPages() < maxPages) { doc.addPage(); y = 20; }
+      if (doc.getNumberOfPages() < 2) { doc.addPage(); y = 20; }
       else { hitBottom = true; }
     }
   }
 
+  // Headings 15pt bold — strings EXACTS reconnus par ATS
   function secATS(title) {
     if (hitBottom) return;
-    chk(14); if (hitBottom) return;
-    y += 2;
-    doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-    doc.text(title, lm, y); y += 2;
-    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5);
-    doc.line(lm, y, rm, y); y += 6;
-    doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+    chk(18); if (hitBottom) return;
+    y += 3;
+    doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    doc.text(title, lm, y); y += 3;
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.6);
+    doc.line(lm, y, rm, y); y += 7;
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
   }
 
-  function txtATS(str, sz) {
+  // Body 10.5pt — noir pur, zéro gris
+  function txtATS(str) {
     if (hitBottom) return;
-    doc.setFontSize(sz || 10.5);
+    doc.setFontSize(10.5); doc.setTextColor(0, 0, 0);
     doc.splitTextToSize(str, lw).forEach(function(l) {
       chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5.5; }
     });
   }
 
+  // Bullets tiret simple "-"
   function bulATS(str) {
     if (hitBottom) return;
-    doc.setFontSize(10.5);
+    doc.setFontSize(10.5); doc.setTextColor(0, 0, 0);
     doc.splitTextToSize(str, lw - 6).forEach(function(l, i) {
       chk(6);
-      if (!hitBottom) { doc.text(i === 0 ? '-' : ' ', lm, y); doc.text(l, lm + 5, y); y += 5.5; }
+      if (!hitBottom) {
+        doc.text(i === 0 ? '-' : ' ', lm, y);
+        doc.text(l, lm + 5, y);
+        y += 5.5;
+      }
     });
   }
 
+  // Dates : "January 2024 – November 2024" — jamais de slash, jamais "Janvier"
   function atsSpelledDate(period) {
-    // Keep full month names, normalise separator to en-dash
     return period.replace(/\s*[-–—]\s*/g, ' – ').trim();
   }
 
+  // Headlines exacts par secteur (dans le body, jamais en PDF header)
   var atsHeadlines = {
-    mine_utility: 'MINING UTILITY WORKER | FIFO READY | DRUG & ALCOHOL FREE',
-    mine_entry:   'MINE LABOURER | TRADE ASSISTANT | FIFO AVAILABLE',
-    farm:         'FARM WORKER | FRUIT PICKER | HARVEST',
-    hospitality:  'HOSPITALITY ALL-ROUNDER | FOOD HANDLING',
-    roadhouse:    'ROADHOUSE WORKER | REMOTE LOCATIONS READY',
-    station:      'STATION HAND | JACKAROO | LIVESTOCK',
-    construction: 'CONSTRUCTION LABOURER | WHITE CARD | SITE READY'
+    mine_utility: 'FIFO UTILITY WORKER | MINE SITE SUPPORT',
+    mine_entry:   'MINE LABOURER | TRADE ASSISTANT | FIFO READY'
   };
 
-  // ── HEADER (name + headline in body, never PDF header/footer) ──
+  // ── NOM + HEADLINE (dans le body) ──
   y = 20;
   doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text(cvData.name || '', lm, y); y += 7;
+  doc.text(cvData.name || '', lm, y); y += 8;
 
-  doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  var headline = atsHeadlines[job] || cvData.jobTitle || '';
-  doc.text(headline, lm, y); y += 5;
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text(atsHeadlines[job] || 'FIFO MINING WORKER | GENERAL LABOUR', lm, y); y += 5;
 
-  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.7);
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.8);
   doc.line(lm, y, rm, y); y += 7;
 
-  // ── CONTACT (in body) ──
-  doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+  // ── CONTACT (dans le body — jamais en header/footer PDF) ──
+  doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
   var cp = [];
   if (cvData.phone)    cp.push('Phone: ' + cvData.phone);
   if (cvData.email)    cp.push('Email: ' + cvData.email);
   if (cvData.location) cp.push('Location: ' + cvData.location);
   if (cvData.visa)     cp.push('Work Rights: ' + cvData.visa);
-  if (isMining)        cp.push('Availability: FIFO / DIDO | Immediate Start');
+  cp.push('Availability: FIFO / DIDO | Immediate Start | Drug & Alcohol Free');
   doc.splitTextToSize(cp.join('  |  '), lw).forEach(function(l) {
-    chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5; }
+    chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5.5; }
   });
   y += 5;
 
   // ── PROFESSIONAL SUMMARY ──
   secATS('PROFESSIONAL SUMMARY');
-  txtATS(cvData.summary || ''); y += 3;
+  txtATS(cvData.summary || '');
+  y += 4;
 
   // ── CERTIFICATIONS ──
   if (cvData.licences && cvData.licences.length) {
     secATS('CERTIFICATIONS');
     cvData.licences.forEach(function(lic) { bulATS(lic); });
-    y += 2;
+    y += 3;
   }
 
   // ── SKILLS ──
   if (cvData.skills && cvData.skills.length) {
     secATS('SKILLS');
     cvData.skills.forEach(function(s) { bulATS(s); });
-    y += 2;
+    y += 3;
   }
 
   // ── WORK EXPERIENCE ──
   secATS('WORK EXPERIENCE');
-  var expLimit = isMining ? 4 : 3;
-  var dutyLimit = isMining ? 7 : 5;
-  cvData.experience.slice(0, expLimit).forEach(function(e) {
+  cvData.experience.slice(0, 4).forEach(function(e) {
     if (hitBottom) return;
-    chk(20); if (hitBottom) return;
+    chk(24); if (hitBottom) return;
+
+    // Role — date sur la même ligne
     doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
     doc.text(e.role || '', lm, y);
     var dateStr = atsSpelledDate(e.period || '');
-    doc.setFontSize(10); doc.setFont('helvetica', 'normal');
-    doc.text(dateStr, rm - doc.getTextWidth(dateStr), y); y += 5.5;
-    doc.setFontSize(10); doc.setFont('helvetica', 'italic'); doc.setTextColor(0, 0, 0);
-    doc.text(e.company || '', lm, y); y += 5.5;
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+    doc.text(dateStr, rm - doc.getTextWidth(dateStr), y); y += 6;
+
+    // Entreprise — italique mais noir pur (pas de gris)
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'italic'); doc.setTextColor(0, 0, 0);
+    doc.text(e.company || '', lm, y); y += 6;
     doc.setFont('helvetica', 'normal');
-    e.duties.slice(0, dutyLimit).forEach(function(d) { bulATS(d); });
-    y += 3;
+
+    // Bullets (max 7 par poste)
+    e.duties.slice(0, 7).forEach(function(d) { bulATS(d); });
+    y += 4;
   });
 
-  // ── EDUCATION (omit section entirely if empty) ──
+  // ── EDUCATION (section entièrement omise si vide) ──
   var eduStr = cvData.education && cvData.education.trim();
   if (eduStr && !/^(not provided|n\/a|none|na|not specified|-)$/i.test(eduStr)) {
-    secATS('EDUCATION'); txtATS(eduStr); y += 2;
+    secATS('EDUCATION');
+    txtATS(eduStr);
+    y += 3;
   }
 
   // ── LANGUAGES ──
@@ -1166,28 +1204,28 @@ function generatePDF_ATS_Mode() {
   if (langs && langs.length) {
     secATS('LANGUAGES');
     langs.forEach(function(l) { txtATS(l); });
-    y += 2;
+    y += 3;
   }
 
   // ── REFERENCES ──
-  chk(12);
+  chk(14);
   if (!hitBottom) {
-    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.3);
-    doc.line(lm, y, rm, y); y += 5;
-    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+    secATS('REFERENCES');
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
     doc.text('References available upon request', lm, y);
   }
 
-  doc.save((cvData.name || 'CV').replace(/\s+/g, '_') + '_ATS.pdf');
+  doc.save((cvData.name || 'CV').replace(/\s+/g, '_') + '_ATS_Mining.pdf');
 }
 
 // ─── STANDARD PDF — 1-PAGE, NOIR ET BLANC ────────────────────────────────────
 function downloadPDF() {
   if (!cvData) return;
-  // ATS mode: toujours utiliser generatePDF_ATS_Mode() quel que soit le secteur
-  if (atsMode) { generatePDF_ATS_Mode(); return; }
   var job = cvData._job || selectedJob;
-  if (job === 'mine_utility' || job === 'mine_entry') { downloadMiningPDF(); return; }
+  var isMiningJob = (job === 'mine_utility' || job === 'mine_entry');
+  // ATS mode uniquement pour les secteurs mining
+  if (atsMode && isMiningJob) { generatePDF_ATS_Mode(); return; }
+  if (isMiningJob) { downloadMiningPDF(); return; }
 
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit:'mm', format:'a4' });
