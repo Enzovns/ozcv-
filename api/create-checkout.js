@@ -1,9 +1,9 @@
 const Stripe = require('stripe');
 
 const TIERS = {
-  standard: { price: 1000, name: 'OzCV Standard — CV Professionnel' },
-  pro:      { price: 1900, name: 'OzCV Pro — CV + Mode ATS + Cover Letter' },
-  premium:  { price: 7900, name: 'OzCV Premium — CV + Appel Personnalisé 30min' }
+  standard: { price: 1000, name: 'OzCV Standard' },
+  pro:      { price: 1900, name: 'OzCV Pro' },
+  premium:  { price: 7900, name: 'OzCV Premium' }
 };
 
 module.exports = async (req, res) => {
@@ -16,14 +16,13 @@ module.exports = async (req, res) => {
   const { tier } = req.body;
   if (!tier || !TIERS[tier]) return res.status(400).json({ error: 'Invalid tier.' });
 
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key || !key.startsWith('sk_')) {
-    return res.status(500).json({ error: 'Stripe key missing or invalid. Key starts with: ' + (key ? key.substring(0, 7) : 'undefined') });
-  }
-
   try {
-    const stripe = new Stripe(key.trim(), { apiVersion: '2023-10-16' });
-    const base = process.env.BASE_URL || 'https://ozcv.vercel.app';
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2023-10-16',
+      timeout: 20000,
+      maxNetworkRetries: 0
+    });
+    const base = 'https://ozcv.vercel.app';
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -37,13 +36,13 @@ module.exports = async (req, res) => {
         quantity: 1
       }],
       success_url: `${base}/?paid=true&tier=${tier}`,
-      cancel_url:  `${base}/`,
+      cancel_url: `${base}/`,
       allow_promotion_codes: true
     });
 
     res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('Stripe error full:', err);
-    res.status(500).json({ error: err.message, type: err.type, code: err.code });
+    console.error('Stripe error:', err.type, err.code, err.message);
+    res.status(500).json({ error: err.message, type: err.type });
   }
 };
