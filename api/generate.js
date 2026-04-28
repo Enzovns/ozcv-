@@ -27,14 +27,16 @@ module.exports = async (req, res) => {
         `You generate a 100% ATS-optimised Australian CV for the mining sector.\n\n` +
         `STRICT RULES:\n` +
         `- Use these exact section headings: PROFESSIONAL SUMMARY, CERTIFICATIONS, SKILLS, WORK EXPERIENCE, EDUCATION, LANGUAGES, REFERENCES\n` +
-        `- Integrate the following keywords naturally into Skills and Work Experience (exact spelling/capitalisation): ` +
-        `White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, Manual Handling, JSA, SWMS, Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), HSE, PPE compliance, MSDS/SDS, FIFO, DIDO, 12-hour shifts, shutdown, turnaround, Pilbara, open-cut, mobile plant, drug and alcohol testing, pre-employment medical, police clearance, full work rights Australia\n` +
-        `- Every Work Experience bullet must begin with a strong action verb\n` +
+        `- CRITICAL SEPARATION — CERTIFICATIONS vs SKILLS:\n` +
+        `  * "licences" array = ONLY tickets/certifications (White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, First Aid, Police Check / VEVO, Driver's Licence). NEVER put these in skills[].\n` +
+        `  * "skills" array = ONLY operational skills — NO tickets (12-15 items): Manual Handling, HSE Procedures, PPE Compliance, SWMS / JSA / Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), FIFO / DIDO Ready, 12-Hour Shift Capacity, Shutdown & Turnaround Support, Open-Cut Mining Operations, Mobile Plant Awareness, Pilbara Site Experience, Physical Fitness & Endurance, Team Collaboration, Drug & Alcohol Free.\n` +
+        `  * ATS checkers heavily penalise duplicating certifications inside skills. NEVER duplicate.\n` +
+        `- Every Work Experience bullet must begin with a strong action verb and contain at least one keyword from the skills list\n` +
         `- Include measurable metrics where possible (e.g. '200+ accommodation rooms cleaned per week', '12-hour shifts on a 7:7 FIFO roster')\n` +
-        `- Invented mine experience must use ONLY verified closed Australian mines: Koolyanobbing Iron Ore Mine WA (closed December 2024), Ranger Uranium Mine NT (closed January 2022)\n` +
-        `- Always explicitly mention: Drug & Alcohol free, Available for FIFO, visa/work rights\n` +
-        `- EDUCATION: if no education provided, set "education" to "" — NEVER write "Not provided", "N/A" or any placeholder\n` +
-        `- LANGUAGES: always reformat to Australian professional standard regardless of user input — e.g. "French – Native", "English – Professional working proficiency"\n` +
+        `- HEADER: the contact line must be plain: Phone | Email | Location | Work Rights. Do NOT include "Drug & Alcohol Free" in the header.\n` +
+        `- PROFESSIONAL SUMMARY must explicitly state: FIFO availability, Drug & Alcohol free, and work rights\n` +
+        `- EDUCATION: if no education was provided by the candidate, default to "High School Diploma" — NEVER leave empty, NEVER write "Not provided" or "N/A"\n` +
+        `- LANGUAGES: always reformat to Australian professional standard — e.g. "French – Native", "English – Professional working proficiency"\n` +
         `- Follow the exact JSON schema provided in the user message — do not invent new keys\n` +
         `- Return ONLY valid JSON, no markdown, no preamble`;
     } else if (jobDescription && jobDescription.trim()) {

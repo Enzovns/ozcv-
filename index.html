@@ -1527,12 +1527,20 @@ function buildPrompt(f) {
   var pageRule = isMiningJob
     ? 'PAGE CONSTRAINT: This is a 2-PAGE CV maximum. Max 4 work experience entries. Max 6 bullet points per experience. Never go to a 3rd page. '
     : 'PAGE CONSTRAINT (CRITICAL — 1 PAGE ONLY): Max 3 work experience entries. EXACTLY 4 bullet points per experience, no more, no fewer. Summary max 3 sentences. Max 8 skills. All text must be concise to fit on a single A4 page. ';
-  var eduRule = 'EDUCATION RULE: If no education is provided or the field is empty, set "education" to "" (empty string). NEVER write "Not provided", "N/A", "none", "not specified", or any placeholder. Leave it as empty string "". ';
+  var eduRule = (f.atsMode && isMiningJob)
+    ? 'EDUCATION RULE (ATS MODE — CRITICAL): If the candidate provided no education, you MUST default to "High School Diploma". NEVER leave the education field empty in ATS mode — ATS checkers flag missing education as a critical error. '
+    : 'EDUCATION RULE: If no education is provided or the field is empty, set "education" to "" (empty string). NEVER write "Not provided", "N/A", "none", "not specified", or any placeholder. Leave it as empty string "". ';
   var langRule = 'LANGUAGES RULE: NEVER copy the user\'s raw language input verbatim. ALWAYS translate to English and reformat each language as "Language – Level" (e.g. "French – Native", "English – Fluent"). Standard levels: Native / Fluent / Professional working proficiency / Intermediate / Conversational / Basic. Return each language as a separate item in the languages array. Interpret French, mixed-language, or informal input and convert to professional English format. ALL text in the CV must be in the target language (' + f.cvLang + ') — if a user writes in French or any other language, translate everything to ' + f.cvLang + '. ';
   var aiText = (aiTexts[f.job]||aiTexts['farm'])[aiLevel-1];
   var atsMiningRule = '';
   if (f.atsMode && isMiningJob) {
-    atsMiningRule = 'ATS MODE — MANDATORY KEYWORD DENSITY: The "skills" array MUST contain 12-15 items and include at least 10 of these exact keywords (exact spelling/capitalisation): White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, Manual Handling, JSA, SWMS, Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), HSE, PPE compliance, FIFO, DIDO, 12-hour shifts, shutdown, Pilbara, open-cut, mobile plant, drug and alcohol testing, pre-employment medical, full work rights Australia. Each "duties" bullet MUST contain at least one ATS keyword from this list. The "summary" MUST reference FIFO availability and Drug & Alcohol compliance explicitly. ';
+    atsMiningRule =
+      'ATS MODE — STRICT SEPARATION CERTIFICATIONS vs SKILLS: ' +
+      'The "licences" array MUST contain ONLY certifications/tickets (exact spelling): White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, First Aid, Police Check / VEVO, Driver\'s Licence. NEVER put these in skills[]. ' +
+      'The "skills" array MUST contain ONLY operational skills (12-15 items, NO tickets): Manual Handling, HSE Procedures, PPE Compliance, SWMS / JSA / Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), FIFO / DIDO Ready, 12-Hour Shift Capacity, Shutdown & Turnaround Support, Open-Cut Mining Operations, Mobile Plant Awareness, Pilbara Site Experience, Physical Fitness & Endurance, Team Collaboration, Drug & Alcohol Free. ' +
+      'Each "duties" bullet MUST begin with a strong action verb and contain at least one ATS keyword from the skills list above. ' +
+      'The "summary" MUST explicitly mention: FIFO availability, Drug & Alcohol compliance, and work rights. ' +
+      'NEVER duplicate certifications from licences[] into skills[]. ATS checkers penalise duplication heavily. ';
   }
   return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+atsMiningRule+rules+' '+pageRule+eduRule+langRule+'Return ONLY valid JSON no preamble: '+schema;
 }
@@ -1785,7 +1793,7 @@ function generatePDF_ATS_Mode() {
   if (cvData.email)    cp.push('Email: ' + cvData.email);
   if (cvData.location) cp.push('Location: ' + cvData.location);
   if (cvData.visa)     cp.push('Work Rights: ' + cvData.visa);
-  cp.push('Availability: FIFO / DIDO | Immediate Start | Drug & Alcohol Free');
+  cp.push('Availability: FIFO / DIDO | Immediate Start');
   doc.splitTextToSize(cp.join('  |  '), lw).forEach(function(l) {
     chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5.5; }
   });
