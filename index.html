@@ -211,7 +211,7 @@
     .ats-upload-area { border:2px dashed var(--border); border-radius:8px; padding:28px; text-align:center; cursor:pointer; transition:border-color 0.2s; margin-bottom:14px; }
     .ats-upload-area:hover, .ats-upload-area.drag { border-color:var(--gold); }
     .ats-upload-area p { font-size:12px; color:var(--muted); margin-top:8px; }
-    .score-result-wrap { display:none; max-height:70vh; overflow-y:auto; }
+    .score-result-wrap { display:none; max-height:65vh; overflow-y:auto; }
     .score-circle-outer { display:flex; justify-content:center; margin:12px 0 6px; }
     .score-breakdown-item { font-size:12px; padding:8px 0; border-bottom:1px solid var(--border); color:var(--muted); display:flex; gap:8px; align-items:flex-start; }
     .score-breakdown-item::before { content:'✓'; color:#6abf6a; flex-shrink:0; }
@@ -1103,6 +1103,7 @@ function selectTier(tier, silent) {
   });
   var prices = { standard: '$10 AUD', pro: '$19 AUD', premium: '$79 AUD' };
   document.getElementById('btn-generate').textContent = 'GENERATE MY RESUME — ' + (prices[tier] || '$10 AUD');
+  updateAtsModeAvailability(selectedJob);
   if (!silent) document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -1172,11 +1173,11 @@ function displayAtsScore(result) {
   document.getElementById('score-ozcv').textContent = ozcvScore + '/100 ✓';
 
   var stEl = document.getElementById('score-strengths');
-  stEl.innerHTML = '<p style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Points forts</p>' +
+  stEl.innerHTML = '<p style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Points forts</p>' +
     (result.strengths || []).map(function(s) { return '<div class="score-breakdown-item">' + s + '</div>'; }).join('');
 
   var wkEl = document.getElementById('score-weaknesses');
-  wkEl.innerHTML = '<p style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin:10px 0 6px">À améliorer</p>' +
+  wkEl.innerHTML = '<p style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:10px 0 6px">À améliorer</p>' +
     (result.weaknesses || []).map(function(w) { return '<div class="score-breakdown-item weak">' + w + '</div>'; }).join('');
 
   document.getElementById('score-result-wrap').style.display = 'block';
@@ -1238,7 +1239,7 @@ function toggleFaq(btn) {
 // ─── ATS AVAILABILITY — gestion secteur + tier ───────────────────────────────
 function updateAtsModeAvailability(type) {
   var isMining = (type === 'mine_utility' || type === 'mine_entry');
-  var hasAccess = (userTier === 'pro' || userTier === 'premium');
+  var hasAccess = (userTier === 'pro' || userTier === 'premium' || selectedTier === 'pro' || selectedTier === 'premium');
   var wrap = document.getElementById('ats-toggle-wrap');
   var tooltip = document.getElementById('ats-tooltip');
   if (!wrap) return;
@@ -2032,8 +2033,8 @@ function downloadPDF() {
 
     <div class="score-result-wrap" id="score-result-wrap">
       <div style="text-align:center;margin:8px 0 4px">
-        <span id="score-big" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);line-height:1">0</span>
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--muted)">/100</span>
+        <span id="score-big" style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);line-height:1">0</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted)">/100</span>
       </div>
       <div class="score-circle-outer">
         <svg viewBox="0 0 120 120" width="120" height="120">
@@ -2045,7 +2046,7 @@ function downloadPDF() {
           <text x="60" y="80" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#888">/100</text>
         </svg>
       </div>
-      <p id="score-grade" style="text-align:center;font-size:16px;color:var(--text);margin-bottom:6px;line-height:1.4;font-weight:600"></p>
+      <p id="score-grade" style="text-align:center;font-size:15px;color:var(--text);margin-bottom:6px;line-height:1.4;font-weight:600"></p>
       <p id="score-top-issue" style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5"></p>
       <div id="score-strengths"></div>
       <div id="score-weaknesses"></div>
