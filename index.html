@@ -1017,7 +1017,8 @@ window.addEventListener('DOMContentLoaded', function() {
     var tier = params.get('tier') || 'pro';
     localStorage.setItem('ozcv_tier', tier);
     userTier = tier;
-    var saved = localStorage.getItem('ozcv_form');
+    var fd = params.get('fd');
+    var saved = fd ? decodeURIComponent(fd) : localStorage.getItem('ozcv_form');
     if (saved) {
       var formData = JSON.parse(saved);
       loadFormData(formData);
@@ -1043,10 +1044,11 @@ async function handleGenerate() {
   var btn = document.getElementById('gen-btn');
   btn.disabled = true;
   try {
+    var formBackup = localStorage.getItem('ozcv_form') || '{}';
     var res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tier: selectedTier })
+      body: JSON.stringify({ tier: selectedTier, formData: formBackup })
     });
     var data = await res.json();
     if (data.url) {
