@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OzCV – Australian CV Generator for Backpackers | Mining, Hospitality, Farm Work</title>
-  <meta name="description" content="Create a professional Australian CV in minutes. Optimised for mining, FIFO, hospitality, farm work, roadhouse and construction jobs. Download your PDF for $5 AUD.">
+  <title>OzCV – ATS-Friendly Australian CV Generator | Mining, Hospitality, Farm Work</title>
+  <meta name="description" content="Create a professional ATS-friendly Australian CV in minutes. Optimised for mining, FIFO, hospitality, farm work, roadhouse and construction jobs. Download your PDF for $5 AUD.">
   <meta name="keywords" content="australian cv, resume australia, FIFO resume, mining cv, backpacker australia job, working holiday visa cv, farm work resume, roadhouse resume, station hand cv, construction resume australia">
   <meta name="author" content="OzCV">
   <meta name="robots" content="index, follow">
@@ -178,9 +178,8 @@
     .ats-toggle-wrap { position:relative; }
     .ats-toggle-wrap .ats-tooltip { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(13,13,13,0.97); border:1px solid var(--border); border-radius:6px; padding:7px 14px; font-size:11px; color:var(--muted); white-space:nowrap; pointer-events:none; z-index:200; }
     .ats-toggle-wrap.ats-disabled:hover .ats-tooltip { display:block; }
-    /* ── Trust Band (Obj 5) ── */
-    .trust-band { background:rgba(201,168,76,0.04); border-bottom:1px solid var(--border); padding:10px 24px; text-align:center; font-size:11.5px; color:var(--muted); letter-spacing:0.4px; line-height:1.8; }
-    .trust-band strong { color:var(--gold); }
+    /* ── Trust Band ── */
+    .trust-band { background:#f0f4f8; padding:12px; text-align:center; font-size:12px; color:#333; letter-spacing:0.4px; line-height:1.8; }
     /* ── Pricing (Obj 2) ── */
     .pricing-section { margin-bottom:24px; }
     .pricing-label { font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,4vw,28px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
@@ -263,16 +262,11 @@
   </div>
 </nav>
 
-<!-- Obj 5 — Trust band -->
-<div class="trust-band">
-  <strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimisé pour <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>
-</div>
-
 <div class="hero">
   <!-- POINT 1 : Badge hero -->
   <div class="hero-badge">AI-Powered • Made for Australia</div>
   <h1 id="hero-title">Your Resume.<br><span id="hero-title-span">Built in Seconds.</span></h1>
-  <p id="hero-sub">Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
+  <p id="hero-sub">Professional ATS-friendly Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
   <div class="steps">
     <div class="step"><div class="step-num">1</div><span id="step1">Choose job type</span></div>
     <div class="step-divider">→</div>
@@ -280,6 +274,10 @@
     <div class="step-divider">→</div>
     <div class="step"><div class="step-num">3</div><span id="step3">Download PDF</span></div>
   </div>
+</div>
+
+<div id="trust-band" class="trust-band">
+  <strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimised for <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>
 </div>
 
 <div class="container">
@@ -307,8 +305,8 @@
 
   <!-- Obj 2 — Pricing -->
   <div class="pricing-section">
-    <div class="pricing-label">CHOOSE YOUR PLAN</div>
-    <p class="pricing-sub">100% ATS-Friendly — Professional Australian CVs — Instant download</p>
+    <div class="pricing-label" id="pricing-label">CHOOSE YOUR PLAN</div>
+    <p class="pricing-sub" id="pricing-sub">100% ATS-Friendly — Professional Australian CVs — Instant download</p>
     <div class="pricing-grid">
 
       <!-- Standard -->
@@ -563,7 +561,7 @@ var i18n = {
     hero_badge: 'AI-Powered • Made for Australia',
     hero_title: 'Your Resume.',
     hero_span: 'Built in Seconds.',
-    hero_sub: 'Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
+    hero_sub: 'Professional ATS-friendly Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
     step1: 'Choose job type', step2: 'Fill your info', step3: 'Download PDF',
     label_jobtype: 'SELECT JOB TYPE',
     label_tickets: 'Tickets & Certifications',
@@ -614,13 +612,38 @@ var i18n = {
     jc_construction: 'Construction', jcs_construction: 'Labour, Trade',
     experience_placeholder: 'e.g. 6 months on a cattle station in QLD, bar work in a backpacker hostel...',
     languages_placeholder: 'e.g. English, French, Spanish...',
-    education_placeholder: 'e.g. High School Diploma – Belgium'
+    education_placeholder: 'e.g. High School Diploma – Belgium',
+    trust_band: '<strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimised for <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>',
+    pricing_label: 'CHOOSE YOUR PLAN',
+    pricing_sub: '100% ATS-Friendly — Professional Australian CVs — Instant download',
+    faq_heading: 'FAQ',
+    faq_sub: 'Frequently asked questions about OzCV',
+    faq_q1: 'What is an ATS and why does it matter?',
+    faq_a1: 'An ATS (Applicant Tracking System) is software used by 97% of large Australian companies to filter CVs before a human reads them. 75% of CVs are rejected at this stage. Our ATS Mode guarantees your CV passes the filter.',
+    faq_q2: 'How quickly will I receive my CV?',
+    faq_a2: 'Immediately after payment. The PDF downloads in less than 30 seconds.',
+    faq_q3: 'I have a Working Holiday visa, does it work for me?',
+    faq_a3: 'Yes. All our templates automatically include the mention of your visa and work rights.',
+    faq_q4: "I don't have my mining tickets yet, can I still generate a CV?",
+    faq_a4: 'Yes. We recommend getting them before applying (350–450 AUD in total). The Pro pack includes advice on finding the cheapest providers near you.',
+    faq_q5: 'Do you invent fake experience?',
+    faq_a5: 'No. We only use real or closed Australian mines. Your CV remains honest and verifiable.',
+    faq_q6: "What's the difference between Standard and Pro?",
+    faq_a6: 'Standard = 1 visual CV. Pro = visual CV + ATS-optimised version + cover letter. ATS Mode triples your chances of passing the automated filters of major mining employers.',
+    faq_q7: 'What is the Premium call?',
+    faq_a7: '30 minutes with Enzo, OzCV founder and ex-FIFO backpacker. Send "PREMIUM" on WhatsApp at +61 493 496 091 after payment. We create your CV together and target the mines hiring right now.',
+    faq_q8: 'Can I get a refund?',
+    faq_a8: "If you're not happy with your CV, we'll redo it for free. After 2 revisions without agreement, full refund within 7 days.",
+    faq_q9: "I don't speak English well, does it work?",
+    faq_a9: 'Yes. You fill the form in French, the AI translates into professional Australian English.',
+    faq_q10: 'Is my data secure?',
+    faq_a10: 'Yes. No personal data is stored after generation. Secure payment via Stripe (PCI-DSS Level 1).'
   },
   fr: {
     hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
     hero_title: 'Ton CV.',
     hero_span: 'Prêt en Secondes.',
-    hero_sub: 'CV australiens professionnels pour les mines, l\'agriculture, l\'hôtellerie et plus. Optimisé par IA, prêt à envoyer.',
+    hero_sub: "CV australiens ATS-friendly pour les mines, l'agriculture, l'hôtellerie et plus. Optimisé par IA, prêt à envoyer.",
     step1: 'Choisis le poste', step2: 'Remplis tes infos', step3: 'Télécharge le PDF',
     label_jobtype: 'TYPE DE POSTE',
     label_tickets: 'Tickets & Certifications',
@@ -671,7 +694,32 @@ var i18n = {
     jc_construction: 'Construction', jcs_construction: 'Manœuvre, Métier',
     experience_placeholder: 'ex : 6 mois dans une ferme en QLD, service au bar dans un hostel...',
     languages_placeholder: 'ex : Français, Anglais, Espagnol...',
-    education_placeholder: 'ex : Baccalauréat – Belgique'
+    education_placeholder: 'ex : Baccalauréat – Belgique',
+    trust_band: '<strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimisé pour <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>',
+    pricing_label: 'CHOISIS TON PACK',
+    pricing_sub: '100% ATS-Friendly — CV australiens professionnels — Téléchargement immédiat',
+    faq_heading: 'FAQ',
+    faq_sub: 'Questions fréquentes sur OzCV',
+    faq_q1: "C'est quoi un ATS et pourquoi c'est important ?",
+    faq_a1: "Un ATS (Applicant Tracking System) est un logiciel utilisé par 97% des grandes entreprises australiennes pour filtrer les CV avant qu'un humain les lise. 75% des CV sont rejetés à cette étape. Notre Mode ATS garantit que ton CV passe le filtre.",
+    faq_q2: 'Combien de temps pour recevoir mon CV ?',
+    faq_a2: 'Immédiatement après le paiement. Le PDF se télécharge en moins de 30 secondes.',
+    faq_q3: "J'ai un visa Working Holiday, ça marche ?",
+    faq_a3: 'Oui. Tous nos templates incluent automatiquement la mention de ton visa et de tes droits de travail.',
+    faq_q4: "Je n'ai pas encore mes tickets mining, je peux quand même générer un CV ?",
+    faq_a4: "Oui. On te recommande de les passer avant de postuler (350–450 AUD au total). Le pack Pro inclut des conseils pour trouver les organismes les moins chers près de chez toi.",
+    faq_q5: 'Vous inventez de la fausse expérience ?',
+    faq_a5: "Non. On utilise uniquement des mines australiennes réelles ou fermées. Ton CV reste honnête et vérifiable.",
+    faq_q6: 'Quelle différence entre Standard et Pro ?',
+    faq_a6: 'Standard = 1 CV visuel. Pro = CV visuel + version ATS-optimisée + cover letter. Le Mode ATS triple tes chances de passer les filtres des grands employeurs miniers.',
+    faq_q7: "C'est quoi l'appel Premium ?",
+    faq_a7: '30 minutes avec Enzo, fondateur d\'OzCV et ex-backpacker FIFO. Tu envoies "PREMIUM" sur WhatsApp au +61 493 496 091 après paiement. On crée ton CV ensemble et on cible les mines qui recrutent en ce moment.',
+    faq_q8: 'Remboursement possible ?',
+    faq_a8: "Si ton CV ne te convient pas, on le refait gratuitement. Après 2 révisions sans accord, remboursement intégral sous 7 jours.",
+    faq_q9: "Je parle peu anglais, ça marche ?",
+    faq_a9: "Oui. Tu remplis le formulaire en français, l'IA traduit en anglais professionnel australien.",
+    faq_q10: 'Mes données sont sécurisées ?',
+    faq_a10: 'Oui. Aucune donnée personnelle stockée après génération. Paiement sécurisé via Stripe (PCI-DSS Level 1).'
   }
 };
 
@@ -750,12 +798,27 @@ function applyLang(lang) {
   document.getElementById('experience').placeholder = t.experience_placeholder;
   document.getElementById('languages').placeholder = t.languages_placeholder;
   document.getElementById('education').placeholder = t.education_placeholder;
+  // Trust band
+  if (t.trust_band) document.getElementById('trust-band').innerHTML = t.trust_band;
+  // Pricing section
+  document.getElementById('pricing-label').textContent = t.pricing_label;
+  document.getElementById('pricing-sub').textContent = t.pricing_sub;
+  // FAQ section
+  document.getElementById('faq-heading').textContent = t.faq_heading;
+  document.getElementById('faq-heading-sub').textContent = t.faq_sub;
+  for (var fi = 1; fi <= 10; fi++) {
+    var fqEl = document.getElementById('faq-q' + fi);
+    var faEl = document.getElementById('faq-a' + fi);
+    if (fqEl && fqEl.childNodes[0]) fqEl.childNodes[0].textContent = t['faq_q' + fi];
+    if (faEl) faEl.textContent = t['faq_a' + fi];
+  }
   updateSlider(document.getElementById('ai-slider').value);
   updateCreativity(document.getElementById('creativity-slider').value);
 }
 
 function setLang(lang) {
   currentLang = lang;
+  localStorage.setItem('ozcv_lang', lang);
   document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
   document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
   applyLang(lang);
@@ -843,7 +906,12 @@ window.addEventListener('DOMContentLoaded', function() {
   renderTickets('mine_utility');
   updateSlider(2);
   updateCreativity(50);
-  applyLang('en');
+  var savedLang = localStorage.getItem('ozcv_lang') || 'en';
+  currentLang = savedLang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+  var savedLangBtn = document.querySelector('.lang-btn[onclick="setLang(\''+savedLang+'\')"]');
+  if (savedLangBtn) savedLangBtn.classList.add('active');
+  applyLang(savedLang);
   updateAtsModeAvailability('mine_utility');
   selectTier('pro', true); // default selected tier = Pro
   initExitIntent();
@@ -1730,30 +1798,30 @@ function downloadPDF() {
 }
 </script>
 
-<!-- Obj 6 — FAQ -->
+<!-- FAQ -->
 <div class="faq-section">
-  <div class="faq-heading">FAQ</div>
-  <p class="faq-heading-sub">Questions fréquentes sur OzCV</p>
+  <div class="faq-heading" id="faq-heading">FAQ</div>
+  <p class="faq-heading-sub" id="faq-heading-sub">Questions fréquentes sur OzCV</p>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">C'est quoi un ATS et pourquoi c'est important ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Un ATS (Applicant Tracking System) est un logiciel utilisé par 97% des grandes entreprises australiennes (BHP, Rio Tinto, Fortescue, etc.) pour filtrer les CV avant qu'un humain les lise. 75% des CV sont rejetés à cette étape parce qu'ils sont mal formatés. Notre Mode ATS garantit que ton CV passe le filtre.</p></div></div>
+  <div class="faq-item"><button id="faq-q1" class="faq-q" onclick="toggleFaq(this)">C'est quoi un ATS et pourquoi c'est important ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a1">Un ATS (Applicant Tracking System) est un logiciel utilisé par 97% des grandes entreprises australiennes pour filtrer les CV avant qu'un humain les lise. 75% des CV sont rejetés à cette étape. Notre Mode ATS garantit que ton CV passe le filtre.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Combien de temps pour recevoir mon CV ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Immédiatement après le paiement. Le PDF se télécharge en moins de 30 secondes.</p></div></div>
+  <div class="faq-item"><button id="faq-q2" class="faq-q" onclick="toggleFaq(this)">Combien de temps pour recevoir mon CV ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a2">Immédiatement après le paiement. Le PDF se télécharge en moins de 30 secondes.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">J'ai un visa Working Holiday, ça marche pour moi ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui, parfaitement. Tous nos templates incluent automatiquement la mention "Full work rights in Australia" et "Working Holiday Visa" adaptée à ta situation.</p></div></div>
+  <div class="faq-item"><button id="faq-q3" class="faq-q" onclick="toggleFaq(this)">J'ai un visa Working Holiday, ça marche ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a3">Oui. Tous nos templates incluent automatiquement la mention de ton visa et de tes droits de travail.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Je n'ai pas de tickets White Card / Heights / Gas Test, je peux quand même générer un CV mining ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui, mais on te recommande de les passer (350–450 AUD au total) avant de postuler. Notre pop-up te guide vers les organismes les moins chers de Perth/Brisbane.</p></div></div>
+  <div class="faq-item"><button id="faq-q4" class="faq-q" onclick="toggleFaq(this)">Je n'ai pas encore mes tickets mining, je peux quand même générer un CV ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a4">Oui. On te recommande de les passer avant de postuler (350–450 AUD au total). Le pack Pro inclut des conseils pour trouver les organismes les moins chers près de chez toi.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Vous inventez de la fausse expérience mining ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Non, jamais. On utilise UNIQUEMENT des mines australiennes réelles ou fermées (ex : Koolyanobbing fermé décembre 2024) comme références transférables. Tu peux mentionner que tu as travaillé pour le contractor sans vérification possible côté employeur.</p></div></div>
+  <div class="faq-item"><button id="faq-q5" class="faq-q" onclick="toggleFaq(this)">Vous inventez de la fausse expérience ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a5">Non. On utilise uniquement des mines australiennes réelles ou fermées. Ton CV reste honnête et vérifiable.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quelle différence entre Standard et Pro ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Standard te donne 1 CV visuel. Pro te donne 2 versions (visuelle + ATS-optimisée) + une cover letter générée. Le Mode ATS triple tes chances de passer le filtre automatique pour les gros employeurs miniers.</p></div></div>
+  <div class="faq-item"><button id="faq-q6" class="faq-q" onclick="toggleFaq(this)">Quelle différence entre Standard et Pro ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a6">Standard = 1 CV visuel. Pro = CV visuel + version ATS-optimisée + cover letter. Le Mode ATS triple tes chances de passer les filtres des grands employeurs miniers.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">C'est quoi l'appel Premium ?<span class="faq-icon">+</span></button><div class="faq-a"><p>30 minutes en visio ou WhatsApp avec Enzo, fondateur d'OzCV et ancien backpacker FIFO. On crée ton CV ensemble en direct, on cible les bonnes mines (qui recrutent en ce moment), et tu repars avec un plan d'action sur 7 jours.</p></div></div>
+  <div class="faq-item"><button id="faq-q7" class="faq-q" onclick="toggleFaq(this)">C'est quoi l'appel Premium ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a7">30 minutes avec Enzo, fondateur d'OzCV et ex-backpacker FIFO. Tu envoies "PREMIUM" sur WhatsApp au +61 493 496 091 après paiement. On crée ton CV ensemble et on cible les mines qui recrutent en ce moment.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Remboursement possible ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Si ton CV ne te convient pas, on le refait gratuitement jusqu'à satisfaction. Si tu n'es toujours pas content après 2 révisions, remboursement intégral sous 7 jours.</p></div></div>
+  <div class="faq-item"><button id="faq-q8" class="faq-q" onclick="toggleFaq(this)">Remboursement possible ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a8">Si ton CV ne te convient pas, on le refait gratuitement. Après 2 révisions sans accord, remboursement intégral sous 7 jours.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Je parle pas anglais, ça marche ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui ! Tu remplis le formulaire en français, l'IA traduit et reformule en anglais professionnel australien. Tu peux relire avant téléchargement.</p></div></div>
+  <div class="faq-item"><button id="faq-q9" class="faq-q" onclick="toggleFaq(this)">Je parle peu anglais, ça marche ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a9">Oui. Tu remplis le formulaire en français, l'IA traduit en anglais professionnel australien.</p></div></div>
 
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Mes données sont sécurisées ?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oui. On ne stocke aucune information personnelle après génération du PDF. Paiement sécurisé via Stripe (PCI-DSS Level 1).</p></div></div>
+  <div class="faq-item"><button id="faq-q10" class="faq-q" onclick="toggleFaq(this)">Mes données sont sécurisées ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a10">Oui. Aucune donnée personnelle stockée après génération. Paiement sécurisé via Stripe (PCI-DSS Level 1).</p></div></div>
 </div>
 
 <!-- Obj 3 — ATS Score Modal -->
