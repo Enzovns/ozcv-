@@ -963,7 +963,7 @@ function saveFormData() {
     atsMode: atsMode,
     tier: selectedTier
   };
-  sessionStorage.setItem('ozcv_form', JSON.stringify(data));
+  localStorage.setItem('ozcv_form', JSON.stringify(data));
 }
 
 function loadFormData(data) {
@@ -1017,7 +1017,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var tier = params.get('tier') || 'pro';
     localStorage.setItem('ozcv_tier', tier);
     userTier = tier;
-    var saved = sessionStorage.getItem('ozcv_form');
+    var saved = localStorage.getItem('ozcv_form');
     if (saved) {
       var formData = JSON.parse(saved);
       loadFormData(formData);
@@ -1083,7 +1083,7 @@ async function generateCV(formData) {
     renderCV(cvData);
     document.getElementById('cv-result').style.display = 'block';
     document.getElementById('cv-result').scrollIntoView({ behavior: 'smooth' });
-    sessionStorage.removeItem('ozcv_form');
+    localStorage.removeItem('ozcv_form');
   } catch(e) {
     showError(i18n[currentLang].err_connection);
   } finally {
