@@ -16,8 +16,13 @@ module.exports = async (req, res) => {
   const { tier } = req.body;
   if (!tier || !TIERS[tier]) return res.status(400).json({ error: 'Invalid tier.' });
 
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key || !key.startsWith('sk_')) {
+    return res.status(500).json({ error: 'Stripe key missing or invalid. Key starts with: ' + (key ? key.substring(0, 7) : 'undefined') });
+  }
+
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
+    const stripe = new Stripe(key.trim(), { apiVersion: '2023-10-16' });
     const base = process.env.BASE_URL || 'https://ozcv.vercel.app';
 
     const session = await stripe.checkout.sessions.create({
@@ -38,7 +43,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('Stripe error:', err.message);
-    res.status(500).json({ error: err.message });
+    console.error('Stripe error full:', err);
+    res.status(500).json({ error: err.message, type: err.type, code: err.code });
   }
 };
