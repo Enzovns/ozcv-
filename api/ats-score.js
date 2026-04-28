@@ -10,59 +10,56 @@ module.exports = async (req, res) => {
   const { fileBase64, mediaType } = req.body;
   if (!fileBase64) return res.status(400).json({ error: 'Missing file data.' });
 
-  const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-  const mtype = validTypes.includes(mediaType) ? mediaType : 'application/pdf';
-
   try {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-5',
       max_tokens: 1200,
+      system: 'Tu es un expert ATS australien. Retourne UNIQUEMENT un JSON valide, sans markdown, sans backticks, sans texte avant ou après le JSON.',
       messages: [{
         role: 'user',
         content: [
           {
             type: 'document',
-            source: { type: 'base64', media_type: mtype, data: fileBase64 }
+            source: { type: 'base64', media_type: 'application/pdf', data: fileBase64 }
           },
           {
             type: 'text',
-            text: `You are an ATS (Applicant Tracking System) expert specialising in Australian job applications — especially mining, FIFO, construction, hospitality, and farm work.
-
-Analyse this CV for ATS compatibility and return ONLY valid JSON (no markdown, no preamble):
-
+            text: `Analyse ce CV pour le marché australien mining/FIFO. Retourne ce JSON exact :
 {
-  "score": <integer 0-100>,
-  "grade": "<Poor|Fair|Good|Excellent>",
-  "strengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
-  "weaknesses": [
-    "<specific weakness 1 — formatting, keyword, structure>",
-    "<specific weakness 2>",
-    "<specific weakness 3>",
-    "<specific weakness 4>",
-    "<specific weakness 5>"
-  ],
-  "ozcv_score": 95,
-  "top_issue": "<single most critical fix in one sentence>"
+  "score": <number 0-100>,
+  "strengths": ["<point fort 1>", "<point fort 2>", "<point fort 3>"],
+  "weaknesses": ["<faiblesse 1>", "<faiblesse 2>", "<faiblesse 3>", "<faiblesse 4>", "<faiblesse 5>"],
+  "scoreWithOzCV": <number entre 90 et 97>,
+  "summary": "<1 phrase encourageante en français>"
 }
 
-Scoring criteria:
-- Layout (single column, no tables/text boxes, no headers/footers): 25 pts
-- Keywords density (industry-relevant, Australian context): 25 pts
-- File format compatibility: 10 pts
-- Section structure (standard headings, reverse chronological): 20 pts
-- Contact info accessibility: 10 pts
-- Date format consistency: 10 pts
+Critères de scoring (commence à 100, déduis les pénalités, ajoute les bonus) :
+-15 si mise en page multi-colonnes ou tableaux
+-10 si icônes ou emojis présents dans le CV
+-10 si dates en français ou format non-standard (ex: jan/2024 au lieu de January 2024)
+-10 si 'Not provided' dans une section quelconque
+-5 par keyword ATS mining manquant parmi : White Card, SWMS, JSA, HSE, PPE, FIFO, drug and alcohol
+-5 si pas de mention visa ou work rights
+-5 si pas de 'References available upon request'
++10 si headings standards exacts présents : PROFESSIONAL SUMMARY, SKILLS, WORK EXPERIENCE, CERTIFICATIONS, REFERENCES
++10 si métriques chiffrées présentes dans Work Experience (ex: '200 rooms/week', '12-hour shifts')
 
-Be specific and actionable in weaknesses. Always set ozcv_score to 95.`
+Score final entre 0 et 100. scoreWithOzCV toujours entre 90 et 97.`
           }
         ]
       }]
     });
 
-    const raw = message.content[0].text.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(raw);
+    let result;
+    try {
+      const raw = message.content[0].text.replace(/```json|```/g, '').trim();
+      result = JSON.parse(raw);
+    } catch (parseErr) {
+      return res.status(200).json({ error: 'Analyse impossible, réessaie' });
+    }
+
     res.status(200).json(result);
   } catch (err) {
     console.error('ATS score error:', err.message);
