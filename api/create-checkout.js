@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
         },
         quantity: 1
       }],
-      success_url: `${base}/success.html?tier=${tier}`,
+      success_url: `${base}/?paid=true&tier=${tier}`,
       cancel_url:  `${base}/`,
       allow_promotion_codes: true
     });
