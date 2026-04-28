@@ -1,9 +1,9 @@
 const Stripe = require('stripe');
 
 const TIERS = {
-  standard: { price: 1000, name: 'OzCV Standard — Professional CV' },
-  pro:      { price: 1900, name: 'OzCV Pro — CV + ATS Mode + Cover Letter' },
-  premium:  { price: 7900, name: 'OzCV Premium — 1-on-1 Session with Enzo' }
+  standard: { price: 1000, name: 'OzCV Standard — CV Professionnel' },
+  pro:      { price: 1900, name: 'OzCV Pro — CV + Mode ATS + Cover Letter' },
+  premium:  { price: 7900, name: 'OzCV Premium — CV + Appel Personnalisé 30min' }
 };
 
 module.exports = async (req, res) => {
@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
         },
         quantity: 1
       }],
-      success_url: `${base}/?paid=true&tier=${tier}`,
+      success_url: `${base}/success.html?tier=${tier}`,
       cancel_url:  `${base}/`,
       allow_promotion_codes: true
     });
