@@ -2,7 +2,7 @@
   "name": "ozcv",
   "version": "1.0.0",
   "dependencies": {
-    "stripe": "^14.0.0",
+    "stripe": "14.21.0",
     "@anthropic-ai/sdk": "^0.20.0"
   }
 }
