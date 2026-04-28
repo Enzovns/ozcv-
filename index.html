@@ -246,6 +246,11 @@
     .faq-a { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
     .faq-item.open .faq-a { max-height:400px; }
     .faq-a p { padding:0 20px 16px; font-size:13px; color:var(--muted); line-height:1.75; }
+    /* ── ATS Tier Locked (mining sector but not Pro/Premium) ── */
+    .ats-toggle-wrap.ats-tier-locked { opacity:0.5; }
+    .ats-toggle-wrap.ats-tier-locked:hover .ats-tooltip { display:block; }
+    /* ── Post-download message ── */
+    .post-dl-msg { background:rgba(46,204,113,0.08); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; font-size:13px; color:#6abf6a; margin-top:12px; line-height:1.6; }
   </style>
 </head>
 <body>
@@ -499,7 +504,22 @@
       <button class="btn-download" onclick="downloadPDF()" id="btn-download">⬇ DOWNLOAD PDF</button>
       <button class="btn-new" onclick="resetForm()" id="btn-new">← New Resume</button>
     </div>
+    <div id="post-download-msg" class="post-dl-msg" style="display:none"></div>
     <div id="cv-paper"></div>
+  </div>
+</div>
+
+<!-- ATS Upgrade Modal -->
+<div class="modal-overlay" id="ats-upgrade-modal" onclick="if(event.target===this)closeAtsUpgradeModal()">
+  <div class="modal-box" style="max-width:380px;text-align:center">
+    <div style="font-size:40px;margin-bottom:10px">🔒</div>
+    <div class="modal-title">MODE ATS — PACK PRO</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:20px">
+      Le Mode ATS est inclus dans le <strong style="color:var(--gold)">Pack Pro — $19 AUD</strong>.<br>
+      Tu obtiens : CV visuel + version ATS 100% optimisée pour PageUp, Workday et Seek AU.
+    </p>
+    <button onclick="closeAtsUpgradeModal();selectTier('pro');document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;color:var(--dark);margin-bottom:10px">UPGRADER VERS PRO — $19</button>
+    <button class="modal-close" onclick="closeAtsUpgradeModal()">Fermer</button>
   </div>
 </div>
 
@@ -531,6 +551,7 @@ var cvData = null;
 var currentLang = 'en';
 var atsMode = false;
 var selectedTier = 'pro'; // default: Pro (most popular)
+var userTier = 'none'; // tier user has PAID for — read from localStorage on load
 
 // ─── POINT 6 : Système i18n complet EN/FR ─────────────────────────────────────
 var i18n = {
@@ -814,6 +835,7 @@ function loadFormData(data) {
 
 // ─── POINT 8 : Détection ?paid=true ──────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
+  userTier = localStorage.getItem('ozcv_tier') || 'none';
   renderTickets('mine_utility');
   updateSlider(2);
   updateCreativity(50);
@@ -825,10 +847,13 @@ window.addEventListener('DOMContentLoaded', function() {
   if (params.get('paid') === 'true') {
     window.history.replaceState({}, '', window.location.pathname);
     var tier = params.get('tier') || 'pro';
+    localStorage.setItem('ozcv_tier', tier);
+    userTier = tier;
     var saved = sessionStorage.getItem('ozcv_form');
     if (saved) {
       var formData = JSON.parse(saved);
       loadFormData(formData);
+      updateAtsModeAvailability(formData.job || 'mine_utility');
       if (tier === 'premium') {
         document.getElementById('premium-banner').style.display = 'block';
       }
@@ -876,7 +901,7 @@ async function generateCV(formData) {
     var res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: buildPrompt(formData), jobDescription: formData.jobDescription || '', aiCreativity: parseInt(formData.aiCreativity) || 50 })
+      body: JSON.stringify({ prompt: buildPrompt(formData), jobDescription: formData.jobDescription || '', aiCreativity: parseInt(formData.aiCreativity) || 50, atsMode: !!(formData.atsMode) })
     });
     var data = await res.json();
     if (data.error) { showError(data.error); return; }
@@ -991,6 +1016,34 @@ function closeExitModal() {
   document.getElementById('exit-modal').classList.remove('open');
 }
 
+// ─── ATS UPGRADE MODAL ────────────────────────────────────────────────────────
+function openAtsUpgradeModal() {
+  document.getElementById('ats-upgrade-modal').classList.add('open');
+}
+function closeAtsUpgradeModal() {
+  document.getElementById('ats-upgrade-modal').classList.remove('open');
+}
+
+// ─── POST-DOWNLOAD MESSAGE (tier-based) ───────────────────────────────────────
+function showPostDownloadMessage() {
+  if (!cvData) return;
+  var job = cvData._job || selectedJob;
+  var isMiningJob = (job === 'mine_utility' || job === 'mine_entry');
+  if (userTier !== 'pro' && userTier !== 'premium') return;
+  var msg = '';
+  if (!atsMode && isMiningJob) {
+    msg = 'Tu as aussi droit à la version ATS de ton CV ! Active le Mode ATS et génère ta deuxième version.';
+  } else if (atsMode && isMiningJob) {
+    msg = 'Bravo ! Partage OzCV à un ami backpacker 🎒 → ozcv.vercel.app';
+  }
+  if (!msg) return;
+  var el = document.getElementById('post-download-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 8000);
+}
+
 // ─── FAQ (Obj 6) ─────────────────────────────────────────────────────────────
 function toggleFaq(btn) {
   var item = btn.parentElement;
@@ -999,17 +1052,22 @@ function toggleFaq(btn) {
   if (!wasOpen) item.classList.add('open');
 }
 
-// ─── ATS AVAILABILITY — active toggle uniquement pour secteurs mining ────────
+// ─── ATS AVAILABILITY — gestion secteur + tier ───────────────────────────────
 function updateAtsModeAvailability(type) {
   var isMining = (type === 'mine_utility' || type === 'mine_entry');
+  var hasAccess = (userTier === 'pro' || userTier === 'premium');
   var wrap = document.getElementById('ats-toggle-wrap');
+  var tooltip = document.getElementById('ats-tooltip');
   if (!wrap) return;
-  if (isMining) {
-    wrap.classList.remove('ats-disabled');
-  } else {
+  wrap.classList.remove('ats-disabled');
+  wrap.classList.remove('ats-tier-locked');
+  if (!isMining) {
     wrap.classList.add('ats-disabled');
-    // Désactive et remet à zéro si le toggle était ON
+    if (tooltip) tooltip.textContent = 'Mode ATS disponible uniquement pour Mining, Mine Utility et Mine Labourer';
     if (atsMode) setAtsMode(false);
+  } else if (!hasAccess) {
+    wrap.classList.add('ats-tier-locked');
+    if (tooltip) tooltip.textContent = 'Mode ATS disponible à partir du Pack Pro — $19';
   }
 }
 
@@ -1085,6 +1143,14 @@ function openModal() { document.getElementById('ai-modal').classList.add('open')
 function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
 
 function setAtsMode(val) {
+  if (val) {
+    var hasAccess = (userTier === 'pro' || userTier === 'premium');
+    if (!hasAccess) {
+      document.getElementById('atsModeToggle').checked = false;
+      openAtsUpgradeModal();
+      return;
+    }
+  }
   atsMode = val;
   document.getElementById('atsModeToggle').checked = val;
   document.getElementById('ats-hint').style.display = val ? 'block' : 'none';
@@ -1350,6 +1416,7 @@ function downloadMiningPDF() {
   }
 
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
+  showPostDownloadMessage();
 }
 
 // ─── ATS MODE PDF — MINING UNIQUEMENT (mine_utility / mine_entry) ─────────────
@@ -1515,6 +1582,7 @@ function generatePDF_ATS_Mode() {
   }
 
   doc.save((cvData.name || 'CV').replace(/\s+/g, '_') + '_ATS_Mining.pdf');
+  showPostDownloadMessage();
 }
 
 // ─── STANDARD PDF — 1-PAGE, NOIR ET BLANC ────────────────────────────────────
@@ -1641,6 +1709,7 @@ function downloadPDF() {
   doc.text('References available upon request', lm, 289);
 
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
+  showPostDownloadMessage();
 }
 </script>
 
