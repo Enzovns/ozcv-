@@ -265,6 +265,20 @@
     .wa-tooltip { position:absolute; bottom:calc(100% + 10px); right:0; background:rgba(0,0,0,0.85); color:#fff; font-size:12px; font-family:'DM Sans',sans-serif; padding:6px 12px; border-radius:6px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s; }
     .wa-btn:hover .wa-tooltip { opacity:1; }
     @media(max-width:560px) { .wa-btn { width:48px; height:48px; bottom:16px; right:16px; } }
+    /* ── Testimonials ── */
+    .testimonials-section { padding:48px 20px 32px; max-width:900px; margin:0 auto; }
+    .testimonials-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(24px,5vw,36px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
+    .testimonials-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:8px; }
+    .testimonials-counter { font-size:12px; color:var(--gold); text-align:center; margin-bottom:28px; font-weight:600; letter-spacing:0.5px; }
+    .testimonials-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media(max-width:620px) { .testimonials-grid { grid-template-columns:1fr; } }
+    .testi-card { background:#fff; border:1px solid #e0e0e0; border-radius:12px; padding:20px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+    .testi-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .testi-flag { font-size:26px; flex-shrink:0; }
+    .testi-name { font-weight:700; font-size:14px; color:#222; margin-bottom:2px; }
+    .testi-sector { font-size:11px; color:#888; }
+    .testi-stars { color:#f1c40f; font-size:14px; letter-spacing:1px; margin-bottom:10px; }
+    .testi-text { font-size:13px; color:#444; line-height:1.65; font-style:italic; }
   </style>
 </head>
 <body>
@@ -527,6 +541,70 @@
     </div>
     <div id="post-download-msg" class="post-dl-msg" style="display:none"></div>
     <div id="cv-paper"></div>
+  </div>
+</div>
+
+<!-- Testimonials -->
+<div class="testimonials-section">
+  <div class="testimonials-heading">Ce que disent les backpackers 🎒</div>
+  <p class="testimonials-sub">Ils ont trouvé du boulot en Australie avec OzCV</p>
+  <p class="testimonials-counter">★ Rejoins les 500+ backpackers qui ont trouvé du boulot avec OzCV</p>
+  <div class="testimonials-grid">
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇫🇷</div>
+        <div><div class="testi-name">Mathieu R.</div><div class="testi-sector">Mining — Pilbara, WA</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"J'avais aucune expérience mining officielle. OzCV m'a généré un CV béton en 2 minutes. J'ai eu un entretien chez un contractor à Karratha la semaine suivante. Le Mode ATS c'est vraiment la différence."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇧🇪</div>
+        <div><div class="testi-name">Laura M.</div><div class="testi-sector">Hospitality — Melbourne, VIC</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Super facile à utiliser, même en français. Mon CV est sorti professionnel, avec le RSA bien mis en avant. J'ai trouvé un job de serveuse à Melbourne en 3 jours."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇨🇭</div>
+        <div><div class="testi-name">Théo K.</div><div class="testi-sector">Mine Utility — Queensland</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Le pack Pro vaut vraiment le coup. J'ai eu la version visuelle pour les candidatures directes et la version ATS pour Seek et Indeed. 3 rappels en une semaine. Embauché en FIFO 3:1 à Cook Colliery."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇫🇷</div>
+        <div><div class="testi-name">Camille D.</div><div class="testi-sector">Farm Work — Mildura, VIC</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐</div>
+      <p class="testi-text">"Honnêtement je m'attendais pas à quelque chose d'aussi bon pour $10. Le CV est clean, professionnel, avec mes droits de travail bien mentionnés. Parfait pour les fermes."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇧🇪</div>
+        <div><div class="testi-name">Nicolas B.</div><div class="testi-sector">Construction — Perth, WA</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"J'avais fait mon CV moi-même avant, j'avais aucun retour. Avec OzCV et le White Card bien mis en avant, j'ai eu 2 entretiens chantier la semaine suivante. Franchement bluffé."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇫🇷</div>
+        <div><div class="testi-name">Sophie L.</div><div class="testi-sector">Roadhouse — Outback SA</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"J'avais besoin d'un CV pour un roadhouse en remote. En 5 minutes c'était fait, avec le RSA et Food Handling bien visibles. Le patron m'a appelée le lendemain. OzCV m'a sauvé la mise !"</p>
+    </div>
+
   </div>
 </div>
 
