@@ -66,7 +66,7 @@
     .lang-toggle { display:flex; gap:4px; background:var(--dark3); border:1px solid var(--border); border-radius:6px; padding:4px; }
     .lang-btn { background:none; border:none; color:var(--muted); padding:6px 14px; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; border-radius:4px; transition:all 0.2s; }
     .lang-btn.active { background:var(--gold); color:var(--dark); font-weight:600; }
-    .hero { text-align:center; padding:64px 24px 48px; animation:fadeUp 0.6s ease forwards; }
+    .hero { text-align:center; padding:64px 24px 48px; animation:fadeUp 0.6s ease forwards; margin-bottom:0; }
     /* ── POINT 1 : Badge hero ── */
     .hero-badge { display:inline-block; border:1px solid var(--border); border-radius:20px; padding:6px 16px; font-size:11px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:20px; background:rgba(201,168,76,0.06); }
     .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,10vw,80px); letter-spacing:2px; line-height:1; margin-bottom:16px; }
@@ -179,7 +179,7 @@
     .ats-toggle-wrap .ats-tooltip { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(13,13,13,0.97); border:1px solid var(--border); border-radius:6px; padding:7px 14px; font-size:11px; color:var(--muted); white-space:nowrap; pointer-events:none; z-index:200; }
     .ats-toggle-wrap.ats-disabled:hover .ats-tooltip { display:block; }
     /* ── Trust Band ── */
-    .trust-band { background:#f0f4f8; padding:12px; text-align:center; font-size:12px; color:#333; letter-spacing:0.4px; line-height:1.8; }
+    .trust-band { background:#f0f4f8; padding:12px; text-align:center; font-size:12px; color:#333; letter-spacing:0.4px; line-height:1.8; margin-top:0; }
     /* ── Pricing (Obj 2) ── */
     .pricing-section { margin-bottom:24px; }
     .pricing-label { font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,4vw,28px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
@@ -304,7 +304,6 @@
     <div class="step"><div class="step-num">3</div><span id="step3">Download PDF</span></div>
   </div>
 </div>
-
 <div id="trust-band" class="trust-band">
   <strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimised for <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>
 </div>
@@ -361,7 +360,7 @@
         <ul class="pricing-features">
           <li>Tout le Standard</li>
           <li><strong style="color:var(--gold)">Mode ATS débloqué (100% ATS-friendly)</strong></li>
-          <li>Cover letter générée par IA</li>
+          <li>Lettre de motivation (cover letter) générée par IA</li>
           <li>2 versions téléchargeables (Visuel + ATS)</li>
           <li>Conseils tickets par secteur</li>
         </ul>
@@ -739,7 +738,7 @@ var i18n = {
   fr: {
     hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
     hero_title: 'Ton CV.',
-    hero_span: 'Prêt en Secondes.',
+    hero_span: 'Généré en quelques secondes.',
     hero_sub: "CV australiens ATS-friendly pour les mines, l'agriculture, l'hôtellerie et plus. Optimisé par IA, prêt à envoyer.",
     step1: 'Choisis le poste', step2: 'Remplis tes infos', step3: 'Télécharge le PDF',
     label_jobtype: 'TYPE DE POSTE',
@@ -1258,7 +1257,7 @@ function updateAtsModeAvailability(type) {
 // ─── TICKET ADVICE BOX ────────────────────────────────────────────────────────
 var ticketAdviceContent = {
   mine_utility: {
-    title: '🎫 Tickets requis pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       'White Card (Construction Induction) — ~$80-120 AUD',
       'Working at Heights — ~$150-200 AUD',
@@ -1268,7 +1267,7 @@ var ticketAdviceContent = {
     tip: "Passe-les en bundle à Perth chez Allens Training ou TAFE WA pour économiser jusqu'à 30%."
   },
   mine_entry: {
-    title: '🎫 Tickets requis pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       'White Card (Construction Induction) — ~$80-120 AUD',
       'Working at Heights — ~$150-200 AUD',
@@ -1278,7 +1277,7 @@ var ticketAdviceContent = {
     tip: "Passe-les en bundle à Perth chez Allens Training ou TAFE WA pour économiser jusqu'à 30%."
   },
   hospitality: {
-    title: '🎫 Tickets requis pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       'RSA (Responsible Service of Alcohol) — ~$50-80 AUD (en ligne possible)',
       'Food Handling Certificate / Food Safety Supervisor — ~$30-80 AUD'
@@ -1286,7 +1285,7 @@ var ticketAdviceContent = {
     tip: "L'RSA en ligne est accepté dans la plupart des États australiens. Fais-le sur Australian Online Courses ou SITXFSA."
   },
   roadhouse: {
-    title: '🎫 Tickets requis pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       'RSA (Responsible Service of Alcohol) — ~$50-80 AUD',
       'Food Handling Certificate — ~$30-80 AUD',
@@ -1295,7 +1294,7 @@ var ticketAdviceContent = {
     tip: 'Les roadhouses recrutent souvent sans expérience. Mets en avant ta disponibilité immédiate et remote.'
   },
   construction: {
-    title: '🎫 Tickets requis pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       'White Card (obligatoire sur tous les chantiers australiens) — ~$80-120 AUD',
       'Working at Heights — ~$150-200 AUD',
@@ -1304,7 +1303,7 @@ var ticketAdviceContent = {
     tip: 'Le White Card se fait en 1 journée. Commence par lui avant tout autre ticket.'
   },
   farm: {
-    title: '🎫 Tickets utiles pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       "Driver's Licence (quasi obligatoire)",
       'Chainsaw Certificate selon les exploitations'
@@ -1312,7 +1311,7 @@ var ticketAdviceContent = {
     tip: 'La plupart des fermes forment sur place. Mets en avant ta condition physique et ta disponibilité géographique.'
   },
   station: {
-    title: '🎫 Tickets utiles pour ce secteur :',
+    title: '🎫 Tickets conseillés pour ce secteur :',
     items: [
       "Driver's Licence (obligatoire)",
       'HR Licence si disponible',
