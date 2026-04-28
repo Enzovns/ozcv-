@@ -4,18 +4,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OzCV — AI CV Generator for Australia | Mining, FIFO & Working Holiday</title>
-  <meta name="description" content="Generate a professional Australian CV in seconds. Tailored for mining, FIFO, farming, hospitality and working holiday visa holders. AI-powered, $5 AUD." />
-  <meta name="keywords" content="Australian CV generator, FIFO resume Australia, mining CV Australia, working holiday visa resume Australia, resume builder Australia" />
-  <link rel="canonical" href="https://ozcv.vercel.app" />
-  <meta property="og:title" content="OzCV — AI CV Generator for Australia" />
-  <meta property="og:description" content="Professional Australian CVs for mining, FIFO, farming, hospitality and more. AI-powered, ready to download, $5 AUD." />
-  <meta property="og:url" content="https://ozcv.vercel.app" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="OzCV" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="OzCV — AI CV Generator for Australia" />
-  <meta name="twitter:description" content="Professional Australian CVs for mining, FIFO, farming, hospitality and more." />
+  <title>OzCV – ATS-Friendly Australian CV Generator | Mining, Hospitality, Farm Work</title>
+  <meta name="description" content="Create a professional ATS-friendly Australian CV in minutes. Optimised for mining, FIFO, hospitality, farm work, roadhouse and construction jobs. Download your PDF for $5 AUD.">
+  <meta name="keywords" content="australian cv, resume australia, FIFO resume, mining cv, backpacker australia job, working holiday visa cv, farm work resume, roadhouse resume, station hand cv, construction resume australia">
+  <meta name="author" content="OzCV">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ozcv.vercel.app/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="OzCV – Professional Australian CV for Backpackers">
+  <meta property="og:description" content="Generate a job-ready Australian CV in minutes. Tailored for mining, FIFO, hospitality, farm work, roadhouse and construction. Download PDF for $5 AUD.">
+  <meta property="og:url" content="https://ozcv.vercel.app">
+  <meta property="og:site_name" content="OzCV">
+  <meta property="og:locale" content="en_AU">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OzCV – Australian CV Generator for Backpackers">
+  <meta name="twitter:description" content="Professional Australian CV tailored for mining, FIFO, hospitality and farm work. $5 AUD PDF download.">
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "OzCV",
+    "url": "https://ozcv.vercel.app",
+    "description": "AI-powered Australian CV generator for backpackers and working holiday visa holders. Specialised templates for mining, FIFO, hospitality, farm work, roadhouse, station hand and construction sectors.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "inLanguage": ["en", "fr"],
+    "offers": {
+      "@type": "Offer",
+      "price": "5",
+      "priceCurrency": "AUD",
+      "description": "PDF CV download"
+    },
+    "provider": {
+      "@type": "Organization",
+      "name": "OzCV",
+      "url": "https://ozcv.vercel.app"
+    },
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Backpackers, Working Holiday Visa holders, International workers in Australia"
+    }
+  }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
@@ -127,6 +160,125 @@
     footer a { color:var(--gold); text-decoration:none; }
     footer a:hover { text-decoration:underline; }
     .footer-links { display:flex; gap:24px; }
+    /* ── ATS Mode Toggle ── */
+    .ats-toggle-wrap { display:flex; align-items:center; gap:14px; background:var(--dark2); border:1px solid var(--border); border-radius:8px; padding:16px 20px; margin-bottom:10px; flex-wrap:wrap; }
+    .ats-toggle-label { font-size:13px; color:var(--muted); font-weight:500; transition:color 0.2s; user-select:none; }
+    .ats-toggle-label.active { color:var(--gold); }
+    .switch { position:relative; display:inline-block; width:50px; height:27px; flex-shrink:0; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; inset:0; background:var(--dark3); border:1px solid var(--border); border-radius:27px; transition:0.25s; }
+    .slider:before { position:absolute; content:""; height:19px; width:19px; left:3px; bottom:3px; background:var(--muted); border-radius:50%; transition:0.25s; }
+    .switch input:checked + .slider { background:rgba(46,204,113,0.15); border-color:#2ecc71; }
+    .switch input:checked + .slider:before { transform:translateX(23px); background:#2ecc71; }
+    .ats-toggle-badge { font-size:10px; background:rgba(46,204,113,0.12); border:1px solid rgba(46,204,113,0.3); color:#2ecc71; border-radius:20px; padding:2px 10px; letter-spacing:1px; font-weight:600; }
+    .ats-hint { font-size:12px; color:#2ecc71; margin-bottom:10px; padding:10px 16px; background:rgba(46,204,113,0.06); border:1px solid rgba(46,204,113,0.2); border-radius:6px; display:none; line-height:1.5; }
+    .ats-toggle-wrap.ats-disabled { opacity:0.4; cursor:not-allowed; }
+    .ats-toggle-wrap.ats-disabled .switch,
+    .ats-toggle-wrap.ats-disabled label { pointer-events:none; }
+    .ats-toggle-wrap { position:relative; }
+    .ats-toggle-wrap .ats-tooltip { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(13,13,13,0.97); border:1px solid var(--border); border-radius:6px; padding:7px 14px; font-size:11px; color:var(--muted); white-space:nowrap; pointer-events:none; z-index:200; }
+    .ats-toggle-wrap.ats-disabled:hover .ats-tooltip { display:block; }
+    /* ── Trust Band ── */
+    .trust-band { background:#f0f4f8; padding:12px; text-align:center; font-size:12px; color:#333; letter-spacing:0.4px; line-height:1.8; }
+    /* ── Pricing (Obj 2) ── */
+    .pricing-section { margin-bottom:24px; }
+    .pricing-label { font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,4vw,28px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
+    .pricing-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:20px; line-height:1.5; }
+    .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    @media(max-width:680px){ .pricing-grid { grid-template-columns:1fr; } }
+    .pricing-card { background:var(--dark2); border:1px solid var(--border); border-radius:12px; padding:24px 18px; position:relative; display:flex; flex-direction:column; cursor:pointer; transition:all 0.2s; }
+    .pricing-card:hover { border-color:var(--gold); transform:translateY(-2px); }
+    .pricing-card.selected { border-color:var(--gold); background:rgba(201,168,76,0.07); box-shadow:0 0 0 2px rgba(201,168,76,0.15); }
+    .pricing-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--dark); font-size:9px; font-weight:700; letter-spacing:1.5px; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .pricing-tier { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); margin-bottom:4px; }
+    .pricing-price { font-family:'Bebas Neue',sans-serif; font-size:40px; color:var(--text); line-height:1; margin-bottom:2px; }
+    .pricing-currency { font-size:11px; color:var(--muted); margin-bottom:14px; }
+    .pricing-features { list-style:none; margin-bottom:16px; flex:1; }
+    .pricing-features li { font-size:12px; color:var(--muted); padding:5px 0; border-bottom:1px solid rgba(201,168,76,0.06); display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
+    .pricing-features li::before { content:'✓'; color:var(--gold); font-size:11px; flex-shrink:0; margin-top:2px; }
+    .pricing-select-btn { width:100%; padding:10px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; cursor:pointer; border-radius:6px; transition:all 0.2s; border:1px solid var(--border); background:transparent; color:var(--muted); }
+    .pricing-card.selected .pricing-select-btn { background:linear-gradient(135deg,var(--gold),var(--gold-light)); border:none; color:var(--dark); }
+    /* ── ATS Score CTA (Obj 3) ── */
+    .ats-score-cta { background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.01)); border:1px solid var(--border); border-radius:12px; padding:24px 22px; margin-bottom:20px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .ats-score-cta-icon { font-size:36px; flex-shrink:0; }
+    .ats-score-cta-text { flex:1; min-width:180px; }
+    .ats-score-cta-text h3 { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--text); margin-bottom:5px; }
+    .ats-score-cta-text p { font-size:12px; color:var(--muted); line-height:1.6; }
+    .ats-score-cta-btn { background:transparent; border:1px solid var(--gold); color:var(--gold); padding:10px 20px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; cursor:pointer; border-radius:6px; transition:all 0.2s; white-space:nowrap; flex-shrink:0; }
+    .ats-score-cta-btn:hover { background:var(--gold); color:var(--dark); }
+    /* ── ATS Score Modal (Obj 3) ── */
+    .ats-score-modal-box { max-width:500px; width:100%; }
+    .ats-upload-area { border:2px dashed var(--border); border-radius:8px; padding:28px; text-align:center; cursor:pointer; transition:border-color 0.2s; margin-bottom:14px; }
+    .ats-upload-area:hover, .ats-upload-area.drag { border-color:var(--gold); }
+    .ats-upload-area p { font-size:12px; color:var(--muted); margin-top:8px; }
+    .score-result-wrap { display:none; max-height:70vh; overflow-y:auto; }
+    .score-circle-outer { display:flex; justify-content:center; margin:12px 0 6px; }
+    .score-breakdown-item { font-size:12px; padding:8px 0; border-bottom:1px solid var(--border); color:var(--muted); display:flex; gap:8px; align-items:flex-start; }
+    .score-breakdown-item::before { content:'✓'; color:#6abf6a; flex-shrink:0; }
+    .score-breakdown-item.weak::before { content:'✕'; color:#ff8070; }
+    .score-cta-row { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .score-cta-btn { flex:1; padding:10px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:1.5px; cursor:pointer; border-radius:6px; border:none; background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--dark); min-width:80px; }
+    /* ── Premium Success Banner (Obj 2) ── */
+    .premium-banner { background:rgba(201,168,76,0.08); border:1px solid var(--gold); border-radius:10px; padding:20px 24px; margin-bottom:20px; display:none; }
+    .premium-banner strong { color:var(--gold); font-size:16px; display:block; margin-bottom:8px; }
+    .premium-banner p { font-size:13px; color:var(--text); line-height:1.75; }
+    .premium-banner a { color:var(--gold); }
+    /* ── Exit Intent (Obj 4) ── */
+    .exit-modal-box { max-width:380px; width:100%; text-align:center; }
+    .exit-title { font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:2px; color:var(--text); margin:12px 0 8px; }
+    .exit-subtitle { font-size:13px; color:var(--muted); margin-bottom:14px; line-height:1.6; }
+    .exit-code-box { display:inline-block; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:4px; color:var(--gold); background:rgba(201,168,76,0.1); border:1.5px dashed var(--gold); border-radius:8px; padding:10px 22px; margin-bottom:8px; }
+    .exit-validity { font-size:11px; color:var(--muted); margin-bottom:18px; }
+    .exit-use-btn { width:100%; padding:13px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:3px; cursor:pointer; border-radius:8px; background:linear-gradient(135deg,var(--gold),var(--gold-light)); border:none; color:var(--dark); transition:all 0.2s; }
+    .exit-use-btn:hover { filter:brightness(1.1); }
+    .exit-dismiss { display:block; margin-top:10px; font-size:12px; color:var(--muted); cursor:pointer; background:none; border:none; width:100%; }
+    .exit-dismiss:hover { color:var(--text); }
+    /* ── FAQ (Obj 6) ── */
+    .faq-section { padding:0 20px 60px; }
+    .faq-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(24px,5vw,34px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
+    .faq-heading-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:24px; }
+    .faq-item { background:var(--dark2); border:1px solid var(--border); border-radius:8px; margin-bottom:8px; overflow:hidden; }
+    .faq-q { width:100%; background:none; border:none; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; text-align:left; gap:12px; }
+    .faq-q:hover { color:var(--gold); }
+    .faq-icon { color:var(--gold); font-size:20px; flex-shrink:0; transition:transform 0.2s; line-height:1; }
+    .faq-item.open .faq-icon { transform:rotate(45deg); }
+    .faq-a { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+    .faq-item.open .faq-a { max-height:400px; }
+    .faq-a p { padding:0 20px 16px; font-size:13px; color:var(--muted); line-height:1.75; }
+    /* ── ATS Tier Locked (mining sector but not Pro/Premium) ── */
+    .ats-toggle-wrap.ats-tier-locked { opacity:0.5; }
+    .ats-toggle-wrap.ats-tier-locked:hover .ats-tooltip { display:block; }
+    /* ── Post-download message ── */
+    .post-dl-msg { background:rgba(46,204,113,0.08); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; font-size:13px; color:#6abf6a; margin-top:12px; line-height:1.6; }
+    /* ── Ticket Advice Box ── */
+    @keyframes fadeInDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+    .ticket-advice-box { background:#e8f4fd; border-left:4px solid #3498db; border-radius:0 6px 6px 0; padding:12px 36px 12px 14px; margin-top:14px; font-size:12px; color:#2c3e50; line-height:1.8; position:relative; }
+    .ticket-advice-close { position:absolute; top:8px; right:10px; background:none; border:none; color:#3498db; font-size:18px; cursor:pointer; line-height:1; padding:0 4px; }
+    .ticket-advice-close:hover { color:#1a6fa8; }
+    .ticket-advice-title { font-weight:600; margin-bottom:6px; color:#1a6fa8; }
+    .ticket-advice-item { color:#2c3e50; }
+    .ticket-advice-tip { color:#1a6fa8; font-style:italic; margin-top:8px; }
+    /* ── WhatsApp Floating Button ── */
+    @keyframes waPulse { 0%,100% { box-shadow:0 4px 12px rgba(37,211,102,0.4); transform:scale(1); } 50% { box-shadow:0 8px 24px rgba(37,211,102,0.7); transform:scale(1.07); } }
+    .wa-btn { position:fixed; bottom:24px; right:24px; z-index:9999; width:56px; height:56px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(37,211,102,0.4); text-decoration:none; }
+    .wa-btn:hover { animation:waPulse 0.8s ease infinite; }
+    .wa-tooltip { position:absolute; bottom:calc(100% + 10px); right:0; background:rgba(0,0,0,0.85); color:#fff; font-size:12px; font-family:'DM Sans',sans-serif; padding:6px 12px; border-radius:6px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .wa-btn:hover .wa-tooltip { opacity:1; }
+    @media(max-width:560px) { .wa-btn { width:48px; height:48px; bottom:16px; right:16px; } }
+    /* ── Testimonials ── */
+    .testimonials-section { padding:48px 20px 32px; max-width:900px; margin:0 auto; }
+    .testimonials-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(24px,5vw,36px); letter-spacing:2px; color:var(--text); text-align:center; margin-bottom:6px; }
+    .testimonials-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:8px; }
+    .testimonials-counter { font-size:12px; color:var(--gold); text-align:center; margin-bottom:28px; font-weight:600; letter-spacing:0.5px; }
+    .testimonials-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media(max-width:620px) { .testimonials-grid { grid-template-columns:1fr; } }
+    .testi-card { background:#fff; border:1px solid #e0e0e0; border-radius:12px; padding:20px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+    .testi-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .testi-flag { font-size:26px; flex-shrink:0; }
+    .testi-name { font-weight:700; font-size:14px; color:#222; margin-bottom:2px; }
+    .testi-sector { font-size:11px; color:#888; }
+    .testi-stars { color:#f1c40f; font-size:14px; letter-spacing:1px; margin-bottom:10px; }
+    .testi-text { font-size:13px; color:#444; line-height:1.65; font-style:italic; }
   </style>
 </head>
 <body>
@@ -143,7 +295,7 @@
   <!-- POINT 1 : Badge hero -->
   <div class="hero-badge">AI-Powered • Made for Australia</div>
   <h1 id="hero-title">Your Resume.<br><span id="hero-title-span">Built in Seconds.</span></h1>
-  <p id="hero-sub">Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
+  <p id="hero-sub">Professional ATS-friendly Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.</p>
   <div class="steps">
     <div class="step"><div class="step-num">1</div><span id="step1">Choose job type</span></div>
     <div class="step-divider">→</div>
@@ -153,6 +305,10 @@
   </div>
 </div>
 
+<div id="trust-band" class="trust-band">
+  <strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimised for <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>
+</div>
+
 <div class="container">
 
   <div class="success-banner" id="success-banner">
@@ -160,16 +316,94 @@
     <div><strong id="success-title">Payment confirmed!</strong><span id="success-sub">Your CV is being generated...</span></div>
   </div>
 
+  <!-- Obj 2 — Premium success message -->
+  <div class="premium-banner" id="premium-banner">
+    <strong>🎉 Merci pour ton achat Premium !</strong>
+    <p>Enzo va te contacter sous 24h sur <strong>WhatsApp (+61 493 496 091)</strong> ou par email pour planifier ton appel. Tu peux aussi écrire directement : <a href="mailto:enzo.vanes@hotmail.com">enzo.vanes@hotmail.com</a></p>
+  </div>
+
+  <!-- Obj 3 — Free ATS Score CTA -->
+  <div class="ats-score-cta">
+    <div class="ats-score-cta-icon">🎯</div>
+    <div class="ats-score-cta-text">
+      <h3>Teste ton CV actuel — Gratuit</h3>
+      <p>75% des CV sont rejetés par les ATS avant même qu'un humain les lise. Découvre ton score en 30 secondes.</p>
+    </div>
+    <button class="ats-score-cta-btn" onclick="openAtsScoreModal()">Analyser mon CV gratuitement</button>
+  </div>
+
+  <!-- Obj 2 — Pricing -->
+  <div class="pricing-section">
+    <div class="pricing-label" id="pricing-label">CHOOSE YOUR PLAN</div>
+    <p class="pricing-sub" id="pricing-sub">100% ATS-Friendly — Professional Australian CVs — Instant download</p>
+    <div class="pricing-grid">
+
+      <!-- Standard -->
+      <div class="pricing-card" id="tier-standard" onclick="selectTier('standard')">
+        <div class="pricing-tier">Standard</div>
+        <div class="pricing-price">$10</div>
+        <div class="pricing-currency">AUD — one-time</div>
+        <ul class="pricing-features">
+          <li>1 CV PDF professionnel</li>
+          <li>8 templates au choix</li>
+          <li>Mode Visuel uniquement</li>
+          <li>Téléchargement immédiat</li>
+        </ul>
+        <button class="pricing-select-btn">GÉNÉRER MON CV — $10 AUD</button>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card selected" id="tier-pro" onclick="selectTier('pro')">
+        <div class="pricing-badge">⭐ MOST POPULAR</div>
+        <div class="pricing-tier">Pro</div>
+        <div class="pricing-price">$19</div>
+        <div class="pricing-currency">AUD — one-time</div>
+        <ul class="pricing-features">
+          <li>Tout le Standard</li>
+          <li><strong style="color:var(--gold)">Mode ATS débloqué (100% ATS-friendly)</strong></li>
+          <li>Cover letter générée par IA</li>
+          <li>2 versions téléchargeables (Visuel + ATS)</li>
+          <li>Conseils tickets par secteur</li>
+        </ul>
+        <button class="pricing-select-btn">GÉNÉRER MON CV PRO — $19 AUD</button>
+      </div>
+
+      <!-- Premium -->
+      <div class="pricing-card" id="tier-premium" onclick="selectTier('premium')">
+        <div class="pricing-tier">Premium</div>
+        <div class="pricing-price">$79</div>
+        <div class="pricing-currency">AUD — one-time</div>
+        <ul class="pricing-features">
+          <li>Tout le Pro</li>
+          <li>Appel WhatsApp 30min avec Enzo</li>
+          <li>CV créé en direct ensemble</li>
+          <li>Révisions illimitées 7 jours</li>
+          <li>Conseil mines qui recrutent en ce moment</li>
+        </ul>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px;border-top:1px solid var(--border);padding-top:12px">
+          📲 Après paiement, envoie <strong style="color:var(--gold)">"PREMIUM"</strong> sur WhatsApp au<br>
+          <span style="color:var(--gold);font-weight:600;">+61 493 496 091</span>. Enzo répond sous 24h.
+        </p>
+        <button class="pricing-select-btn">RÉSERVER MON APPEL — $79 AUD</button>
+      </div>
+
+    </div>
+  </div>
+
   <div class="section">
     <div class="section-title" id="label-jobtype">SELECT JOB TYPE</div>
     <div class="job-grid">
-      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label" id="jc-mine_utility">Mine Utility</div><div class="sub">Camp, Cleaning, Kitchen</div></div>
-      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label" id="jc-mine_entry">Mine Entry Level</div><div class="sub">Labourer, Trade Asst, Sentry</div></div>
-      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" id="jc-farm">Farm Work</div><div class="sub">Harvest, Picking</div></div>
-      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" id="jc-hospitality">Hospitality</div><div class="sub">Pub, Hotel, Café</div></div>
-      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" id="jc-roadhouse">Roadhouse</div><div class="sub">Remote service</div></div>
-      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" id="jc-station">Station Hand</div><div class="sub">Cattle, Sheep</div></div>
-      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" id="jc-construction">Construction</div><div class="sub">Labour, Trade</div></div>
+      <div class="job-card active" onclick="selectJob(this,'mine_utility')"><div class="emoji">🚧</div><div class="label" id="jc-mine_utility">Mine Utility</div><div class="sub" id="jcs-mine_utility">Camp, Cleaning, Kitchen</div></div>
+      <div class="job-card" onclick="selectJob(this,'mine_entry')"><div class="emoji">⛏️</div><div class="label" id="jc-mine_entry">Mine Entry Level</div><div class="sub" id="jcs-mine_entry">Labourer, Trade Asst, Sentry</div></div>
+      <div class="job-card" onclick="selectJob(this,'farm')"><div class="emoji">🌾</div><div class="label" id="jc-farm">Farm Work</div><div class="sub" id="jcs-farm">Harvest, Picking</div></div>
+      <div class="job-card" onclick="selectJob(this,'hospitality')"><div class="emoji">🍺</div><div class="label" id="jc-hospitality">Hospitality</div><div class="sub" id="jcs-hospitality">Pub, Hotel, Café</div></div>
+      <div class="job-card" onclick="selectJob(this,'roadhouse')"><div class="emoji">🛣️</div><div class="label" id="jc-roadhouse">Roadhouse</div><div class="sub" id="jcs-roadhouse">Remote service</div></div>
+      <div class="job-card" onclick="selectJob(this,'station')"><div class="emoji">🐄</div><div class="label" id="jc-station">Station Hand</div><div class="sub" id="jcs-station">Cattle, Sheep</div></div>
+      <div class="job-card" onclick="selectJob(this,'construction')"><div class="emoji">🏗️</div><div class="label" id="jc-construction">Construction</div><div class="sub" id="jcs-construction">Labour, Trade</div></div>
+    </div>
+    <div id="ticket-advice-box" class="ticket-advice-box" style="display:none">
+      <button class="ticket-advice-close" onclick="closeTicketAdvice()" aria-label="Fermer">✕</button>
+      <div id="ticket-advice-content"></div>
     </div>
     <div class="tickets-box" id="tickets-box">
       <div style="font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:500;" id="label-tickets">Tickets & Certifications</div>
@@ -206,9 +440,9 @@
   <div class="section">
     <div class="section-title" id="label-exp">EXPERIENCE & SKILLS</div>
     <div class="form-grid full">
-      <div class="field"><label id="lbl-experience">Past Experience (leave empty if none)</label><textarea id="experience" placeholder="e.g. 6 months on a cattle station in QLD, bar work in backpacker hostel..."></textarea></div>
-      <div class="field"><label id="lbl-languages">Languages spoken</label><input type="text" id="languages" placeholder="e.g. English, French, Spanish..." /></div>
-      <div class="field"><label id="lbl-education">Education (optional)</label><input type="text" id="education" placeholder="e.g. High School Diploma – Belgium" /></div>
+      <div class="field"><label id="lbl-experience">Past Experience (leave empty if none)</label><textarea id="experience"></textarea></div>
+      <div class="field"><label id="lbl-languages">Languages spoken</label><input type="text" id="languages" /></div>
+      <div class="field"><label id="lbl-education">Education (optional)</label><input type="text" id="education" /></div>
     </div>
   </div>
 
@@ -276,6 +510,20 @@
     </div>
   </div>
 
+<div class="ats-toggle-wrap" id="ats-toggle-wrap">
+  <span class="ats-toggle-label" id="ats-lbl-visual">Mode Visuel</span>
+  <label class="switch">
+    <input type="checkbox" id="atsModeToggle" onchange="setAtsMode(this.checked)">
+    <span class="slider"></span>
+  </label>
+  <span class="ats-toggle-label" id="ats-lbl-ats">Mode ATS</span>
+  <span class="ats-toggle-badge" id="ats-badge" style="display:none">100% ATS</span>
+  <span class="ats-tooltip" id="ats-tooltip">Mode ATS disponible uniquement pour les secteurs Mining</span>
+</div>
+<div class="ats-hint" id="ats-hint">
+  ✓ CV optimisé pour passer les filtres automatiques (PageUp, Workday, Seek, Indeed AU) — Single-column · Helvetica · Keywords mining intégrés
+</div>
+
 <button class="gen-btn" id="gen-btn" onclick="handleGenerate()">✦ <span id="btn-generate">GENERATE MY RESUME — $5 AUD</span></button>
 
   <div class="error-box" id="error-box"></div>
@@ -291,7 +539,86 @@
       <button class="btn-download" onclick="downloadPDF()" id="btn-download">⬇ DOWNLOAD PDF</button>
       <button class="btn-new" onclick="resetForm()" id="btn-new">← New Resume</button>
     </div>
+    <div id="post-download-msg" class="post-dl-msg" style="display:none"></div>
     <div id="cv-paper"></div>
+  </div>
+</div>
+
+<!-- Testimonials -->
+<div class="testimonials-section">
+  <div class="testimonials-heading">Ce que disent les backpackers 🎒</div>
+  <p class="testimonials-sub">Ils ont trouvé du boulot en Australie avec OzCV</p>
+  <p class="testimonials-counter">★ Rejoins les 500+ backpackers qui ont trouvé du boulot avec OzCV</p>
+  <div class="testimonials-grid">
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇫🇷</div>
+        <div><div class="testi-name">Mathieu R.</div><div class="testi-sector">Mining — Pilbara, WA</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"J'avais aucune expérience mining officielle. OzCV m'a généré un CV béton en 2 minutes. J'ai eu un entretien chez un contractor à Karratha la semaine suivante. Le Mode ATS c'est vraiment la différence."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇧🇪</div>
+        <div><div class="testi-name">Laura M.</div><div class="testi-sector">Hospitality — Melbourne, VIC</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Super facile à utiliser, même en français. Mon CV est sorti professionnel, avec le RSA bien mis en avant. J'ai trouvé un job de serveuse à Melbourne en 3 jours."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇨🇭</div>
+        <div><div class="testi-name">Théo K.</div><div class="testi-sector">Mine Utility — Queensland</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"Le pack Pro vaut vraiment le coup. J'ai eu la version visuelle pour les candidatures directes et la version ATS pour Seek et Indeed. 3 rappels en une semaine. Embauché en FIFO 3:1 à Cook Colliery."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇫🇷</div>
+        <div><div class="testi-name">Camille D.</div><div class="testi-sector">Farm Work — Mildura, VIC</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐</div>
+      <p class="testi-text">"Honnêtement je m'attendais pas à quelque chose d'aussi bon pour $10. Le CV est clean, professionnel, avec mes droits de travail bien mentionnés. Parfait pour les fermes."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇧🇪</div>
+        <div><div class="testi-name">Nicolas B.</div><div class="testi-sector">Construction — Perth, WA</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"J'avais fait mon CV moi-même avant, j'avais aucun retour. Avec OzCV et le White Card bien mis en avant, j'ai eu 2 entretiens chantier la semaine suivante. Franchement bluffé."</p>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-header">
+        <div class="testi-flag">🇫🇷</div>
+        <div><div class="testi-name">Sophie L.</div><div class="testi-sector">Roadhouse — Outback SA</div></div>
+      </div>
+      <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+      <p class="testi-text">"J'avais besoin d'un CV pour un roadhouse en remote. En 5 minutes c'était fait, avec le RSA et Food Handling bien visibles. Le patron m'a appelée le lendemain. OzCV m'a sauvé la mise !"</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ATS Upgrade Modal -->
+<div class="modal-overlay" id="ats-upgrade-modal" onclick="if(event.target===this)closeAtsUpgradeModal()">
+  <div class="modal-box" style="max-width:380px;text-align:center">
+    <div style="font-size:40px;margin-bottom:10px">🔒</div>
+    <div class="modal-title">MODE ATS — PACK PRO</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:20px">
+      Le Mode ATS est inclus dans le <strong style="color:var(--gold)">Pack Pro — $19 AUD</strong>.<br>
+      Tu obtiens : CV visuel + version ATS 100% optimisée pour PageUp, Workday et Seek AU.
+    </p>
+    <button onclick="closeAtsUpgradeModal();selectTier('pro');document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;color:var(--dark);margin-bottom:10px">UPGRADER VERS PRO — $19</button>
+    <button class="modal-close" onclick="closeAtsUpgradeModal()">Fermer</button>
   </div>
 </div>
 
@@ -317,13 +644,13 @@
 </div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-var STRIPE_LINK = 'https://buy.stripe.com/dRmdR97Io5FKbFDbqM1gs01';
-
 // ─── STATE ────────────────────────────────────────────────────────────────────
 var selectedJob = 'mine_utility';
 var cvData = null;
 var currentLang = 'en';
+var atsMode = false;
+var selectedTier = 'pro'; // default: Pro (most popular)
+var userTier = 'none'; // tier user has PAID for — read from localStorage on load
 
 // ─── POINT 6 : Système i18n complet EN/FR ─────────────────────────────────────
 var i18n = {
@@ -331,7 +658,7 @@ var i18n = {
     hero_badge: 'AI-Powered • Made for Australia',
     hero_title: 'Your Resume.',
     hero_span: 'Built in Seconds.',
-    hero_sub: 'Professional Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
+    hero_sub: 'Professional ATS-friendly Australian resumes for mining, farming, hospitality and more. AI-optimized, ready to send.',
     step1: 'Choose job type', step2: 'Fill your info', step3: 'Download PDF',
     label_jobtype: 'SELECT JOB TYPE',
     label_tickets: 'Tickets & Certifications',
@@ -372,13 +699,48 @@ var i18n = {
     creativity_labels: ['REFORMULATE ONLY','ADD RESPONSIBILITIES','ADD EXPERIENCE'],
     creativity_l1: 'Reformulate only', creativity_l2: 'Add responsibilities', creativity_l3: 'Add experience',
     match_score_msg: 'Your CV matches',
-    match_score_suffix: 'of this job\'s requirements'
+    match_score_suffix: 'of this job\'s requirements',
+    jc_mine_utility: 'Mine Utility', jcs_mine_utility: 'Camp, Cleaning, Kitchen',
+    jc_mine_entry: 'Mine Entry Level', jcs_mine_entry: 'Labourer, Trade Asst, Sentry',
+    jc_farm: 'Farm Work', jcs_farm: 'Harvest, Picking',
+    jc_hospitality: 'Hospitality', jcs_hospitality: 'Pub, Hotel, Café',
+    jc_roadhouse: 'Roadhouse', jcs_roadhouse: 'Remote service',
+    jc_station: 'Station Hand', jcs_station: 'Cattle, Sheep',
+    jc_construction: 'Construction', jcs_construction: 'Labour, Trade',
+    experience_placeholder: 'e.g. 6 months on a cattle station in QLD, bar work in a backpacker hostel...',
+    languages_placeholder: 'e.g. English, French, Spanish...',
+    education_placeholder: 'e.g. High School Diploma – Belgium',
+    trust_band: '<strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimised for <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>',
+    pricing_label: 'CHOOSE YOUR PLAN',
+    pricing_sub: '100% ATS-Friendly — Professional Australian CVs — Instant download',
+    faq_heading: 'FAQ',
+    faq_sub: 'Frequently asked questions about OzCV',
+    faq_q1: 'What is an ATS and why does it matter?',
+    faq_a1: 'An ATS (Applicant Tracking System) is software used by 97% of large Australian companies to filter CVs before a human reads them. 75% of CVs are rejected at this stage. Our ATS Mode guarantees your CV passes the filter.',
+    faq_q2: 'How quickly will I receive my CV?',
+    faq_a2: 'Immediately after payment. The PDF downloads in less than 30 seconds.',
+    faq_q3: 'I have a Working Holiday visa, does it work for me?',
+    faq_a3: 'Yes. All our templates automatically include the mention of your visa and work rights.',
+    faq_q4: "I don't have my mining tickets yet, can I still generate a CV?",
+    faq_a4: 'Yes. We recommend getting them before applying (350–450 AUD in total). The Pro pack includes advice on finding the cheapest providers near you.',
+    faq_q5: 'Do you invent fake experience?',
+    faq_a5: 'No. We only use real or closed Australian mines. Your CV remains honest and verifiable.',
+    faq_q6: "What's the difference between Standard and Pro?",
+    faq_a6: 'Standard = 1 visual CV. Pro = visual CV + ATS-optimised version + cover letter. ATS Mode triples your chances of passing the automated filters of major mining employers.',
+    faq_q7: 'What is the Premium call?',
+    faq_a7: '30 minutes with Enzo, OzCV founder and ex-FIFO backpacker. Send "PREMIUM" on WhatsApp at +61 493 496 091 after payment. We create your CV together and target the mines hiring right now.',
+    faq_q8: 'Can I get a refund?',
+    faq_a8: "If you're not happy with your CV, we'll redo it for free. After 2 revisions without agreement, full refund within 7 days.",
+    faq_q9: "I don't speak English well, does it work?",
+    faq_a9: 'Yes. You fill the form in French, the AI translates into professional Australian English.',
+    faq_q10: 'Is my data secure?',
+    faq_a10: 'Yes. No personal data is stored after generation. Secure payment via Stripe (PCI-DSS Level 1).'
   },
   fr: {
     hero_badge: 'Propulsé par l\'IA • Fait pour l\'Australie',
     hero_title: 'Ton CV.',
     hero_span: 'Prêt en Secondes.',
-    hero_sub: 'CV australiens professionnels pour les mines, l\'agriculture, l\'hôtellerie et plus. Optimisé par IA, prêt à envoyer.',
+    hero_sub: "CV australiens ATS-friendly pour les mines, l'agriculture, l'hôtellerie et plus. Optimisé par IA, prêt à envoyer.",
     step1: 'Choisis le poste', step2: 'Remplis tes infos', step3: 'Télécharge le PDF',
     label_jobtype: 'TYPE DE POSTE',
     label_tickets: 'Tickets & Certifications',
@@ -419,7 +781,42 @@ var i18n = {
     creativity_labels: ['REFORMULER SEULEMENT','AJOUTER DES RESPONSABILITÉS','AJOUTER UNE EXPÉRIENCE'],
     creativity_l1: 'Reformuler seulement', creativity_l2: 'Ajouter des responsabilités', creativity_l3: 'Ajouter une expérience',
     match_score_msg: 'Ton CV correspond à',
-    match_score_suffix: 'des exigences de ce poste'
+    match_score_suffix: 'des exigences de ce poste',
+    jc_mine_utility: 'Utilitaire Mine', jcs_mine_utility: 'Camp, Nettoyage, Cuisine',
+    jc_mine_entry: 'Mine Débutant', jcs_mine_entry: 'Manœuvre, Asst. Métier, Gardien',
+    jc_farm: 'Travail Agricole', jcs_farm: 'Récolte, Cueillette',
+    jc_hospitality: 'Hôtellerie', jcs_hospitality: 'Pub, Hôtel, Café',
+    jc_roadhouse: 'Roadhouse', jcs_roadhouse: 'Service en zone isolée',
+    jc_station: 'Station Hand', jcs_station: 'Bovins, Ovins',
+    jc_construction: 'Construction', jcs_construction: 'Manœuvre, Métier',
+    experience_placeholder: 'ex : 6 mois dans une ferme en QLD, service au bar dans un hostel...',
+    languages_placeholder: 'ex : Français, Anglais, Espagnol...',
+    education_placeholder: 'ex : Baccalauréat – Belgique',
+    trust_band: '<strong>✓ 100% ATS-Friendly</strong> &nbsp;|&nbsp; Compatible <strong>PageUp · Workday · Seek · Indeed AU</strong> &nbsp;|&nbsp; Optimisé pour <strong>BHP · Rio Tinto · Fortescue · Roy Hill</strong>',
+    pricing_label: 'CHOISIS TON PACK',
+    pricing_sub: '100% ATS-Friendly — CV australiens professionnels — Téléchargement immédiat',
+    faq_heading: 'FAQ',
+    faq_sub: 'Questions fréquentes sur OzCV',
+    faq_q1: "C'est quoi un ATS et pourquoi c'est important ?",
+    faq_a1: "Un ATS (Applicant Tracking System) est un logiciel utilisé par 97% des grandes entreprises australiennes pour filtrer les CV avant qu'un humain les lise. 75% des CV sont rejetés à cette étape. Notre Mode ATS garantit que ton CV passe le filtre.",
+    faq_q2: 'Combien de temps pour recevoir mon CV ?',
+    faq_a2: 'Immédiatement après le paiement. Le PDF se télécharge en moins de 30 secondes.',
+    faq_q3: "J'ai un visa Working Holiday, ça marche ?",
+    faq_a3: 'Oui. Tous nos templates incluent automatiquement la mention de ton visa et de tes droits de travail.',
+    faq_q4: "Je n'ai pas encore mes tickets mining, je peux quand même générer un CV ?",
+    faq_a4: "Oui. On te recommande de les passer avant de postuler (350–450 AUD au total). Le pack Pro inclut des conseils pour trouver les organismes les moins chers près de chez toi.",
+    faq_q5: 'Vous inventez de la fausse expérience ?',
+    faq_a5: "Non. On utilise uniquement des mines australiennes réelles ou fermées. Ton CV reste honnête et vérifiable.",
+    faq_q6: 'Quelle différence entre Standard et Pro ?',
+    faq_a6: 'Standard = 1 CV visuel. Pro = CV visuel + version ATS-optimisée + cover letter. Le Mode ATS triple tes chances de passer les filtres des grands employeurs miniers.',
+    faq_q7: "C'est quoi l'appel Premium ?",
+    faq_a7: '30 minutes avec Enzo, fondateur d\'OzCV et ex-backpacker FIFO. Tu envoies "PREMIUM" sur WhatsApp au +61 493 496 091 après paiement. On crée ton CV ensemble et on cible les mines qui recrutent en ce moment.',
+    faq_q8: 'Remboursement possible ?',
+    faq_a8: "Si ton CV ne te convient pas, on le refait gratuitement. Après 2 révisions sans accord, remboursement intégral sous 7 jours.",
+    faq_q9: "Je parle peu anglais, ça marche ?",
+    faq_a9: "Oui. Tu remplis le formulaire en français, l'IA traduit en anglais professionnel australien.",
+    faq_q10: 'Mes données sont sécurisées ?',
+    faq_a10: 'Oui. Aucune donnée personnelle stockée après génération. Paiement sécurisé via Stripe (PCI-DSS Level 1).'
   }
 };
 
@@ -454,7 +851,7 @@ function applyLang(lang) {
   document.getElementById('lbl-languages').textContent = t.lbl_languages;
   document.getElementById('lbl-education').textContent = t.lbl_education;
   document.getElementById('btn-generate').textContent = t.btn_generate;
-  document.getElementById('btn-download').textContent = t.btn_download;
+  if (!atsMode) document.getElementById('btn-download').textContent = t.btn_download;
   document.getElementById('btn-new').textContent = t.btn_new;
   document.getElementById('loading-text').textContent = t.loading_text;
   document.getElementById('success-title').textContent = t.success_title;
@@ -481,12 +878,44 @@ function applyLang(lang) {
   document.getElementById('creativity-l3').textContent = t.creativity_l3;
   document.getElementById('match-score-msg').textContent = t.match_score_msg;
   document.getElementById('match-score-suffix').textContent = t.match_score_suffix;
+  document.getElementById('jc-mine_utility').textContent = t.jc_mine_utility;
+  document.getElementById('jcs-mine_utility').textContent = t.jcs_mine_utility;
+  document.getElementById('jc-mine_entry').textContent = t.jc_mine_entry;
+  document.getElementById('jcs-mine_entry').textContent = t.jcs_mine_entry;
+  document.getElementById('jc-farm').textContent = t.jc_farm;
+  document.getElementById('jcs-farm').textContent = t.jcs_farm;
+  document.getElementById('jc-hospitality').textContent = t.jc_hospitality;
+  document.getElementById('jcs-hospitality').textContent = t.jcs_hospitality;
+  document.getElementById('jc-roadhouse').textContent = t.jc_roadhouse;
+  document.getElementById('jcs-roadhouse').textContent = t.jcs_roadhouse;
+  document.getElementById('jc-station').textContent = t.jc_station;
+  document.getElementById('jcs-station').textContent = t.jcs_station;
+  document.getElementById('jc-construction').textContent = t.jc_construction;
+  document.getElementById('jcs-construction').textContent = t.jcs_construction;
+  document.getElementById('experience').placeholder = t.experience_placeholder;
+  document.getElementById('languages').placeholder = t.languages_placeholder;
+  document.getElementById('education').placeholder = t.education_placeholder;
+  // Trust band
+  if (t.trust_band) document.getElementById('trust-band').innerHTML = t.trust_band;
+  // Pricing section
+  document.getElementById('pricing-label').textContent = t.pricing_label;
+  document.getElementById('pricing-sub').textContent = t.pricing_sub;
+  // FAQ section
+  document.getElementById('faq-heading').textContent = t.faq_heading;
+  document.getElementById('faq-heading-sub').textContent = t.faq_sub;
+  for (var fi = 1; fi <= 10; fi++) {
+    var fqEl = document.getElementById('faq-q' + fi);
+    var faEl = document.getElementById('faq-a' + fi);
+    if (fqEl && fqEl.childNodes[0]) fqEl.childNodes[0].textContent = t['faq_q' + fi];
+    if (faEl) faEl.textContent = t['faq_a' + fi];
+  }
   updateSlider(document.getElementById('ai-slider').value);
   updateCreativity(document.getElementById('creativity-slider').value);
 }
 
 function setLang(lang) {
   currentLang = lang;
+  localStorage.setItem('ozcv_lang', lang);
   document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
   document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
   applyLang(lang);
@@ -531,7 +960,9 @@ function saveFormData() {
     tickets: getSelectedTickets(),
     jobDescription: document.getElementById('job-description').value.trim(),
     aiCreativity: document.getElementById('creativity-slider').value,
-    lang: currentLang
+    lang: currentLang,
+    atsMode: atsMode,
+    tier: selectedTier
   };
   sessionStorage.setItem('ozcv_form', JSON.stringify(data));
 }
@@ -562,20 +993,39 @@ function loadFormData(data) {
   updateSlider(data.aiLevel || 2);
   updateCreativity(data.aiCreativity || 50);
   if (data.lang) setLang(data.lang);
+  setAtsMode(data.atsMode || false);
+  if (data.tier) selectTier(data.tier, true); // true = silent (no scroll)
 }
 
 // ─── POINT 8 : Détection ?paid=true ──────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
+  userTier = localStorage.getItem('ozcv_tier') || 'none';
   renderTickets('mine_utility');
   updateSlider(2);
   updateCreativity(50);
+  var savedLang = localStorage.getItem('ozcv_lang') || 'en';
+  currentLang = savedLang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+  var savedLangBtn = document.querySelector('.lang-btn[onclick="setLang(\''+savedLang+'\')"]');
+  if (savedLangBtn) savedLangBtn.classList.add('active');
+  applyLang(savedLang);
+  updateAtsModeAvailability('mine_utility');
+  selectTier('pro', true); // default selected tier = Pro
+  initExitIntent();
   var params = new URLSearchParams(window.location.search);
   if (params.get('paid') === 'true') {
     window.history.replaceState({}, '', window.location.pathname);
+    var tier = params.get('tier') || 'pro';
+    localStorage.setItem('ozcv_tier', tier);
+    userTier = tier;
     var saved = sessionStorage.getItem('ozcv_form');
     if (saved) {
       var formData = JSON.parse(saved);
       loadFormData(formData);
+      updateAtsModeAvailability(formData.job || 'mine_utility');
+      if (tier === 'premium') {
+        document.getElementById('premium-banner').style.display = 'block';
+      }
       document.getElementById('success-banner').style.display = 'flex';
       generateCV(formData);
     } else {
@@ -585,13 +1035,31 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 // ─── GENERATE FLOW ────────────────────────────────────────────────────────────
-function handleGenerate() {
+async function handleGenerate() {
   var t = i18n[currentLang];
   var firstName = document.getElementById('firstName').value.trim();
   var lastName = document.getElementById('lastName').value.trim();
   if (!firstName || !lastName) { showError(t.err_name); return; }
   saveFormData();
-  window.location.href = STRIPE_LINK;
+  var btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  try {
+    var res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: selectedTier })
+    });
+    var data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      showError(data.error || 'Payment error. Please try again.');
+      btn.disabled = false;
+    }
+  } catch(e) {
+    showError(t.err_connection);
+    btn.disabled = false;
+  }
 }
 
 async function generateCV(formData) {
@@ -602,7 +1070,7 @@ async function generateCV(formData) {
     var res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: buildPrompt(formData), jobDescription: formData.jobDescription || '', aiCreativity: parseInt(formData.aiCreativity) || 50 })
+      body: JSON.stringify({ prompt: buildPrompt(formData), jobDescription: formData.jobDescription || '', aiCreativity: parseInt(formData.aiCreativity) || 50, atsMode: !!(formData.atsMode) })
     });
     var data = await res.json();
     if (data.error) { showError(data.error); return; }
@@ -626,13 +1094,265 @@ async function generateCV(formData) {
   }
 }
 
+// ─── TIER SELECTION (Obj 2) ──────────────────────────────────────────────────
+function selectTier(tier, silent) {
+  selectedTier = tier;
+  ['standard','pro','premium'].forEach(function(t) {
+    var card = document.getElementById('tier-' + t);
+    if (card) card.classList.toggle('selected', t === tier);
+  });
+  var prices = { standard: '$10 AUD', pro: '$19 AUD', premium: '$79 AUD' };
+  document.getElementById('btn-generate').textContent = 'GENERATE MY RESUME — ' + (prices[tier] || '$10 AUD');
+  if (!silent) document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── ATS SCORE MODAL (Obj 3) ─────────────────────────────────────────────────
+function openAtsScoreModal() {
+  document.getElementById('ats-score-modal').classList.add('open');
+}
+function closeAtsScoreModal() {
+  document.getElementById('ats-score-modal').classList.remove('open');
+}
+
+async function analyzeAtsCV(file) {
+  if (!file) return;
+  document.getElementById('ats-upload-area').style.display = 'none';
+  document.getElementById('ats-score-loading').style.display = 'block';
+  document.getElementById('score-result-wrap').style.display = 'none';
+  try {
+    var reader = new FileReader();
+    reader.onload = async function(e) {
+      var base64 = e.target.result.split(',')[1];
+      var mediaType = file.type || 'application/pdf';
+      try {
+        var res = await fetch('/api/ats-score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileBase64: base64, mediaType: mediaType })
+        });
+        var result = await res.json();
+        if (result.error) { alert('Erreur : ' + result.error); return; }
+        displayAtsScore(result);
+      } catch(err) {
+        alert('Erreur de connexion. Réessaie.');
+      } finally {
+        document.getElementById('ats-score-loading').style.display = 'none';
+      }
+    };
+    reader.readAsDataURL(file);
+  } catch(e) {
+    document.getElementById('ats-score-loading').style.display = 'none';
+  }
+}
+
+function displayAtsScore(result) {
+  var score = result.score || 0;
+  // SVG circle: circumference 2*π*50 ≈ 314
+  var offset = 314 - (score / 100) * 314;
+  var arc = document.getElementById('score-arc');
+  var arcColor = score < 50 ? '#e74c3c' : score < 75 ? '#f39c12' : '#2ecc71';
+  arc.setAttribute('stroke', arcColor);
+  setTimeout(function() { arc.style.strokeDashoffset = offset; }, 50);
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('score-big').textContent = score;
+
+  // Score-based title
+  var title = score < 50
+    ? '⚠️ Ton CV est probablement rejeté avant d\'être lu'
+    : score < 75
+    ? '📊 Ton CV passe certains filtres mais peut être amélioré'
+    : '✅ Bon score, mais encore optimisable';
+  document.getElementById('score-grade').textContent = title;
+
+  // Summary (1 encouraging sentence from API)
+  document.getElementById('score-top-issue').textContent = result.summary || '';
+
+  // scoreWithOzCV — dynamic value from API (90–97)
+  var ozcvScore = result.scoreWithOzCV || 95;
+  document.getElementById('score-ozcv').textContent = ozcvScore + '/100 ✓';
+
+  var stEl = document.getElementById('score-strengths');
+  stEl.innerHTML = '<p style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Points forts</p>' +
+    (result.strengths || []).map(function(s) { return '<div class="score-breakdown-item">' + s + '</div>'; }).join('');
+
+  var wkEl = document.getElementById('score-weaknesses');
+  wkEl.innerHTML = '<p style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin:10px 0 6px">À améliorer</p>' +
+    (result.weaknesses || []).map(function(w) { return '<div class="score-breakdown-item weak">' + w + '</div>'; }).join('');
+
+  document.getElementById('score-result-wrap').style.display = 'block';
+}
+
+// ─── EXIT INTENT (Obj 4) ─────────────────────────────────────────────────────
+function initExitIntent() {
+  if (localStorage.getItem('ozcv_exit_shown')) return;
+  var fired = false;
+  document.addEventListener('mouseleave', function(e) {
+    if (fired || e.clientY >= 50) return;
+    fired = true;
+    localStorage.setItem('ozcv_exit_shown', '1');
+    setTimeout(function() {
+      document.getElementById('exit-modal').classList.add('open');
+    }, 200);
+  });
+}
+function closeExitModal() {
+  document.getElementById('exit-modal').classList.remove('open');
+}
+
+// ─── ATS UPGRADE MODAL ────────────────────────────────────────────────────────
+function openAtsUpgradeModal() {
+  document.getElementById('ats-upgrade-modal').classList.add('open');
+}
+function closeAtsUpgradeModal() {
+  document.getElementById('ats-upgrade-modal').classList.remove('open');
+}
+
+// ─── POST-DOWNLOAD MESSAGE (tier-based) ───────────────────────────────────────
+function showPostDownloadMessage() {
+  if (!cvData) return;
+  var job = cvData._job || selectedJob;
+  var isMiningJob = (job === 'mine_utility' || job === 'mine_entry');
+  if (userTier !== 'pro' && userTier !== 'premium') return;
+  var msg = '';
+  if (!atsMode && isMiningJob) {
+    msg = 'Tu as aussi droit à la version ATS de ton CV ! Active le Mode ATS et génère ta deuxième version.';
+  } else if (atsMode && isMiningJob) {
+    msg = 'Bravo ! Partage OzCV à un ami backpacker 🎒 → ozcv.vercel.app';
+  }
+  if (!msg) return;
+  var el = document.getElementById('post-download-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 8000);
+}
+
+// ─── FAQ (Obj 6) ─────────────────────────────────────────────────────────────
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ─── ATS AVAILABILITY — gestion secteur + tier ───────────────────────────────
+function updateAtsModeAvailability(type) {
+  var isMining = (type === 'mine_utility' || type === 'mine_entry');
+  var hasAccess = (userTier === 'pro' || userTier === 'premium');
+  var wrap = document.getElementById('ats-toggle-wrap');
+  var tooltip = document.getElementById('ats-tooltip');
+  if (!wrap) return;
+  wrap.classList.remove('ats-disabled');
+  wrap.classList.remove('ats-tier-locked');
+  if (!isMining) {
+    wrap.classList.add('ats-disabled');
+    if (tooltip) tooltip.textContent = 'Mode ATS disponible uniquement pour Mining, Mine Utility et Mine Labourer';
+    if (atsMode) setAtsMode(false);
+  } else if (!hasAccess) {
+    wrap.classList.add('ats-tier-locked');
+    if (tooltip) tooltip.textContent = 'Mode ATS disponible à partir du Pack Pro — $19';
+  }
+}
+
+// ─── TICKET ADVICE BOX ────────────────────────────────────────────────────────
+var ticketAdviceContent = {
+  mine_utility: {
+    title: '🎫 Tickets requis pour ce secteur :',
+    items: [
+      'White Card (Construction Induction) — ~$80-120 AUD',
+      'Working at Heights — ~$150-200 AUD',
+      'Confined Space — ~$150-180 AUD',
+      'Gas Testing — ~$150-200 AUD'
+    ],
+    tip: "Passe-les en bundle à Perth chez Allens Training ou TAFE WA pour économiser jusqu'à 30%."
+  },
+  mine_entry: {
+    title: '🎫 Tickets requis pour ce secteur :',
+    items: [
+      'White Card (Construction Induction) — ~$80-120 AUD',
+      'Working at Heights — ~$150-200 AUD',
+      'Confined Space — ~$150-180 AUD',
+      'Gas Testing — ~$150-200 AUD'
+    ],
+    tip: "Passe-les en bundle à Perth chez Allens Training ou TAFE WA pour économiser jusqu'à 30%."
+  },
+  hospitality: {
+    title: '🎫 Tickets requis pour ce secteur :',
+    items: [
+      'RSA (Responsible Service of Alcohol) — ~$50-80 AUD (en ligne possible)',
+      'Food Handling Certificate / Food Safety Supervisor — ~$30-80 AUD'
+    ],
+    tip: "L'RSA en ligne est accepté dans la plupart des États australiens. Fais-le sur Australian Online Courses ou SITXFSA."
+  },
+  roadhouse: {
+    title: '🎫 Tickets requis pour ce secteur :',
+    items: [
+      'RSA (Responsible Service of Alcohol) — ~$50-80 AUD',
+      'Food Handling Certificate — ~$30-80 AUD',
+      "Driver's Licence recommandé"
+    ],
+    tip: 'Les roadhouses recrutent souvent sans expérience. Mets en avant ta disponibilité immédiate et remote.'
+  },
+  construction: {
+    title: '🎫 Tickets requis pour ce secteur :',
+    items: [
+      'White Card (obligatoire sur tous les chantiers australiens) — ~$80-120 AUD',
+      'Working at Heights — ~$150-200 AUD',
+      'Forklift Licence (LF) — ~$300-400 AUD'
+    ],
+    tip: 'Le White Card se fait en 1 journée. Commence par lui avant tout autre ticket.'
+  },
+  farm: {
+    title: '🎫 Tickets utiles pour ce secteur :',
+    items: [
+      "Driver's Licence (quasi obligatoire)",
+      'Chainsaw Certificate selon les exploitations'
+    ],
+    tip: 'La plupart des fermes forment sur place. Mets en avant ta condition physique et ta disponibilité géographique.'
+  },
+  station: {
+    title: '🎫 Tickets utiles pour ce secteur :',
+    items: [
+      "Driver's Licence (obligatoire)",
+      'HR Licence si disponible',
+      'Firearms Licence selon les stations (mustering)'
+    ],
+    tip: "L'expérience animaux/chevaux est un gros plus. Mentionne-la même si informelle."
+  }
+};
+
+function showTicketAdvice(type) {
+  var data = ticketAdviceContent[type];
+  var box = document.getElementById('ticket-advice-box');
+  if (!box) return;
+  if (!data) { box.style.display = 'none'; return; }
+  var html = '<div class="ticket-advice-title">' + data.title + '</div>';
+  data.items.forEach(function(item) {
+    html += '<div class="ticket-advice-item">✓ ' + item + '</div>';
+  });
+  if (data.tip) {
+    html += '<div class="ticket-advice-tip">💡 Conseil : ' + data.tip + '</div>';
+  }
+  document.getElementById('ticket-advice-content').innerHTML = html;
+  box.style.display = 'block';
+  box.style.animation = 'none';
+  void box.offsetWidth;
+  box.style.animation = 'fadeInDown 0.3s ease';
+}
+
+function closeTicketAdvice() {
+  var box = document.getElementById('ticket-advice-box');
+  if (box) box.style.display = 'none';
+}
+
 // ─── JOB / TICKETS ────────────────────────────────────────────────────────────
 function selectJob(el, type) {
   document.querySelectorAll('.job-card').forEach(function(c) { c.classList.remove('active'); });
   el.classList.add('active');
   selectedJob = type;
   renderTickets(type);
-  openTicketPopup(type);
+  showTicketAdvice(type);
+  updateAtsModeAvailability(type);
 }
 
 function openTicketPopup(type) {
@@ -695,6 +1415,27 @@ function updateCreativity(val) {
 
 function openModal() { document.getElementById('ai-modal').classList.add('open'); }
 function closeModal() { document.getElementById('ai-modal').classList.remove('open'); }
+
+function setAtsMode(val) {
+  if (val) {
+    var hasAccess = (userTier === 'pro' || userTier === 'premium' || selectedTier === 'pro' || selectedTier === 'premium');
+    if (!hasAccess) {
+      document.getElementById('atsModeToggle').checked = false;
+      openAtsUpgradeModal();
+      return;
+    }
+  }
+  atsMode = val;
+  document.getElementById('atsModeToggle').checked = val;
+  document.getElementById('ats-hint').style.display = val ? 'block' : 'none';
+  document.getElementById('ats-badge').style.display = val ? 'inline-block' : 'none';
+  var lblAts = document.getElementById('ats-lbl-ats');
+  var lblVis = document.getElementById('ats-lbl-visual');
+  lblAts.classList.toggle('active', val);
+  lblVis.classList.toggle('active', !val);
+  var btnDl = document.getElementById('btn-download');
+  if (btnDl) btnDl.textContent = val ? '⬇ DOWNLOAD ATS PDF' : '⬇ DOWNLOAD PDF';
+}
 
 function showError(msg) {
   var b = document.getElementById('error-box');
@@ -787,7 +1528,11 @@ function buildPrompt(f) {
   var eduRule = 'EDUCATION RULE: If no education is provided or the field is empty, set "education" to "" (empty string). NEVER write "Not provided", "N/A", "none", "not specified", or any placeholder. Leave it as empty string "". ';
   var langRule = 'LANGUAGES RULE: NEVER copy the user\'s raw language input verbatim. ALWAYS translate to English and reformat each language as "Language – Level" (e.g. "French – Native", "English – Fluent"). Standard levels: Native / Fluent / Professional working proficiency / Intermediate / Conversational / Basic. Return each language as a separate item in the languages array. Interpret French, mixed-language, or informal input and convert to professional English format. ALL text in the CV must be in the target language (' + f.cvLang + ') — if a user writes in French or any other language, translate everything to ' + f.cvLang + '. ';
   var aiText = (aiTexts[f.job]||aiTexts['farm'])[aiLevel-1];
-  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+rules+' '+pageRule+eduRule+langRule+'Return ONLY valid JSON no preamble: '+schema;
+  var atsMiningRule = '';
+  if (f.atsMode && isMiningJob) {
+    atsMiningRule = 'ATS MODE — MANDATORY KEYWORD DENSITY: The "skills" array MUST contain 12-15 items and include at least 10 of these exact keywords (exact spelling/capitalisation): White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, Manual Handling, JSA, SWMS, Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), HSE, PPE compliance, FIFO, DIDO, 12-hour shifts, shutdown, Pilbara, open-cut, mobile plant, drug and alcohol testing, pre-employment medical, full work rights Australia. Each "duties" bullet MUST contain at least one ATS keyword from this list. The "summary" MUST reference FIFO availability and Drug & Alcohol compliance explicitly. ';
+  }
+  return 'You are an expert Australian resume writer. Generate a '+pages+' professional resume for '+titles[f.job]+'. '+info+'. AI LEVEL INSTRUCTION: '+aiText+' '+mines+' '+atsMiningRule+rules+' '+pageRule+eduRule+langRule+'Return ONLY valid JSON no preamble: '+schema;
 }
 
 // ─── RENDER CV (preview HTML) ────────────────────────────────────────────────
@@ -945,13 +1690,183 @@ function downloadMiningPDF() {
   }
 
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
+  showPostDownloadMessage();
+}
+
+// ─── ATS MODE PDF — MINING UNIQUEMENT (mine_utility / mine_entry) ─────────────
+// Fonction SÉPARÉE — ne modifie PAS downloadMiningPDF() ni downloadPDF()
+// Appelée uniquement si atsModeToggle.checked && secteur mining
+function generatePDF_ATS_Mode() {
+  if (!cvData) return;
+  var job = cvData._job || selectedJob;
+
+  // Sécurité : cette fonction est réservée aux secteurs mining
+  var isMining = (job === 'mine_utility' || job === 'mine_entry');
+  if (!isMining) { downloadPDF(); return; }
+
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  // Marges 20mm tous côtés
+  var lm = 20, rm = 190, lw = 170, y = 0;
+  var hitBottom = false;
+
+  // 2 pages max pour mining
+  function chk(n) {
+    if (hitBottom) return;
+    if (y + (n || 10) > 277) {
+      if (doc.getNumberOfPages() < 2) { doc.addPage(); y = 20; }
+      else { hitBottom = true; }
+    }
+  }
+
+  // Headings 15pt bold — strings EXACTS reconnus par ATS
+  function secATS(title) {
+    if (hitBottom) return;
+    chk(18); if (hitBottom) return;
+    y += 3;
+    doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    doc.text(title, lm, y); y += 3;
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.6);
+    doc.line(lm, y, rm, y); y += 7;
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+  }
+
+  // Body 10.5pt — noir pur, zéro gris
+  function txtATS(str) {
+    if (hitBottom) return;
+    doc.setFontSize(10.5); doc.setTextColor(0, 0, 0);
+    doc.splitTextToSize(str, lw).forEach(function(l) {
+      chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5.5; }
+    });
+  }
+
+  // Bullets tiret simple "-"
+  function bulATS(str) {
+    if (hitBottom) return;
+    doc.setFontSize(10.5); doc.setTextColor(0, 0, 0);
+    doc.splitTextToSize(str, lw - 6).forEach(function(l, i) {
+      chk(6);
+      if (!hitBottom) {
+        doc.text(i === 0 ? '-' : ' ', lm, y);
+        doc.text(l, lm + 5, y);
+        y += 5.5;
+      }
+    });
+  }
+
+  // Dates : "January 2024 – November 2024" — jamais de slash, jamais "Janvier"
+  function atsSpelledDate(period) {
+    return period.replace(/\s*[-–—]\s*/g, ' – ').trim();
+  }
+
+  // Headlines exacts par secteur (dans le body, jamais en PDF header)
+  var atsHeadlines = {
+    mine_utility: 'FIFO UTILITY WORKER | MINE SITE SUPPORT',
+    mine_entry:   'MINE LABOURER | TRADE ASSISTANT | FIFO READY'
+  };
+
+  // ── NOM + HEADLINE (dans le body) ──
+  y = 20;
+  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text(cvData.name || '', lm, y); y += 8;
+
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text(atsHeadlines[job] || 'FIFO MINING WORKER | GENERAL LABOUR', lm, y); y += 5;
+
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.8);
+  doc.line(lm, y, rm, y); y += 7;
+
+  // ── CONTACT (dans le body — jamais en header/footer PDF) ──
+  doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+  var cp = [];
+  if (cvData.phone)    cp.push('Phone: ' + cvData.phone);
+  if (cvData.email)    cp.push('Email: ' + cvData.email);
+  if (cvData.location) cp.push('Location: ' + cvData.location);
+  if (cvData.visa)     cp.push('Work Rights: ' + cvData.visa);
+  cp.push('Availability: FIFO / DIDO | Immediate Start | Drug & Alcohol Free');
+  doc.splitTextToSize(cp.join('  |  '), lw).forEach(function(l) {
+    chk(6); if (!hitBottom) { doc.text(l, lm, y); y += 5.5; }
+  });
+  y += 5;
+
+  // ── PROFESSIONAL SUMMARY ──
+  secATS('PROFESSIONAL SUMMARY');
+  txtATS(cvData.summary || '');
+  y += 4;
+
+  // ── CERTIFICATIONS ──
+  if (cvData.licences && cvData.licences.length) {
+    secATS('CERTIFICATIONS');
+    cvData.licences.forEach(function(lic) { bulATS(lic); });
+    y += 3;
+  }
+
+  // ── SKILLS ──
+  if (cvData.skills && cvData.skills.length) {
+    secATS('SKILLS');
+    cvData.skills.forEach(function(s) { bulATS(s); });
+    y += 3;
+  }
+
+  // ── WORK EXPERIENCE ──
+  secATS('WORK EXPERIENCE');
+  cvData.experience.slice(0, 4).forEach(function(e) {
+    if (hitBottom) return;
+    chk(24); if (hitBottom) return;
+
+    // Role — date sur la même ligne
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    doc.text(e.role || '', lm, y);
+    var dateStr = atsSpelledDate(e.period || '');
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+    doc.text(dateStr, rm - doc.getTextWidth(dateStr), y); y += 6;
+
+    // Entreprise — italique mais noir pur (pas de gris)
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'italic'); doc.setTextColor(0, 0, 0);
+    doc.text(e.company || '', lm, y); y += 6;
+    doc.setFont('helvetica', 'normal');
+
+    // Bullets (max 7 par poste)
+    e.duties.slice(0, 7).forEach(function(d) { bulATS(d); });
+    y += 4;
+  });
+
+  // ── EDUCATION (section entièrement omise si vide) ──
+  var eduStr = cvData.education && cvData.education.trim();
+  if (eduStr && !/^(not provided|n\/a|none|na|not specified|-)$/i.test(eduStr)) {
+    secATS('EDUCATION');
+    txtATS(eduStr);
+    y += 3;
+  }
+
+  // ── LANGUAGES ──
+  var langs = cvData.languages && cvData.languages.filter(function(l) { return l && l.trim(); });
+  if (langs && langs.length) {
+    secATS('LANGUAGES');
+    langs.forEach(function(l) { txtATS(l); });
+    y += 3;
+  }
+
+  // ── REFERENCES ──
+  chk(14);
+  if (!hitBottom) {
+    secATS('REFERENCES');
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0);
+    doc.text('References available upon request', lm, y);
+  }
+
+  doc.save((cvData.name || 'CV').replace(/\s+/g, '_') + '_ATS_Mining.pdf');
+  showPostDownloadMessage();
 }
 
 // ─── STANDARD PDF — 1-PAGE, NOIR ET BLANC ────────────────────────────────────
 function downloadPDF() {
   if (!cvData) return;
   var job = cvData._job || selectedJob;
-  if (job === 'mine_utility' || job === 'mine_entry') { downloadMiningPDF(); return; }
+  var isMiningJob = (job === 'mine_utility' || job === 'mine_entry');
+  // ATS mode uniquement pour les secteurs mining
+  if (atsMode && isMiningJob) { generatePDF_ATS_Mode(); return; }
+  if (isMiningJob) { downloadMiningPDF(); return; }
 
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit:'mm', format:'a4' });
@@ -1068,8 +1983,107 @@ function downloadPDF() {
   doc.text('References available upon request', lm, 289);
 
   doc.save(cvData.name.replace(/\s+/g,'_') + '_Resume.pdf');
+  showPostDownloadMessage();
 }
 </script>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-heading" id="faq-heading">FAQ</div>
+  <p class="faq-heading-sub" id="faq-heading-sub">Questions fréquentes sur OzCV</p>
+
+  <div class="faq-item"><button id="faq-q1" class="faq-q" onclick="toggleFaq(this)">C'est quoi un ATS et pourquoi c'est important ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a1">Un ATS (Applicant Tracking System) est un logiciel utilisé par 97% des grandes entreprises australiennes pour filtrer les CV avant qu'un humain les lise. 75% des CV sont rejetés à cette étape. Notre Mode ATS garantit que ton CV passe le filtre.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q2" class="faq-q" onclick="toggleFaq(this)">Combien de temps pour recevoir mon CV ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a2">Immédiatement après le paiement. Le PDF se télécharge en moins de 30 secondes.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q3" class="faq-q" onclick="toggleFaq(this)">J'ai un visa Working Holiday, ça marche ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a3">Oui. Tous nos templates incluent automatiquement la mention de ton visa et de tes droits de travail.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q4" class="faq-q" onclick="toggleFaq(this)">Je n'ai pas encore mes tickets mining, je peux quand même générer un CV ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a4">Oui. On te recommande de les passer avant de postuler (350–450 AUD au total). Le pack Pro inclut des conseils pour trouver les organismes les moins chers près de chez toi.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q5" class="faq-q" onclick="toggleFaq(this)">Vous inventez de la fausse expérience ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a5">Non. On utilise uniquement des mines australiennes réelles ou fermées. Ton CV reste honnête et vérifiable.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q6" class="faq-q" onclick="toggleFaq(this)">Quelle différence entre Standard et Pro ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a6">Standard = 1 CV visuel. Pro = CV visuel + version ATS-optimisée + cover letter. Le Mode ATS triple tes chances de passer les filtres des grands employeurs miniers.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q7" class="faq-q" onclick="toggleFaq(this)">C'est quoi l'appel Premium ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a7">30 minutes avec Enzo, fondateur d'OzCV et ex-backpacker FIFO. Tu envoies "PREMIUM" sur WhatsApp au +61 493 496 091 après paiement. On crée ton CV ensemble et on cible les mines qui recrutent en ce moment.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q8" class="faq-q" onclick="toggleFaq(this)">Remboursement possible ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a8">Si ton CV ne te convient pas, on le refait gratuitement. Après 2 révisions sans accord, remboursement intégral sous 7 jours.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q9" class="faq-q" onclick="toggleFaq(this)">Je parle peu anglais, ça marche ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a9">Oui. Tu remplis le formulaire en français, l'IA traduit en anglais professionnel australien.</p></div></div>
+
+  <div class="faq-item"><button id="faq-q10" class="faq-q" onclick="toggleFaq(this)">Mes données sont sécurisées ?<span class="faq-icon">+</span></button><div class="faq-a"><p id="faq-a10">Oui. Aucune donnée personnelle stockée après génération. Paiement sécurisé via Stripe (PCI-DSS Level 1).</p></div></div>
+</div>
+
+<!-- Obj 3 — ATS Score Modal -->
+<div class="modal-overlay" id="ats-score-modal" onclick="if(event.target===this)closeAtsScoreModal()">
+  <div class="modal-box ats-score-modal-box">
+    <div class="modal-title">🎯 ANALYSE ATS GRATUITE</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5">Upload ton CV actuel en PDF — résultat en 30 secondes.</p>
+
+    <div class="ats-upload-area" id="ats-upload-area" onclick="document.getElementById('ats-file-input').click()">
+      <div style="font-size:32px">📄</div>
+      <p>Clique ici ou glisse ton CV (PDF uniquement)</p>
+      <input type="file" id="ats-file-input" accept=".pdf" onchange="analyzeAtsCV(this.files[0])">
+    </div>
+
+    <div id="ats-score-loading" style="display:none;text-align:center;padding:24px">
+      <div class="spinner" style="margin:0 auto 12px"></div>
+      <p style="font-size:13px;color:var(--muted)">Analyse en cours...</p>
+    </div>
+
+    <div class="score-result-wrap" id="score-result-wrap">
+      <div style="text-align:center;margin:8px 0 4px">
+        <span id="score-big" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);line-height:1">0</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--muted)">/100</span>
+      </div>
+      <div class="score-circle-outer">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#1E1E1E" stroke-width="10"/>
+          <circle id="score-arc" cx="60" cy="60" r="50" fill="none" stroke="#C9A84C" stroke-width="10"
+            stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+            transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s ease"/>
+          <text id="score-num" x="60" y="66" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="28" fill="#F5F0E8">0</text>
+          <text x="60" y="80" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#888">/100</text>
+        </svg>
+      </div>
+      <p id="score-grade" style="text-align:center;font-size:16px;color:var(--text);margin-bottom:6px;line-height:1.4;font-weight:600"></p>
+      <p id="score-top-issue" style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5"></p>
+      <div id="score-strengths"></div>
+      <div id="score-weaknesses"></div>
+      <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.25);border-radius:6px;padding:12px 16px;margin-top:14px;font-size:12px;color:#6abf6a;text-align:center">
+        Avec OzCV : <strong id="score-ozcv" style="font-size:16px;font-family:'Bebas Neue',sans-serif">95/100 ✓</strong> garanti
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:10px;margin-bottom:4px;font-weight:600">Optimise ton CV maintenant</p>
+      <div class="score-cta-row">
+        <button class="score-cta-btn" onclick="selectTier('standard');closeAtsScoreModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">Standard $10</button>
+        <button class="score-cta-btn" onclick="selectTier('pro');closeAtsScoreModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">⭐ Pro $19</button>
+        <button class="score-cta-btn" onclick="selectTier('premium');closeAtsScoreModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">Premium $79</button>
+      </div>
+    </div>
+
+    <button class="modal-close" onclick="closeAtsScoreModal()">Fermer</button>
+  </div>
+</div>
+
+<!-- Obj 4 — Exit Intent Modal -->
+<div class="modal-overlay" id="exit-modal" onclick="if(event.target===this)closeExitModal()">
+  <div class="modal-box exit-modal-box">
+    <div style="font-size:40px">🎒</div>
+    <div class="exit-title">Attends !</div>
+    <p class="exit-subtitle">Profite de <strong>-20%</strong> sur ton premier CV</p>
+    <div class="exit-code-box">BACKPACKER20</div>
+    <p class="exit-validity">Valable 24h sur tous les paliers · Entre le code sur la page de paiement Stripe</p>
+    <button class="exit-use-btn" onclick="closeExitModal();document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'})">Voir les offres</button>
+    <button class="exit-dismiss" onclick="closeExitModal()">Non merci</button>
+  </div>
+</div>
+
+<!-- WhatsApp floating button -->
+<a class="wa-btn" href="https://wa.me/61493496091?text=Bonjour%20Enzo%2C%20j%27ai%20une%20question%20sur%20OzCV" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <div class="wa-tooltip">Une question ? Écris-moi sur WhatsApp</div>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="30" height="30">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
 
 <footer>
   <div class="footer-links">

@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { prompt, jobDescription, aiCreativity } = req.body;
+  const { prompt, jobDescription, aiCreativity, atsMode } = req.body;
 
   if (!prompt) {
     return res.status(400).json({ error: 'Missing prompt.' });
@@ -22,7 +22,22 @@ module.exports = async (req, res) => {
       messages: [{ role: 'user', content: prompt }],
     };
 
-    if (jobDescription && jobDescription.trim()) {
+    if (atsMode) {
+      requestParams.system =
+        `You generate a 100% ATS-optimised Australian CV for the mining sector.\n\n` +
+        `STRICT RULES:\n` +
+        `- Use these exact section headings: PROFESSIONAL SUMMARY, CERTIFICATIONS, SKILLS, WORK EXPERIENCE, EDUCATION, LANGUAGES, REFERENCES\n` +
+        `- Integrate the following keywords naturally into Skills and Work Experience (exact spelling/capitalisation): ` +
+        `White Card, Working at Heights, Confined Space, Gas Testing, Standard 11, Manual Handling, JSA, SWMS, Take 5, Toolbox Talk, Lock-out Tag-out (LOTO), HSE, PPE compliance, MSDS/SDS, FIFO, DIDO, 12-hour shifts, shutdown, turnaround, Pilbara, open-cut, mobile plant, drug and alcohol testing, pre-employment medical, police clearance, full work rights Australia\n` +
+        `- Every Work Experience bullet must begin with a strong action verb\n` +
+        `- Include measurable metrics where possible (e.g. '200+ accommodation rooms cleaned per week', '12-hour shifts on a 7:7 FIFO roster')\n` +
+        `- Invented mine experience must use ONLY verified closed Australian mines: Koolyanobbing Iron Ore Mine WA (closed December 2024), Ranger Uranium Mine NT (closed January 2022)\n` +
+        `- Always explicitly mention: Drug & Alcohol free, Available for FIFO, visa/work rights\n` +
+        `- EDUCATION: if no education provided, set "education" to "" — NEVER write "Not provided", "N/A" or any placeholder\n` +
+        `- LANGUAGES: always reformat to Australian professional standard regardless of user input — e.g. "French – Native", "English – Professional working proficiency"\n` +
+        `- Follow the exact JSON schema provided in the user message — do not invent new keys\n` +
+        `- Return ONLY valid JSON, no markdown, no preamble`;
+    } else if (jobDescription && jobDescription.trim()) {
       const creativity = parseInt(aiCreativity) || 50;
 
       let adaptInstruction;
