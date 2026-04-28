@@ -1,4 +1,4 @@
-const Stripe = require('stripe');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const TIERS = {
   standard: { price: 1000, name: 'OzCV Standard — CV Professionnel' },
@@ -17,7 +17,6 @@ module.exports = async (req, res) => {
   if (!tier || !TIERS[tier]) return res.status(400).json({ error: 'Invalid tier.' });
 
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const base = process.env.BASE_URL || 'https://ozcv.vercel.app';
 
     const session = await stripe.checkout.sessions.create({
